@@ -1,9 +1,9 @@
 package ch.supsi.fscli.frontend;
 
-import ch.supsi.fscli.frontend.view.CommandLineView;
-import ch.supsi.fscli.frontend.view.LogView;
-import ch.supsi.fscli.frontend.view.MenuBarView;
-import ch.supsi.fscli.frontend.view.OutputView;
+import ch.supsi.fscli.frontend.controller.EventHandler;
+import ch.supsi.fscli.frontend.controller.FSDataSaverController;
+import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
+import ch.supsi.fscli.frontend.view.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,6 +28,13 @@ public class MainFx extends Application {
     private final CommandLineView commandLineView;
     private final OutputView outputView;
     private final LogView logView;
+    private final IShow savingView;
+
+
+    private final EventHandlerInitializer eventHandlerInitializer;
+
+
+    private final EventHandler dataSaverController;
 
 
     public MainFx() {
@@ -38,6 +45,11 @@ public class MainFx extends Application {
         this.commandLineView = CommandLineView.getInstance();
         this.outputView = OutputView.getInstance();
         this.logView = LogView.getInstance();
+        this.savingView = SaveAsView.getInstance();
+
+        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView);
+
+        this.dataSaverController = FSDataSaverController.getInstance();
     }
 
     @Override
@@ -47,6 +59,9 @@ public class MainFx extends Application {
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
         this.outputView.initOutputView(PREF_OUTPUT_VIEW_ROW_COUNT);
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
+
+
+        this.dataSaverController.initialize(eventHandlerInitializer);
 
 
 

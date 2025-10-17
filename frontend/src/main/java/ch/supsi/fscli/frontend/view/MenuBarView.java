@@ -1,5 +1,7 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.controller.FSDataSaverController;
+import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -10,6 +12,8 @@ import javafx.scene.control.SeparatorMenuItem;
 public class MenuBarView {
 
     private static MenuBarView myself;
+
+    private final IFSDataSaverController dataSaverController = FSDataSaverController.getInstance();
 
     public static MenuBarView getInstance() {
         if(myself == null)
@@ -41,10 +45,12 @@ public class MenuBarView {
 
         MenuItem saveMenuItem = new MenuItem("Save");
         saveMenuItem.setId("saveMenuItem");
+        saveMenuItem.setOnAction(actionEvent -> dataSaverController.save());
         saveMenuItem.setDisable(true);
 
         MenuItem saveAsMenuItem = new MenuItem("Save as...");
         saveAsMenuItem.setId("saveAsMenuItem");
+        saveAsMenuItem.setOnAction((actionEvent) -> dataSaverController.showSavingView());
         saveAsMenuItem.setDisable(true);
 
         MenuItem exitMenuItem = new MenuItem("Exit...");
