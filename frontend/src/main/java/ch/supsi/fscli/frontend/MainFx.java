@@ -1,9 +1,6 @@
 package ch.supsi.fscli.frontend;
 
-import ch.supsi.fscli.frontend.controller.EventHandler;
-import ch.supsi.fscli.frontend.controller.FSDataSaverController;
-import ch.supsi.fscli.frontend.controller.HelpController;
-import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
+import ch.supsi.fscli.frontend.controller.*;
 import ch.supsi.fscli.frontend.view.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -38,6 +35,8 @@ public class MainFx extends Application {
 
 
     private final EventHandler dataSaverController;
+    private final EventHandler aboutViewController;
+
     private final EventHandler helpController;
 
     public MainFx() {
@@ -52,9 +51,10 @@ public class MainFx extends Application {
         this.aboutView = AboutView.getInstance();
         this.helpView = HelpView.getInstance();
 
-        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.helpView);
+        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.helpView, this.aboutView);
 
         this.dataSaverController = FSDataSaverController.getInstance();
+        this.aboutViewController = AboutController.getInstance();
         this.helpController = HelpController.getInstance();
     }
 
@@ -69,6 +69,8 @@ public class MainFx extends Application {
 
         this.dataSaverController.initialize(eventHandlerInitializer);
         this.helpController.initialize(eventHandlerInitializer);
+        this.aboutViewController.initialize(eventHandlerInitializer);
+
 
 
         // horizontal box to hold the command line
