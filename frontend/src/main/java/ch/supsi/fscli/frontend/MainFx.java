@@ -29,6 +29,7 @@ public class MainFx extends Application {
     private final OutputView outputView;
     private final LogView logView;
     private final IShow savingView;
+    private final IShow aboutView;
 
 
     private final EventHandlerInitializer eventHandlerInitializer;
@@ -46,6 +47,7 @@ public class MainFx extends Application {
         this.outputView = OutputView.getInstance();
         this.logView = LogView.getInstance();
         this.savingView = SaveAsView.getInstance();
+        this.aboutView = AboutView.getInstance();
 
         this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView);
 
@@ -59,7 +61,7 @@ public class MainFx extends Application {
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
         this.outputView.initOutputView(PREF_OUTPUT_VIEW_ROW_COUNT);
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
-
+        //this.aboutView.initialize(translationController);
 
         this.dataSaverController.initialize(eventHandlerInitializer);
 
