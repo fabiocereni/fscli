@@ -1,5 +1,6 @@
 package ch.supsi.fscli.frontend;
 
+import ch.supsi.fscli.frontend.controller.AboutController;
 import ch.supsi.fscli.frontend.controller.EventHandler;
 import ch.supsi.fscli.frontend.controller.FSDataSaverController;
 import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
@@ -36,6 +37,7 @@ public class MainFx extends Application {
 
 
     private final EventHandler dataSaverController;
+    private final EventHandler aboutViewController;
 
 
     public MainFx() {
@@ -49,9 +51,10 @@ public class MainFx extends Application {
         this.savingView = SaveAsView.getInstance();
         this.aboutView = AboutView.getInstance();
 
-        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView);
+        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.aboutView);
 
         this.dataSaverController = FSDataSaverController.getInstance();
+        this.aboutViewController = AboutController.getInstance();
     }
 
     @Override
@@ -64,6 +67,7 @@ public class MainFx extends Application {
         //this.aboutView.initialize(translationController);
 
         this.dataSaverController.initialize(eventHandlerInitializer);
+        this.aboutViewController.initialize(eventHandlerInitializer);
 
 
 
