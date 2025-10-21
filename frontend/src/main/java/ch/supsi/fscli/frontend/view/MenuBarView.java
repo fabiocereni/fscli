@@ -1,7 +1,9 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.controller.AboutController;
 import ch.supsi.fscli.frontend.controller.FSDataSaverController;
 import ch.supsi.fscli.frontend.controller.HelpController;
+import ch.supsi.fscli.frontend.controller.IAboutView;
 import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
 import ch.supsi.fscli.frontend.controller.IHelpController;
 import javafx.scene.Node;
@@ -16,6 +18,7 @@ public class MenuBarView {
     private static MenuBarView myself;
 
     private final IFSDataSaverController dataSaverController = FSDataSaverController.getInstance();
+    private final IAboutView aboutViewController = AboutController.getInstance();
     private final IHelpController helpController = HelpController.getInstance();
 
     public static MenuBarView getInstance() {
@@ -84,6 +87,8 @@ public class MenuBarView {
 
         MenuItem aboutMenuItem = new MenuItem("About");
         aboutMenuItem.setId("aboutMenuItem");
+        aboutMenuItem.setOnAction((actionEvent) -> aboutViewController.showAboutView());
+
 
 
         this.helpMenu.setId("helpMenu");
