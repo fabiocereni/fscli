@@ -14,7 +14,6 @@ public class FSDataSaverController implements IFSDataSaverController {
     private final IFSDataSaverModel ifsDataWriterModel = FSDataSaverModel.getInstance();
     private IShow savingView;
 
-
     private static FSDataSaverController myself;
 
     private FSDataSaverController() {}
