@@ -25,9 +25,12 @@ public class AboutView implements IShow {
     @Override
     public void showMyView() {
         Alert aboutDialog = new Alert(Alert.AlertType.INFORMATION);
-        aboutDialog.setTitle(translationsController.translate("menuitem.about"));
-        aboutDialog.setHeaderText(translationsController.translate("about.header"));
-        aboutDialog.setContentText(translationsController.translate("about.content"));
-        aboutDialog.showAndWait();
+//        aboutDialog.setTitle(translationsController.translate("menuitem.about"));
+//        aboutDialog.setHeaderText(translationsController.translate("about.header"));
+//        aboutDialog.setContentText(translationsController.translate("about.content"));
+        aboutDialog.setTitle("ciao");
+        aboutDialog.setHeaderText("cioo");
+        aboutDialog.setContentText("ciao");
+        aboutDialog.show();
     }
 }
