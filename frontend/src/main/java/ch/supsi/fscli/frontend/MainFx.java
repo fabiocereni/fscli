@@ -3,6 +3,7 @@ package ch.supsi.fscli.frontend;
 import ch.supsi.fscli.frontend.controller.EventHandler;
 import ch.supsi.fscli.frontend.controller.FSDataSaverController;
 import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
+import ch.supsi.fscli.frontend.controller.QuitController;
 import ch.supsi.fscli.frontend.view.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -29,13 +30,14 @@ public class MainFx extends Application {
     private final OutputView outputView;
     private final LogView logView;
     private final IShow savingView;
+    private final IShow alertQuitView;
 
 
     private final EventHandlerInitializer eventHandlerInitializer;
 
 
     private final EventHandler dataSaverController;
-
+    private final EventHandler quitController;
 
     public MainFx() {
         this.applicationTitle = "filesystem command interpreter simulator";
@@ -46,10 +48,13 @@ public class MainFx extends Application {
         this.outputView = OutputView.getInstance();
         this.logView = LogView.getInstance();
         this.savingView = SaveAsView.getInstance();
+        this.alertQuitView = QuitAlertView.getInstance();
 
-        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView);
+        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.alertQuitView);
 
         this.dataSaverController = FSDataSaverController.getInstance();
+        this.quitController = QuitController.getInstance();
+
     }
 
     @Override
@@ -62,7 +67,7 @@ public class MainFx extends Application {
 
 
         this.dataSaverController.initialize(eventHandlerInitializer);
-
+        this.quitController.initialize(eventHandlerInitializer);
 
 
         // horizontal box to hold the command line
