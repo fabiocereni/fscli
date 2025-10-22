@@ -36,7 +36,6 @@ public class MainFx extends Application {
 
     private final EventHandler dataSaverController;
     private final EventHandler aboutViewController;
-
     private final EventHandler helpController;
 
     public MainFx() {
@@ -70,8 +69,6 @@ public class MainFx extends Application {
         this.dataSaverController.initialize(eventHandlerInitializer);
         this.helpController.initialize(eventHandlerInitializer);
         this.aboutViewController.initialize(eventHandlerInitializer);
-
-
 
         // horizontal box to hold the command line
         HBox commandLinePane = new HBox();

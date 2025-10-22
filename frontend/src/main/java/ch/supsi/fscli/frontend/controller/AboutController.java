@@ -20,9 +20,7 @@ public class AboutController implements IAboutView {
     }
 
     @Override
-    public void showAboutView() {
-        aboutView.showMyView();
-    }
+    public void showAboutView() { aboutView.showMyView(); }
 
     @Override
     public void initialize(EventHandlerInitializer eventHandlerInitializer) {
