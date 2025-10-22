@@ -1,5 +1,7 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.controller.AboutController;
+import ch.supsi.fscli.frontend.controller.BuildInfoController;
 import javafx.scene.control.Alert;
 
 public class AboutView implements IShow {
@@ -7,6 +9,7 @@ public class AboutView implements IShow {
     private static AboutView myself;
 
     //private TranslationsController translationsController;
+    private BuildInfoController buildInfoController = BuildInfoController.getInstance();
 
     private AboutView() {}
 
@@ -25,12 +28,9 @@ public class AboutView implements IShow {
     @Override
     public void showMyView() {
         Alert aboutDialog = new Alert(Alert.AlertType.INFORMATION);
-//        aboutDialog.setTitle(translationsController.translate("menuitem.about"));
-//        aboutDialog.setHeaderText(translationsController.translate("about.header"));
-//        aboutDialog.setContentText(translationsController.translate("about.content"));
-        aboutDialog.setTitle("ciao");
-        aboutDialog.setHeaderText("cioo");
-        aboutDialog.setContentText("ciao");
+        aboutDialog.setTitle( "SUPSI FileSystem"); //TODO TRADUZIONE
+        aboutDialog.setHeaderText("PROGETTO"); //TODO TRADUZIONE
+        aboutDialog.setContentText(buildInfoController.getVersion());
         aboutDialog.show();
     }
 }
