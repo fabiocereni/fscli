@@ -1,11 +1,14 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.controller.QuitController;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
 public class QuitAlertView implements IShow {
 
     private static QuitAlertView myself;
+    private Runnable onConfirm;
 
     //private TranslationsController translationsController;
 
@@ -14,6 +17,10 @@ public class QuitAlertView implements IShow {
             myself = new QuitAlertView();
         }
         return myself;
+    }
+
+    public void setOnConfirm(Runnable onConfirm) {
+        this.onConfirm = onConfirm;
     }
 
 //    public void initialize(TranslationsController translationsController){
@@ -32,7 +39,21 @@ public class QuitAlertView implements IShow {
 //                new ButtonType(translationsController.translate("quit.confirm.no"), ButtonBar.ButtonData.CANCEL_CLOSE)
 //        );
 
-        // return alert.showAndWait().orElse(ButtonType.CANCEL); CHIEDERE COME FARE
+        alert.setTitle("quit.confirm.title");
+        alert.setHeaderText("quit.confirm.header");
+        alert.setContentText("quit.confirm.content");
+
+        alert.getButtonTypes().setAll(
+                new ButtonType("quit.confirm.yes", ButtonBar.ButtonData.OK_DONE),
+                new ButtonType("quit.confirm.no", ButtonBar.ButtonData.CANCEL_CLOSE)
+        );
+
+        var result = alert.showAndWait();
+        if (result.isPresent() && result.get().getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+            if (onConfirm != null) {
+                onConfirm.run();
+            }
+        }
     }
 
 }
