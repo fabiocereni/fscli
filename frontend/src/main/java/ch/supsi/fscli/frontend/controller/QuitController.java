@@ -1,13 +1,15 @@
 package ch.supsi.fscli.frontend.controller;
 
 import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
+import ch.supsi.fscli.frontend.view.IQuitView;
 import ch.supsi.fscli.frontend.view.IShow;
+import javafx.application.Platform;
 
-public class QuitController implements IQuitController{
+public class QuitController implements IQuitController {
 
     private static QuitController mySelf;
 
-    private IShow quitAlertView;
+    private IQuitView quitView;
 
     public static QuitController getInstance() {
         if (mySelf == null) {
@@ -18,11 +20,14 @@ public class QuitController implements IQuitController{
 
     @Override
     public void initialize(EventHandlerInitializer eventHandlerInitializer) {
-        quitAlertView = eventHandlerInitializer.alertQuitView();
+        quitView = eventHandlerInitializer.quitView();
     }
 
     @Override
-    public void showQuitView() {
-        quitAlertView.showMyView();
+    public boolean showQuitView() {
+        boolean confirmed = quitView.showConfirmation();
+         if(confirmed)
+             Platform.exit();
+         return confirmed;
     }
 }

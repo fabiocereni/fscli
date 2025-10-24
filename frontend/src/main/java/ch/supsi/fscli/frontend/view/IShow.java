@@ -1,5 +1,5 @@
 package ch.supsi.fscli.frontend.view;
 
 public interface IShow {
-     void showMyView();
+     default void showMyView() {};
 }
