@@ -1,4 +1,4 @@
 package ch.supsi.fscli.frontend.view;
 
-public record EventHandlerInitializer(IShow savingView, IShow alertQuitView) {
+public record EventHandlerInitializer(IShow savingView, IQuitView quitView) {
 }

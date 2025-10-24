@@ -1,9 +1,6 @@
 package ch.supsi.fscli.frontend;
 
-import ch.supsi.fscli.frontend.controller.EventHandler;
-import ch.supsi.fscli.frontend.controller.FSDataSaverController;
-import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
-import ch.supsi.fscli.frontend.controller.QuitController;
+import ch.supsi.fscli.frontend.controller.*;
 import ch.supsi.fscli.frontend.view.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -30,14 +27,14 @@ public class MainFx extends Application {
     private final OutputView outputView;
     private final LogView logView;
     private final IShow savingView;
-    private final IShow alertQuitView;
+    private final IQuitView quitView;
 
 
     private final EventHandlerInitializer eventHandlerInitializer;
 
 
     private final EventHandler dataSaverController;
-    private final EventHandler quitController;
+    private final IQuitController quitController;
 
     public MainFx() {
         this.applicationTitle = "filesystem command interpreter simulator";
@@ -48,9 +45,9 @@ public class MainFx extends Application {
         this.outputView = OutputView.getInstance();
         this.logView = LogView.getInstance();
         this.savingView = SaveAsView.getInstance();
-        this.alertQuitView = QuitAlertView.getInstance();
+        this.quitView = QuitView.getInstance();
 
-        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.alertQuitView);
+        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView);
 
         this.dataSaverController = FSDataSaverController.getInstance();
         this.quitController = QuitController.getInstance();
@@ -129,11 +126,19 @@ public class MainFx extends Application {
             // to handle to exit process...
             //
             // for new we just close the app directly
-            primaryStage.close();
+            boolean confirmed = this.quitController.showQuitView();
+            if(!confirmed)
+                e.consume();
         });
 
         // show the primary stage
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        // Posso gestire il salvataggio dei dati nel caso in cui l'app non sia chiusa correttamente.
+        System.out.println("Dati non salvati!!!");
     }
 
     public static void main(String[] args) {
