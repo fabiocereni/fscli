@@ -2,8 +2,8 @@ package ch.supsi.fscli.frontend.controller;
 
 import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
 import ch.supsi.fscli.frontend.view.IQuitView;
-import ch.supsi.fscli.frontend.view.IShow;
-import javafx.application.Platform;
+import javafx.stage.Stage;
+import ch.supsi.fscli.frontend.MainFx;
 
 public class QuitController implements IQuitController {
 
@@ -27,7 +27,7 @@ public class QuitController implements IQuitController {
     public boolean showQuitView() {
         boolean confirmed = quitView.showConfirmation();
          if(confirmed)
-             Platform.exit();
+             MainFx.getStageToClose().stream().toList().forEach(Stage::close);
          return confirmed;
     }
 }

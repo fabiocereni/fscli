@@ -13,7 +13,17 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 public class MainFx extends Application {
+
+    public static Collection<Stage> stageToClose = new HashSet<>();
+
+    public static Collection<Stage> getStageToClose() {
+        return stageToClose;
+    }
+
     private static final int PREF_INSETS_SIZE = 7;
     private static final int PREF_COMMAND_SPACER_WIDTH = 11;
     private static final int COMMAND_LINE_PREF_COLUMN_COUNT = 72;
@@ -29,9 +39,7 @@ public class MainFx extends Application {
     private final IShow savingView;
     private final IQuitView quitView;
 
-
     private final EventHandlerInitializer eventHandlerInitializer;
-
 
     private final EventHandler dataSaverController;
     private final IQuitController quitController;
@@ -131,6 +139,7 @@ public class MainFx extends Application {
                 e.consume();
         });
 
+        stageToClose.add(primaryStage);
         // show the primary stage
         primaryStage.show();
     }
