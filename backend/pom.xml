@@ -41,8 +41,6 @@
     </dependencies>
 
     <build>
-        <finalName>fscli-backend</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

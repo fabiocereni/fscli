@@ -38,10 +38,15 @@ public class MainFx extends Application {
     private final LogView logView;
     private final IShow savingView;
     private final IQuitView quitView;
+    private final IShow aboutView;
+    private final IShow helpView;
+
 
     private final EventHandlerInitializer eventHandlerInitializer;
 
     private final EventHandler dataSaverController;
+    private final EventHandler aboutViewController;
+    private final EventHandler helpController;
     private final IQuitController quitController;
 
     public MainFx() {
@@ -53,13 +58,16 @@ public class MainFx extends Application {
         this.outputView = OutputView.getInstance();
         this.logView = LogView.getInstance();
         this.savingView = SaveAsView.getInstance();
+        this.aboutView = AboutView.getInstance();
+        this.helpView = HelpView.getInstance();
         this.quitView = QuitView.getInstance();
 
-        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView);
+        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView);
 
         this.dataSaverController = FSDataSaverController.getInstance();
         this.quitController = QuitController.getInstance();
-
+        this.aboutViewController = AboutController.getInstance();
+        this.helpController = HelpController.getInstance();
     }
 
     @Override
@@ -69,11 +77,13 @@ public class MainFx extends Application {
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
         this.outputView.initOutputView(PREF_OUTPUT_VIEW_ROW_COUNT);
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
-
+        //this.aboutView.initialize(translationController);
 
         this.dataSaverController.initialize(eventHandlerInitializer);
         this.quitController.initialize(eventHandlerInitializer);
 
+        this.helpController.initialize(eventHandlerInitializer);
+        this.aboutViewController.initialize(eventHandlerInitializer);
 
         // horizontal box to hold the command line
         HBox commandLinePane = new HBox();
