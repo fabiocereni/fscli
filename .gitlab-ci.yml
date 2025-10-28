@@ -48,8 +48,8 @@ backend:
       - backend/target/fscli-backend.jar
     expire_in: 1 hour
 
-    rules:
-      - if:$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
+  rules:
+    - if:$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
 
 frontend:
   stage: frontend
@@ -68,5 +68,5 @@ frontend:
       - frontend/target/fscli-jar-with-dependencies.jar
     expire_in: 1 hour
 
-    rules:
-      - if:$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
+  rules:
+    - if:$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
