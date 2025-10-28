@@ -6,42 +6,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FSDataWriterDAOTest {
 
     private final IFSDataWriterDAO fsDataWriterDAO = FSDataWriterDAO.getInstance();
 
-    private static final String TEST ;
-    private static final Path PATH = Path.of("/home/simone/Scrivania/Test.json");
-
-    static {
-        TEST = "Hello, World!";
-    }
-
     @Test
     void save() throws IOException {
+        Path path = Path.of("target/test-saves/Test.json");
+        Files.createDirectories(path.getParent());
+
         String toTest = "{\"testText\":\"Hello, World!\"}";
 
-        if(Files.exists(PATH)) {
-            try {
-                Files.deleteIfExists(PATH);
-            } catch (IOException e) {
-                System.err.println("Error when deleting the file at: " + PATH);
-            }
+        fsDataWriterDAO.save(path, toTest);
 
-            this.fsDataWriterDAO.save(PATH, "Overwritten");
-            String saved = Files.readString(PATH);
-            assertEquals("Overwritten", saved);
-            System.out.println(saved);
+        String saved = Files.readString(path);
+        assertEquals(toTest, saved);
 
-        } else {
-            this.fsDataWriterDAO.save(PATH, toTest);
-            String saved = Files.readString(PATH);
-            assertEquals(toTest, saved);
-            System.out.println(saved);
-        }
-
-        //Files.deleteIfExists(PATH);
+        Files.deleteIfExists(path);
     }
 }
