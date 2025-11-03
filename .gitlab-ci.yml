@@ -28,7 +28,7 @@ backend:
   before_script:
     - cd backend
   script:
-    - mvn $MAVEN_OPTS $MAVEN_CLI_OPTS clean install
+    - mvn $MAVEN_OPTS $MAVEN_CLI_OPTS clean package
   after_script:
     - cd ..
   artifacts:
