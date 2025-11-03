@@ -54,6 +54,8 @@ backend:
 frontend:
   stage: frontend
   image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:maven3java17
+  dependencies:
+    - backend
   before_script:
     - 'cd frontend'
     - 'Xvfb :99 -screen 0 1920x1080x16 &'
