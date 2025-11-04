@@ -40,6 +40,7 @@ public class MainFx extends Application {
     private final IQuitView quitView;
     private final IShow aboutView;
     private final IShow helpView;
+    private final IShow preferencesView;
 
 
     private final EventHandlerInitializer eventHandlerInitializer;
@@ -47,6 +48,7 @@ public class MainFx extends Application {
     private final EventHandler dataSaverController;
     private final EventHandler aboutViewController;
     private final EventHandler helpController;
+    private final EventHandler preferencesController;
     private final IQuitController quitController;
 
     public MainFx() {
@@ -61,13 +63,15 @@ public class MainFx extends Application {
         this.aboutView = AboutView.getInstance();
         this.helpView = HelpView.getInstance();
         this.quitView = QuitView.getInstance();
+        this.preferencesView = PreferencesView.getInstance();
 
-        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView);
+        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView, this.preferencesView);
 
         this.dataSaverController = FSDataSaverController.getInstance();
         this.quitController = QuitController.getInstance();
         this.aboutViewController = AboutController.getInstance();
         this.helpController = HelpController.getInstance();
+        this.preferencesController = PreferencesController.getInstance();
     }
 
     @Override
@@ -84,6 +88,8 @@ public class MainFx extends Application {
 
         this.helpController.initialize(eventHandlerInitializer);
         this.aboutViewController.initialize(eventHandlerInitializer);
+
+        this.preferencesController.initialize(eventHandlerInitializer);
 
         // horizontal box to hold the command line
         HBox commandLinePane = new HBox();

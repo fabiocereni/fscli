@@ -1,12 +1,6 @@
 package ch.supsi.fscli.frontend.view;
 
-import ch.supsi.fscli.frontend.controller.AboutController;
-import ch.supsi.fscli.frontend.controller.FSDataSaverController;
-import ch.supsi.fscli.frontend.controller.HelpController;
-import ch.supsi.fscli.frontend.controller.IAboutView;
-import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
-import ch.supsi.fscli.frontend.controller.QuitController;
-import ch.supsi.fscli.frontend.controller.IHelpController;
+import ch.supsi.fscli.frontend.controller.*;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -22,6 +16,7 @@ public class MenuBarView {
     private final QuitController quitController = QuitController.getInstance();
     private final IAboutView aboutViewController = AboutController.getInstance();
     private final IHelpController helpController = HelpController.getInstance();
+    private final IPreferencesController preferencesController = PreferencesController.getInstance();
 
     public static MenuBarView getInstance() {
         if(myself == null)
@@ -78,7 +73,7 @@ public class MenuBarView {
         // EDIT MENU
         MenuItem preferencesMenuItem = new MenuItem("Preferences...");
         preferencesMenuItem.setId("preferencesMenuItem");
-
+        preferencesMenuItem.setOnAction((actionEvent) -> preferencesController.showPreferencesView());
 
         this.editMenu.setId("editMenu");
         this.editMenu.getItems().add(preferencesMenuItem);
