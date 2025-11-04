@@ -8,26 +8,32 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class PreferencesView {
+import java.util.List;
+
+public class PreferencesView implements IShow {
 
     public static PreferencesView myself;
     private PreferencesController preferencesController;
     //private TranslationsController translationsController;
 
-    public static PreferencesView getIstance(){
+    private PreferencesView() {
+    }
+
+    public static PreferencesView getInstance() {
         if (myself == null) {
             myself = new PreferencesView();
         }
         return myself;
     }
 
-    private final Stage stage = new Stage();
-    private Slider LineSlider;
-    private final ComboBox<String> languageSelector = new ComboBox<>();
-    private Button saveButton;
+    @Override
+    public void showMyView() {
+        Stage stage = new Stage();
+        Slider LineSlider;
+        ComboBox<String> languageSelector = new ComboBox<>();
+        Button saveButton;
 
-    public void preferencesView() {
-        //stage.setTitle(translationsController.translate("preferences.title"));
+        stage.setTitle("preferences.title");
         stage.initModality(Modality.APPLICATION_MODAL);
 
         GridPane root = new GridPane();
@@ -35,42 +41,29 @@ public class PreferencesView {
         root.setVgap(15);
         root.setHgap(10);
 
-        // Label e slider Linee
-        //Label lineLabel = new Label(translationsController.translate("preferences.slider"));
-        //LineSlider.adjustValue(preferencesController.getCurrentLinesCount());
-        LineSlider.setShowTickLabels(true);
-        LineSlider.setShowTickMarks(true);
-        LineSlider.setMajorTickUnit(10);
-        LineSlider.setMinorTickCount(1);
-        LineSlider.setBlockIncrement(1);
-        LineSlider.setSnapToTicks(true);
+        saveButton = new Button("Salva");
 
         // Label e comboBox lingua
-        //Label languageLabel = new Label(translationsController.translate("preferences.box"));
+        Label languageLabel = new Label("translationsController.translate(preferences.box)");
         //languageSelector.getItems().addAll(translationsController.getTagLanguages());
-        //languageSelector.setValue(preferencesController.getCurrentLanguage()); // valore predefinito
+        languageSelector.getItems().addAll(List.of("en", "it", "de"));
+        //languageSelector.setValue(preferencesController.getCurrentLanguage());
+        languageSelector.setValue("en");
 
-        // Posizionamento nel GridPane
-        //root.add(lineLabel, 0, 0);
-        root.add(LineSlider, 1, 0);
-        //root.add(languageLabel, 0, 1);
-        root.add(languageSelector, 1, 1);
-        root.add(saveButton, 1, 2);
+        root.add(languageLabel, 0, 0);
+        root.add(languageSelector, 1, 0);
+        root.add(saveButton, 1, 1);
 
-        // Listener sul bottone Salva
         saveButton.setOnAction(e -> {
-            int bombe = (int) LineSlider.getValue();
+            // int bombe = (int) LineSlider.getValue();
             String lingua = languageSelector.getValue();
 
-
-            preferencesController.updateProperties();
+            //preferencesController.updateProperties();
             stage.close();
         });
 
-        stage.setScene(new Scene(root, 350, 200));
-    }
-
-    public void show(){
+        stage.setScene(new Scene(root, 400, 250));
         stage.showAndWait();
     }
+
 }

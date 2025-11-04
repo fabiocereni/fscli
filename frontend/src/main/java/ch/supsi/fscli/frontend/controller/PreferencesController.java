@@ -1,24 +1,24 @@
 package ch.supsi.fscli.frontend.controller;
 
+import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
+import ch.supsi.fscli.frontend.view.IShow;
 import ch.supsi.fscli.frontend.view.PreferencesView;
 
-public class PreferencesController {
+public class PreferencesController implements IPreferencesController {
 
     private static PreferencesController myself;
+    private IShow preferencesView;
 
     //TODO usare classe che legge i dati dal file
     //private PreferencesBusinessInterface preferencesModel;
 
-    private PreferencesView preferencesView;
-
-    protected PreferencesController() {
+    private PreferencesController() {
     }
 
     public static PreferencesController getInstance() {
         if (myself == null) {
             myself = new PreferencesController();
         }
-
         return myself;
     }
 
@@ -70,11 +70,16 @@ public class PreferencesController {
 //        return this.preferencesModel.getPreference(key);
 //    }
 
-    public void showPreferences() {
-        preferencesView.show();
+//    public void updateProperties() {
+//    }
+
+    @Override
+    public void showPreferencesView() {
+        preferencesView.showMyView();
     }
 
-    public void updateProperties() {
+    @Override
+    public void initialize(EventHandlerInitializer eventHandlerInitializer) {
+        preferencesView = eventHandlerInitializer.preferencesView();
     }
-
 }
