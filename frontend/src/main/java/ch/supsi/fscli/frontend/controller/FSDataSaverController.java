@@ -1,7 +1,7 @@
 package ch.supsi.fscli.frontend.controller;
 
 
-import ch.supsi.fscli.backend.business.AbstractBusiness;
+import ch.supsi.fscli.backend.business.AbstractFSBusiness;
 import ch.supsi.fscli.frontend.model.FSDataSaverModel;
 import ch.supsi.fscli.frontend.model.IFSDataSaverModel;
 import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
@@ -34,15 +34,15 @@ public class FSDataSaverController implements IFSDataSaverController {
     @Override
     public void save(Path path) {
         // TODO bisonga fare il getInstance della classe desiderata
-        AbstractBusiness abstractBusiness = new AbstractBusiness() {};
-        this.ifsDataWriterModel.save(path, abstractBusiness);
+        AbstractFSBusiness abstractFSBusiness = new AbstractFSBusiness() {};
+        this.ifsDataWriterModel.save(path, abstractFSBusiness);
     }
 
     @Override
     public void save() {
         // TODO bisonga fare il getInstance della classe desiderata
-        AbstractBusiness abstractBusiness = new AbstractBusiness() {};
-        this.ifsDataWriterModel.save(abstractBusiness);
+        AbstractFSBusiness abstractFSBusiness = new AbstractFSBusiness() {};
+        this.ifsDataWriterModel.save(abstractFSBusiness);
     }
 
     @Override

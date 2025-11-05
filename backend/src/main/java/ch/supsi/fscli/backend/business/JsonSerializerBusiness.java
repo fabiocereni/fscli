@@ -14,9 +14,9 @@ public class JsonSerializerBusiness {
     private JsonSerializerBusiness() {}
 
 
-    public static String serialize(AbstractBusiness abstractBusiness) {
+    public static String serialize(AbstractFSBusiness abstractFSBusiness) {
         try {
-            return mapper.writeValueAsString(abstractBusiness);
+            return mapper.writeValueAsString(abstractFSBusiness);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
