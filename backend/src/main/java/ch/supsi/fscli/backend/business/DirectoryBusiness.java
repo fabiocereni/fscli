@@ -1,8 +1,8 @@
 package ch.supsi.fscli.backend.business;
 
-public class Directory extends FSElement implements IDirectory {
+public class DirectoryBusiness extends FSElementBusiness implements IDirectoryBusiness {
 
-    public Directory(FSElement parent, String name) {
+    public DirectoryBusiness(FSElementBusiness parent, String name) {
         super(parent, name);
     }
 
@@ -12,7 +12,7 @@ public class Directory extends FSElement implements IDirectory {
     }
 
     @Override
-    public Directory mkdir() {
+    public DirectoryBusiness mkdir() {
         System.out.println("message from directory: mkdir");
         return null;
     }
