@@ -21,7 +21,7 @@ public class FSDataWriterBusinessTest {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH");
     String fileName = LocalDateTime.now().format(formatter) + ".json";
 
-    public static class TestSerialization extends AbstractBusiness {
+    public static class TestSerialization extends AbstractFSBusiness {
         private final String testText = "Hello, World!";
         public String getTestText() {
             return testText;

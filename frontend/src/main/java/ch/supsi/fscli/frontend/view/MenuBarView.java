@@ -1,17 +1,15 @@
 package ch.supsi.fscli.frontend.view;
 
-import ch.supsi.fscli.frontend.controller.AboutController;
-import ch.supsi.fscli.frontend.controller.FSDataSaverController;
-import ch.supsi.fscli.frontend.controller.HelpController;
-import ch.supsi.fscli.frontend.controller.IAboutView;
-import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
-import ch.supsi.fscli.frontend.controller.QuitController;
-import ch.supsi.fscli.frontend.controller.IHelpController;
+import ch.supsi.fscli.frontend.controller.*;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+
+import java.util.Collections;
+import java.util.List;
 
 
 public class MenuBarView {
@@ -22,6 +20,7 @@ public class MenuBarView {
     private final QuitController quitController = QuitController.getInstance();
     private final IAboutView aboutViewController = AboutController.getInstance();
     private final IHelpController helpController = HelpController.getInstance();
+    private final IFSStateDirector fsStateDirector = FSStateDirector.getInstance();
 
     public static MenuBarView getInstance() {
         if(myself == null)
@@ -47,6 +46,7 @@ public class MenuBarView {
         // FILE MENU
         MenuItem newMenuItem = new MenuItem("New");
         newMenuItem.setId("newMenuItem");
+        newMenuItem.setOnAction(actionEvent -> fsStateDirector.createFileSystem());
 
         MenuItem openMenuItem = new MenuItem("Open...");
         openMenuItem.setId("openMenuItem");
@@ -54,12 +54,12 @@ public class MenuBarView {
         MenuItem saveMenuItem = new MenuItem("Save");
         saveMenuItem.setId("saveMenuItem");
         saveMenuItem.setOnAction(actionEvent -> dataSaverController.save());
-        saveMenuItem.setDisable(true);
+        saveMenuItem.disableProperty().bind(fsStateDirector.fileSystemCreatedProperty().not());
 
         MenuItem saveAsMenuItem = new MenuItem("Save as...");
         saveAsMenuItem.setId("saveAsMenuItem");
         saveAsMenuItem.setOnAction((actionEvent) -> dataSaverController.showSavingView());
-        saveAsMenuItem.setDisable(true);
+        saveAsMenuItem.disableProperty().bind(fsStateDirector.fileSystemCreatedProperty().not());
 
         MenuItem exitMenuItem = new MenuItem("Exit...");
         exitMenuItem.setId("exitMenuItem");

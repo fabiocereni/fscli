@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 
 public class FSTest {
 
-    private IDirectory directory;
-    private IFile file;
+    private IDirectoryBusiness directory;
+    private IFileBusiness file;
 
     @BeforeEach
     public void setup() {
-        this.directory = new Directory(null, "Test directory name");
-        this.file = new File(File.getParentDirectory(directory), "Test file name");
+        this.directory = new DirectoryBusiness(null, "Test directory name");
+        this.file = new FileBusinessBusiness(FileBusinessBusiness.getParentDirectory(directory), "Test file name");
     }
 
     @Test

@@ -2,25 +2,25 @@ package ch.supsi.fscli.backend.business;
 
 import java.util.*;
 
-class FSElement  {
-    private FSElement parent;
+class FSElementBusiness extends AbstractFSBusiness {
+    private FSElementBusiness parent;
     private String name;
-    private List<FSElement> content;
+    private List<FSElementBusiness> content;
 
 
-    public FSElement(FSElement parent, String name) {
+    public FSElementBusiness(FSElementBusiness parent, String name) {
         this.parent = parent;
         this.name = name;
         this.content = new ArrayList<>();
     }
 
     
-    public FSElement getParent() {
+    public FSElementBusiness getParent() {
         return parent;
     }
 
     
-    public void setParent(FSElement parent) {
+    public void setParent(FSElementBusiness parent) {
         this.parent = parent;
     }
 
@@ -39,12 +39,12 @@ class FSElement  {
     }
 
     
-    public List<FSElement> getContent() {
+    public List<FSElementBusiness> getContent() {
         return content;
     }
 
     
-    public void setCont(List<FSElement> cont) {
+    public void setCont(List<FSElementBusiness> cont) {
         this.content = cont;
     }
 
@@ -62,7 +62,7 @@ class FSElement  {
 
         if (content != null && !content.isEmpty()) {
             sb.append(":\n");
-            for (FSElement el : content) {
+            for (FSElementBusiness el : content) {
                 if (el != null) {
                     sb.append(el.toStringHelper(level + 1)).append("\n");
                 } else {
