@@ -9,7 +9,7 @@ public class PreferencesController implements IPreferencesController {
     private static PreferencesController myself;
     private IShow preferencesView;
 
-    //TODO usare classe che legge i dati dal file
+    //TODO usare classe che legge e scrive i dati da e sul file
     //private PreferencesBusinessInterface preferencesModel;
 
     private PreferencesController() {
@@ -31,7 +31,7 @@ public class PreferencesController implements IPreferencesController {
 //        return preferencesModel.getCurrentLanguage();
 //    }
 //
-//    public int getCurrentLineSCount() {
+//    public int getCurrentLinesCount() {
 //        return preferencesModel.getLinesCount();
 //    }
 //
@@ -70,8 +70,9 @@ public class PreferencesController implements IPreferencesController {
 //        return this.preferencesModel.getPreference(key);
 //    }
 
-//    public void updateProperties() {
-//    }
+    public void updateProperties() {
+
+    }
 
     @Override
     public void showPreferencesView() {

@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class PreferencesView implements IShow {
 
     public static PreferencesView myself;
-    private PreferencesController preferencesController;
+    private final PreferencesController preferencesController = PreferencesController.getInstance();
     //private TranslationsController translationsController;
 
     private PreferencesView() {
@@ -52,13 +53,39 @@ public class PreferencesView implements IShow {
 
         root.add(languageLabel, 0, 0);
         root.add(languageSelector, 1, 0);
-        root.add(saveButton, 1, 1);
+
+        // numberOfLines
+        Label numberLabel = new Label("Numero di linee:");
+        TextField numberField = new TextField("10");
+        Button minusButton = new Button("-");
+        Button plusButton = new Button("+");
+        HBox numberBox = new HBox(5, minusButton, numberField, plusButton);
+
+        root.add(numberLabel, 0, 1);
+        root.add(numberBox, 1, 1);
+
+
+        //save
+        root.add(saveButton, 1, 2);
+
+
+
+        // set on actions
+        minusButton.setOnAction(e -> {
+            int val = Integer.parseInt(numberField.getText());
+            if (val > 1) numberField.setText(String.valueOf(val - 1));
+        });
+
+        plusButton.setOnAction(e -> {
+            int val = Integer.parseInt(numberField.getText());
+            numberField.setText(String.valueOf(val + 1));
+        });
 
         saveButton.setOnAction(e -> {
             // int bombe = (int) LineSlider.getValue();
-            String lingua = languageSelector.getValue();
-
-            //preferencesController.updateProperties();
+            String language = languageSelector.getValue();
+            int nLines = Integer.parseInt(numberField.getText());
+            preferencesController.updateProperties();
             stage.close();
         });
 
