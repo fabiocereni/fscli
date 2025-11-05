@@ -1,6 +1,6 @@
 package ch.supsi.fscli.backend.application;
 
-import ch.supsi.fscli.backend.business.AbstractBusiness;
+import ch.supsi.fscli.backend.business.AbstractFSBusiness;
 import ch.supsi.fscli.backend.business.FSDataWriterBusiness;
 import ch.supsi.fscli.backend.business.IFSDataWriterBusiness;
 
@@ -22,13 +22,13 @@ public class FSDataWriterApplication implements IFSDataWriterApplication {
     }
 
     @Override
-    public void save(Path path, AbstractBusiness abstractBusiness) {
-        this.fsDataWriterBusiness.save(path, abstractBusiness);
+    public void save(Path path, AbstractFSBusiness abstractFSBusiness) {
+        this.fsDataWriterBusiness.save(path, abstractFSBusiness);
     }
 
     @Override
-    public void save(AbstractBusiness abstractBusiness) {
-        this.fsDataWriterBusiness.save(abstractBusiness);
+    public void save(AbstractFSBusiness abstractFSBusiness) {
+        this.fsDataWriterBusiness.save(abstractFSBusiness);
     }
 
 

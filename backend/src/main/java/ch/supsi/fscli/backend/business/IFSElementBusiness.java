@@ -2,7 +2,7 @@ package ch.supsi.fscli.backend.business;
 
 import java.util.*;
 
-public interface IFSElement<T> {
+public interface IFSElementBusiness<T> {
     default T getParent() {return null;};
     default void setParent(T parent){};
     default String getName() {return null;};

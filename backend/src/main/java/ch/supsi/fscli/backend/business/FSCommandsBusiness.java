@@ -1,5 +1,5 @@
 package ch.supsi.fscli.backend.business;
 
-public interface FSCommands {
+public interface FSCommandsBusiness {
     void pwd();
 }

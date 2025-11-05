@@ -1,7 +1,7 @@
 package ch.supsi.fscli.frontend.model;
 
 import ch.supsi.fscli.backend.application.IFSDataWriterApplication;
-import ch.supsi.fscli.backend.business.AbstractBusiness;
+import ch.supsi.fscli.backend.business.AbstractFSBusiness;
 
 import java.nio.file.Path;
 
@@ -21,12 +21,12 @@ public class FSDataSaverModel implements IFSDataSaverModel {
     }
 
     @Override
-    public void save(Path path, AbstractBusiness abstractBusiness) {
-        this.ifsDataWriterApplication.save(path, abstractBusiness);
+    public void save(Path path, AbstractFSBusiness abstractFSBusiness) {
+        this.ifsDataWriterApplication.save(path, abstractFSBusiness);
     }
 
     @Override
-    public void save(AbstractBusiness abstractBusiness) {
-        this.ifsDataWriterApplication.save(abstractBusiness);
+    public void save(AbstractFSBusiness abstractFSBusiness) {
+        this.ifsDataWriterApplication.save(abstractFSBusiness);
     }
 }
