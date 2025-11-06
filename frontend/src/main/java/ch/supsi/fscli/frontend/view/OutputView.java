@@ -1,36 +1,45 @@
 package ch.supsi.fscli.frontend.view;
 
-import javafx.scene.Node;
 import javafx.scene.control.TextArea;
+import javafx.scene.Node;
 
 public class OutputView {
 
     private static OutputView myself;
+    private TextArea outputArea;
 
-
-    private final TextArea outputView;
-
-
-    private OutputView() {
-        this.outputView = new TextArea();
-        this.outputView.setId("outputView");
-        this.outputView.appendText("This is an example output text...\n");
-    }
+    private OutputView() {}
 
     public static OutputView getInstance() {
-        if(myself == null)
-            myself = new OutputView();
-
+        if (myself == null) myself = new OutputView();
         return myself;
     }
 
-    public void initOutputView(int outputViewPrefRowCount) {
-        this.outputView.setPrefRowCount(outputViewPrefRowCount);
-        this.outputView.setEditable(false);
+    public void initOutputView(int prefRowCount) {
+        outputArea = new TextArea();
+        outputArea.setId("outputView");
+        outputArea.setEditable(false);
+        outputArea.setWrapText(true);
+        outputArea.setPrefRowCount(prefRowCount);
+        outputArea.appendText("FSCLI ready. Type 'help' for available commands.\n");
     }
 
     public Node getNode() {
-        return this.outputView;
+        return outputArea;
     }
 
+    public void appendText(String text) {
+        if (outputArea != null) {
+            outputArea.appendText(text + "\n");
+        }
+    }
+
+    public void clear() {
+        if (outputArea != null) outputArea.clear();
+    }
+
+    // Utile per MainFx
+    public TextArea getTextArea() {
+        return outputArea;
+    }
 }

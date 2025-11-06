@@ -77,9 +77,10 @@ public class MainFx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // init
+        int outputRows = ((PreferencesController)preferencesController).getOutputLines();
         this.menuBarView.initMenuBarView();
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
-        this.outputView.initOutputView(PREF_OUTPUT_VIEW_ROW_COUNT);
+        this.outputView.initOutputView(outputRows);
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
         //this.aboutView.initialize(translationController);
 
@@ -120,8 +121,6 @@ public class MainFx extends Application {
         centerPane.setFitToWidth(true);
         centerPane.setPadding(new Insets(PREF_INSETS_SIZE));
         centerPane.setContent(this.outputView.getNode());
-
-
 
         // scroll pane to hold log view
         ScrollPane bottomPane = new ScrollPane();
