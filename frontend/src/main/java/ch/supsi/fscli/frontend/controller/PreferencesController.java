@@ -1,19 +1,21 @@
 package ch.supsi.fscli.frontend.controller;
 
+import ch.supsi.fscli.frontend.model.IPreferencesModel;
+import ch.supsi.fscli.frontend.model.PreferencesModel;
 import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
 import ch.supsi.fscli.frontend.view.IShow;
 import ch.supsi.fscli.frontend.view.PreferencesView;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PreferencesController implements IPreferencesController {
 
     private static PreferencesController myself;
     private IShow preferencesView;
+    private final IPreferencesModel preferencesModel = PreferencesModel.getInstance();
 
-    //TODO usare classe che legge e scrive i dati da e sul file
-    //private PreferencesBusinessInterface preferencesModel;
-
-    private PreferencesController() {
-    }
+    private PreferencesController() {}
 
     public static PreferencesController getInstance() {
         if (myself == null) {
@@ -26,22 +28,15 @@ public class PreferencesController implements IPreferencesController {
 //        this.preferencesView = preferencesView;
 //        this.preferencesModel = preferencesModel;
 //    }
-
 //    public String getCurrentLanguage() {
 //        return preferencesModel.getCurrentLanguage();
 //    }
 //
-//    public int getCurrentLinesCount() {
-//        return preferencesModel.getLinesCount();
-//    }
 //
 //    public void setCurrentLanguage(String tagLan) {
 //        preferencesModel.setCurrentLanguage(tagLan);
 //    }
 //
-//    public void setCurrentLinesCount(int minesCount) {
-//        preferencesModel.setLinesCount(minesCount);
-//    }
 //
 //    public String getCurrentFont() {
 //        return preferencesModel.getCurrentFont();
@@ -59,19 +54,16 @@ public class PreferencesController implements IPreferencesController {
 //        return preferencesModel.setFontSize(size);
 //    }
 
+    public int getOutputLines() {
+        return preferencesModel.getOutputLines();
+    }
 
-//    /**
-//     * Return the value for the given key
-//     *
-//     * @param key
-//     * @return String
-//     */
-//    public Object getPreference(String key) {
-//        return this.preferencesModel.getPreference(key);
-//    }
+    public void setOutputLines(int minesCount) {
+        preferencesModel.setOutputLines(minesCount);
+    }
 
-    public void updateProperties() {
-
+    public void savePreferences() {
+        preferencesModel.save();
     }
 
     @Override
