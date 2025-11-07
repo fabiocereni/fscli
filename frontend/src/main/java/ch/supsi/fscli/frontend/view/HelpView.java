@@ -1,20 +1,11 @@
 package ch.supsi.fscli.frontend.view;
 
+import com.google.inject.Singleton;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 
+@Singleton
 public class HelpView implements IShow {
-
-    private static HelpView myself;
-
-    private HelpView() {}
-
-    public static HelpView getInstance() {
-        if (myself == null) {
-            myself = new HelpView();
-        }
-        return myself;
-    }
 
     @Override
     public void showMyView() {

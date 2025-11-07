@@ -9,7 +9,7 @@ public class FSStateBusiness implements IFSStateBusiness {
     private FSStateBusiness() {}
 
     public static FSStateBusiness getInstance() {
-        if(myself == null)
+        if (myself == null)
             myself = new FSStateBusiness();
 
         return myself;

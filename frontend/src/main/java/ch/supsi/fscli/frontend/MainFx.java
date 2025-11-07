@@ -2,6 +2,8 @@ package ch.supsi.fscli.frontend;
 
 import ch.supsi.fscli.frontend.controller.*;
 import ch.supsi.fscli.frontend.view.*;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -42,32 +44,41 @@ public class MainFx extends Application {
     private final IShow helpView;
 
 
-    private final EventHandlerInitializer eventHandlerInitializer;
+    private final Injector injector;
+
+    //private final EventHandlerInitializer eventHandlerInitializer;
 
     private final EventHandler dataSaverController;
     private final EventHandler aboutViewController;
     private final EventHandler helpController;
     private final IQuitController quitController;
 
+    private final IFSStateDirector fsStateDirector;
+
+
     public MainFx() {
         this.applicationTitle = "filesystem command interpreter simulator";
 
+        this.injector = Guice.createInjector(new ViewModule(), new ControllerModule(), new DirectorModule());
+
         // declaration
-        this.menuBarView = MenuBarView.getInstance();
-        this.commandLineView = CommandLineView.getInstance();
-        this.outputView = OutputView.getInstance();
-        this.logView = LogView.getInstance();
-        this.savingView = SaveAsView.getInstance();
-        this.aboutView = AboutView.getInstance();
-        this.helpView = HelpView.getInstance();
-        this.quitView = QuitView.getInstance();
+        this.menuBarView = injector.getInstance(MenuBarView.class);
+        this.commandLineView = injector.getInstance(CommandLineView.class);
+        this.outputView = injector.getInstance(OutputView.class);
+        this.logView = injector.getInstance(LogView.class);
+        this.savingView = injector.getInstance(SaveAsView.class);
+        this.aboutView = injector.getInstance(AboutView.class);
+        this.helpView = injector.getInstance(HelpView.class);
+        this.quitView = injector.getInstance(QuitView.class);
 
-        this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView);
+        //this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView);
 
-        this.dataSaverController = FSDataSaverController.getInstance();
-        this.quitController = QuitController.getInstance();
-        this.aboutViewController = AboutController.getInstance();
-        this.helpController = HelpController.getInstance();
+        this.dataSaverController = injector.getInstance(FSDataSaverController.class);
+        this.quitController = injector.getInstance(QuitController.class);
+        this.aboutViewController = injector.getInstance(AboutController.class);
+        this.helpController = injector.getInstance(HelpController.class);
+
+        this.fsStateDirector = injector.getInstance(FSStateDirector.class);
     }
 
     @Override
@@ -79,11 +90,6 @@ public class MainFx extends Application {
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
         //this.aboutView.initialize(translationController);
 
-        this.dataSaverController.initialize(eventHandlerInitializer);
-        this.quitController.initialize(eventHandlerInitializer);
-
-        this.helpController.initialize(eventHandlerInitializer);
-        this.aboutViewController.initialize(eventHandlerInitializer);
 
         // horizontal box to hold the command line
         HBox commandLinePane = new HBox();

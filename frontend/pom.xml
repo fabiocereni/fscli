@@ -43,6 +43,14 @@
             <version>5.14.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- vedere se rimuovere -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>7.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

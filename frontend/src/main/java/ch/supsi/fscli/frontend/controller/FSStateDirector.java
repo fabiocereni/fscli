@@ -1,28 +1,24 @@
 package ch.supsi.fscli.frontend.controller;
 
-import ch.supsi.fscli.backend.application.FSCreationApplication;
-import ch.supsi.fscli.backend.application.FSStateApplication;
 import ch.supsi.fscli.backend.application.IFSCreationApplication;
 import ch.supsi.fscli.backend.application.IFSStateApplication;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
+@Singleton
 public class FSStateDirector implements IFSStateDirector {
 
-    private static FSStateDirector myself;
-
-    private final IFSStateApplication ifsStateApplication = FSStateApplication.getInstance();
-    private final IFSCreationApplication ifsCreationApplication = FSCreationApplication.getInstance();
+    private final IFSStateApplication ifsStateApplication;
+    private final IFSCreationApplication ifsCreationApplication;
 
     private final BooleanProperty fileSystemCreated = new SimpleBooleanProperty(false);
 
-    private FSStateDirector() {}
-
-    public static FSStateDirector getInstance() {
-        if(myself == null)
-            myself = new FSStateDirector();
-
-        return myself;
+    @Inject
+    public FSStateDirector(IFSStateApplication ifsStateApplication, IFSCreationApplication ifsCreationApplication) {
+        this.ifsStateApplication = ifsStateApplication;
+        this.ifsCreationApplication = ifsCreationApplication;
     }
 
     @Override

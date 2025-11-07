@@ -15,7 +15,7 @@ public class FSDataWriterApplication implements IFSDataWriterApplication {
     private FSDataWriterApplication() {}
 
     public static FSDataWriterApplication getInstance() {
-        if(myself == null)
+        if (myself == null)
             myself = new FSDataWriterApplication();
 
         return myself;
