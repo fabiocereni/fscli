@@ -8,5 +8,8 @@ import java.util.Properties;
 public interface ISupportedLanguageModel {
     void setSupportedLanguagesTags();
     List<String> getSupportedLanguagesTags();
-    HashMap<String, HashMap<String, String>> setMapLanguages();
+    void setMapLanguages();
+    HashMap<String, String> getMapLanguages();
+    void setLanguageTagSelected(String languageTagSelected);
+    String getTranslation(String key);
 }

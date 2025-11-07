@@ -19,8 +19,10 @@ public class TranslationLanguageTest {
     @Test
     void testTranslationLanguage() {
         supportedLanguageModel.setSupportedLanguagesTags();
-        HashMap<String, HashMap<String, String>> map = supportedLanguageModel.setMapLanguages();
-        assertEquals("Modifica", map.get("it_CH").get("label.edit"));
+        supportedLanguageModel.setMapLanguages();
+        supportedLanguageModel.setLanguageTagSelected("de_CH");
+        HashMap<String, String> map = supportedLanguageModel.getMapLanguages();
+        assertEquals("Bearbeiten", map.get("label.edit"));
     }
 
 

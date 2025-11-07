@@ -1,6 +1,8 @@
 package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
+import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -10,6 +12,7 @@ import javafx.scene.control.SeparatorMenuItem;
 
 public class MenuBarView {
 
+
     private static MenuBarView myself;
 
     private final IFSDataSaverController dataSaverController = FSDataSaverController.getInstance();
@@ -17,6 +20,8 @@ public class MenuBarView {
     private final IAboutView aboutViewController = AboutController.getInstance();
     private final IHelpController helpController = HelpController.getInstance();
     private final IPreferencesController preferencesController = PreferencesController.getInstance();
+
+    private final ISupportedLanguageModel supportedLanguageModel = SupportedLanguageModel.getInstance();
 
     public static MenuBarView getInstance() {
         if(myself == null)
@@ -31,32 +36,32 @@ public class MenuBarView {
     private final Menu helpMenu;
 
     private MenuBarView () {
-        this.fileMenu = new Menu("File");
-        this.editMenu = new Menu("Edit");
-        this.helpMenu = new Menu("Help");
+        this.fileMenu = new Menu(supportedLanguageModel.getTranslation("label.file"));
+        this.editMenu = new Menu(supportedLanguageModel.getTranslation("label.edit"));
+        this.helpMenu = new Menu(supportedLanguageModel.getTranslation("label.help"));
         this.menuBar = new MenuBar();
     }
 
 
     public void initMenuBarView() {
         // FILE MENU
-        MenuItem newMenuItem = new MenuItem("New");
+        MenuItem newMenuItem = new MenuItem(supportedLanguageModel.getTranslation("label.new"));
         newMenuItem.setId("newMenuItem");
 
-        MenuItem openMenuItem = new MenuItem("Open...");
+        MenuItem openMenuItem = new MenuItem(supportedLanguageModel.getTranslation("label.open"));
         openMenuItem.setId("openMenuItem");
 
-        MenuItem saveMenuItem = new MenuItem("Save");
+        MenuItem saveMenuItem = new MenuItem(supportedLanguageModel.getTranslation("label.save"));
         saveMenuItem.setId("saveMenuItem");
         saveMenuItem.setOnAction(actionEvent -> dataSaverController.save());
         saveMenuItem.setDisable(true);
 
-        MenuItem saveAsMenuItem = new MenuItem("Save as...");
+        MenuItem saveAsMenuItem = new MenuItem(supportedLanguageModel.getTranslation("label.saveAs"));
         saveAsMenuItem.setId("saveAsMenuItem");
         saveAsMenuItem.setOnAction((actionEvent) -> dataSaverController.showSavingView());
         saveAsMenuItem.setDisable(true);
 
-        MenuItem exitMenuItem = new MenuItem("Exit...");
+        MenuItem exitMenuItem = new MenuItem(supportedLanguageModel.getTranslation("label.exit"));
         exitMenuItem.setId("exitMenuItem");
         exitMenuItem.setOnAction((actionEvent) -> quitController.showQuitView());
 
@@ -71,7 +76,7 @@ public class MenuBarView {
         this.fileMenu.getItems().add(exitMenuItem);
 
         // EDIT MENU
-        MenuItem preferencesMenuItem = new MenuItem("Preferences...");
+        MenuItem preferencesMenuItem = new MenuItem(supportedLanguageModel.getTranslation("label.preferences"));
         preferencesMenuItem.setId("preferencesMenuItem");
         preferencesMenuItem.setOnAction((actionEvent) -> preferencesController.showPreferencesView());
 
@@ -79,11 +84,11 @@ public class MenuBarView {
         this.editMenu.getItems().add(preferencesMenuItem);
 
         // HELP MENU
-        MenuItem helpMenuItem = new MenuItem("Help");
+        MenuItem helpMenuItem = new MenuItem(supportedLanguageModel.getTranslation("label.help"));
         helpMenuItem.setId("helpMenuItem");
         helpMenuItem.setOnAction(actionEvent -> helpController.showHelpView());
 
-        MenuItem aboutMenuItem = new MenuItem("About");
+        MenuItem aboutMenuItem = new MenuItem(supportedLanguageModel.getTranslation("label.about"));
         aboutMenuItem.setId("aboutMenuItem");
         aboutMenuItem.setOnAction((actionEvent) -> aboutViewController.showAboutView());
 

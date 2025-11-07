@@ -3,6 +3,7 @@ package ch.supsi.fscli.frontend.controller.i18n;
 import ch.supsi.fscli.backend.application.i18n.ISupportedLanguageApplication;
 import ch.supsi.fscli.backend.application.i18n.SupportedLanguageApplication;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class SupportedLanguageController implements ISupportedLanguageController {
@@ -29,5 +30,15 @@ public class SupportedLanguageController implements ISupportedLanguageController
     @Override
     public List<String> getSupportedLanguagesTags() {
         return supportedLanguageApplication.getSupportedLanguagesTags();
+    }
+
+    @Override
+    public void setMapLanguages(HashMap<String, HashMap<String, String>> mapLanguages) {
+        supportedLanguageApplication.setMapLanguages(mapLanguages);
+    }
+
+    @Override
+    public HashMap<String, String> getMapLanguages(String languageTag) {
+        return supportedLanguageApplication.getMapLanguages(languageTag);
     }
 }

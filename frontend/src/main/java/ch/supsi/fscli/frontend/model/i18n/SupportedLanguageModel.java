@@ -13,7 +13,9 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
     private static SupportedLanguageModel myself;
 
     private static final String supportedLanguagePropertiesPath = "/supported-languages.properties";
-    private static final String translationPropertiesLabel = "labels";
+    private static final String translationPropertiesLabel = "i18n.labels";
+
+    private String languageTagSelected;
 
     private SupportedLanguageModel() {
         supportedLanguageController = SupportedLanguageController.getInstance();
@@ -28,11 +30,46 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
 
     @Override
     public void setSupportedLanguagesTags() {
-        supportedLanguageController.setSupportedLanguagesTags(loadSupportedLanguages(supportedLanguagePropertiesPath));
+        supportedLanguageController.setSupportedLanguagesTags(loadSupportedLanguages());
     }
 
     @Override
-    public HashMap<String, HashMap<String, String>>  setMapLanguages() {
+    public void setMapLanguages() {
+        supportedLanguageController.setMapLanguages(loadTranslationLanguages());
+    }
+
+    public void setLanguageTagSelected(String languageTagSelected) {
+        this.languageTagSelected = languageTagSelected;
+    }
+
+    @Override
+    public List<String> getSupportedLanguagesTags() {
+        return supportedLanguageController.getSupportedLanguagesTags();
+    }
+
+    @Override
+    public HashMap<String, String> getMapLanguages() {
+        return supportedLanguageController.getMapLanguages(languageTagSelected);
+    }
+
+    @Override
+    public String getTranslation(String key) {
+        return getMapLanguages().get(key);
+    }
+
+    private List<String> loadSupportedLanguages() {
+        Properties supportedLanguages = new Properties();
+        try {
+            supportedLanguages.load(getClass().getResourceAsStream(supportedLanguagePropertiesPath));
+        } catch (IOException e) {
+            System.err.println("WARN: File 'supported-languages.properties' non trovato.");
+        }
+        return supportedLanguages.values().stream()
+                .map(Object::toString)
+                .toList();
+    }
+
+    private HashMap<String, HashMap<String, String>> loadTranslationLanguages() {
         List<String> languagesTag = getSupportedLanguagesTags();
         HashMap<String, HashMap<String, String>> listMapLanguages = new HashMap<>();
 
@@ -48,23 +85,6 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
             listMapLanguages.put(tag, mapLanguage);
         }
         return listMapLanguages;
-    }
-
-    @Override
-    public List<String> getSupportedLanguagesTags() {
-        return supportedLanguageController.getSupportedLanguagesTags();
-    }
-
-    private List<String> loadSupportedLanguages(String path) {
-        Properties supportedLanguages = new Properties();
-        try {
-            supportedLanguages.load(getClass().getResourceAsStream(path));
-        } catch (IOException e) {
-            System.err.println("WARN: File 'supported-languages.properties' non trovato.");
-        }
-        return supportedLanguages.values().stream()
-                .map(Object::toString)
-                .toList();
     }
 
 }
