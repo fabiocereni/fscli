@@ -1,16 +1,15 @@
 package ch.supsi.fscli.frontend.i18n;
 
-import ch.supsi.fscli.backend.DAO.i18n.*;
 import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
 import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SupportedLanguageDAOTest {
+public class TranslationLanguageTest {
 
     private final ISupportedLanguageModel supportedLanguageModel = SupportedLanguageModel.getInstance();
 
@@ -18,10 +17,12 @@ public class SupportedLanguageDAOTest {
     void setup() {}
 
     @Test
-    public void testSupportedLanguageModel() {
-        List<String> tagLanguages = List.of("en_US", "it_CH", "de_CH");
+    void testTranslationLanguage() {
         supportedLanguageModel.setSupportedLanguagesTags();
-        assertEquals(tagLanguages, supportedLanguageModel.getSupportedLanguagesTags());
+        HashMap<String, HashMap<String, String>> map = supportedLanguageModel.setMapLanguages();
+        assertEquals("Modifica", map.get("it_CH").get("label.edit"));
     }
+
+
 
 }
