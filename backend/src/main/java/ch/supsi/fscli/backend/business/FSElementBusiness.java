@@ -1,5 +1,7 @@
 package ch.supsi.fscli.backend.business;
 
+import com.google.inject.Inject;
+
 import java.util.*;
 
 class FSElementBusiness extends AbstractFSBusiness {
@@ -7,7 +9,7 @@ class FSElementBusiness extends AbstractFSBusiness {
     private String name;
     private List<FSElementBusiness> content;
 
-
+    @Inject
     public FSElementBusiness(FSElementBusiness parent, String name) {
         this.parent = parent;
         this.name = name;

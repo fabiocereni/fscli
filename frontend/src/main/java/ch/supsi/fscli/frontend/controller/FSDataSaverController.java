@@ -1,33 +1,22 @@
 package ch.supsi.fscli.frontend.controller;
 
-
 import ch.supsi.fscli.backend.business.AbstractFSBusiness;
-import ch.supsi.fscli.frontend.model.FSDataSaverModel;
 import ch.supsi.fscli.frontend.model.IFSDataSaverModel;
-import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
 import ch.supsi.fscli.frontend.view.IShow;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.nio.file.Path;
 
+@Singleton
 public class FSDataSaverController implements IFSDataSaverController {
 
-    private final IFSDataSaverModel ifsDataWriterModel = FSDataSaverModel.getInstance();
+    private final IFSDataSaverModel ifsDataWriterModel;
     private IShow savingView;
 
-    private static FSDataSaverController myself;
-
-    private FSDataSaverController() {}
-
-    public static FSDataSaverController getInstance() {
-        if(myself == null)
-            myself = new FSDataSaverController();
-
-        return myself;
-    }
-
-    @Override
-    public void initialize(EventHandlerInitializer eventHandlerInitializer) {
-        this.savingView = eventHandlerInitializer.savingView();
+    @Inject
+    private FSDataSaverController(IFSDataSaverModel ifsDataWriterModel) {
+        this.ifsDataWriterModel = ifsDataWriterModel;
     }
 
 

@@ -2,27 +2,22 @@ package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.FSDataSaverController;
 import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.file.Path;
 
+@Singleton
 public class SaveAsView implements IShow {
 
+    private final IFSDataSaverController dataSaverController;
 
-    private static SaveAsView myself;
-
-    private final IFSDataSaverController dataSaverController = FSDataSaverController.getInstance();
-
-    private SaveAsView() {}
-
-    public static SaveAsView getInstance() {
-        if (myself == null) {
-            myself = new SaveAsView();
-        }
-
-        return myself;
+    @Inject
+    public SaveAsView(IFSDataSaverController dataSaverController) {
+        this.dataSaverController = dataSaverController;
     }
 
     @Override

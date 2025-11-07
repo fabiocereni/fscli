@@ -19,7 +19,7 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
     private FSDataWriterBusiness() {}
 
     public static FSDataWriterBusiness getInstance() {
-        if(myself == null)
+        if (myself == null)
             myself = new FSDataWriterBusiness();
 
         return myself;

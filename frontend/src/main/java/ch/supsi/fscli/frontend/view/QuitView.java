@@ -1,23 +1,16 @@
 package ch.supsi.fscli.frontend.view;
 
+import com.google.inject.Singleton;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
+@Singleton
 public class QuitView implements IQuitView {
 
-    private static QuitView myself;
-
     //private TranslationsController translationsController;
-
-    public static QuitView getInstance() {
-        if (myself == null) {
-            myself = new QuitView();
-        }
-        return myself;
-    }
 
 //    public void initialize(TranslationsController translationsController){
 //        this.translationsController = translationsController;

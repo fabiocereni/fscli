@@ -1,20 +1,18 @@
 package ch.supsi.fscli.frontend.controller;
 
-import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
+import ch.supsi.fscli.frontend.view.HelpViewQualifier;
 import ch.supsi.fscli.frontend.view.IShow;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 public class HelpController implements IHelpController {
 
-    private static HelpController myself;
-    private IShow helpView;
+    private final IShow helpView;
 
-    private HelpController() {
-    }
-
-    public static HelpController getInstance() {
-        if(myself == null)
-            myself = new HelpController();
-        return myself;
+    @Inject
+    public HelpController(@HelpViewQualifier IShow helpView) {
+        this.helpView = helpView;
     }
 
     @Override
@@ -22,8 +20,4 @@ public class HelpController implements IHelpController {
         helpView.showMyView();
     }
 
-    @Override
-    public void initialize(EventHandlerInitializer eventHandlerInitializer) {
-        helpView = eventHandlerInitializer.helpView();
-    }
 }

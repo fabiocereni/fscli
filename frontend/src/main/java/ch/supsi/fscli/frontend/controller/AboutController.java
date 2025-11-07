@@ -1,29 +1,21 @@
 package ch.supsi.fscli.frontend.controller;
 
-import ch.supsi.fscli.frontend.view.AboutView;
-import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
+import ch.supsi.fscli.frontend.view.AboutViewQualifier;
 import ch.supsi.fscli.frontend.view.IShow;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 public class AboutController implements IAboutView {
 
-    private static AboutController mySelf;
+    private final IShow aboutView;
 
-    private IShow aboutView;
-
-    public AboutController(){};
-
-    public static AboutController getInstance() {
-        if (mySelf == null) {
-            mySelf = new AboutController();
-        }
-        return mySelf;
+    @Inject
+    public AboutController(@AboutViewQualifier IShow aboutView) {
+        this.aboutView = aboutView;
     }
 
     @Override
     public void showAboutView() { aboutView.showMyView(); }
 
-    @Override
-    public void initialize(EventHandlerInitializer eventHandlerInitializer) {
-        aboutView = eventHandlerInitializer.aboutView();
-    }
 }

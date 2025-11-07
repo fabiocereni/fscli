@@ -1,25 +1,23 @@
 package ch.supsi.fscli.frontend.view;
 
-import ch.supsi.fscli.frontend.controller.AboutController;
 import ch.supsi.fscli.frontend.controller.BuildInfoController;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import javafx.scene.control.Alert;
 
+@Singleton
 public class AboutView implements IShow {
 
     private static AboutView myself;
 
     //private TranslationsController translationsController;
-    private BuildInfoController buildInfoController = BuildInfoController.getInstance();
+    private final BuildInfoController buildInfoController;
 
-    private AboutView() {}
-
-
-    public static AboutView getInstance() {
-        if (myself == null) {
-            myself = new AboutView();
-        }
-        return myself;
+    @Inject
+    public AboutView(BuildInfoController buildInfoController) {
+        this.buildInfoController = buildInfoController;
     }
+
 
 //    public void initialize(TranslationsController translationsController){
 //        this.translationsController = translationsController;

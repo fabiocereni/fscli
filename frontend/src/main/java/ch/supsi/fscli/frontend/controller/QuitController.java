@@ -1,26 +1,19 @@
 package ch.supsi.fscli.frontend.controller;
 
-import ch.supsi.fscli.frontend.view.EventHandlerInitializer;
 import ch.supsi.fscli.frontend.view.IQuitView;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import javafx.stage.Stage;
 import ch.supsi.fscli.frontend.MainFx;
 
+@Singleton
 public class QuitController implements IQuitController {
 
-    private static QuitController mySelf;
+    private final IQuitView quitView;
 
-    private IQuitView quitView;
-
-    public static QuitController getInstance() {
-        if (mySelf == null) {
-            mySelf = new QuitController();
-        }
-        return mySelf;
-    }
-
-    @Override
-    public void initialize(EventHandlerInitializer eventHandlerInitializer) {
-        quitView = eventHandlerInitializer.quitView();
+    @Inject
+    public QuitController(IQuitView quitView) {
+        this.quitView = quitView;
     }
 
     @Override
