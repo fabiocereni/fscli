@@ -1,6 +1,7 @@
 package ch.supsi.fscli.frontend;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
 import ch.supsi.fscli.frontend.view.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -42,6 +43,7 @@ public class MainFx extends Application {
     private final IShow helpView;
     private final IShow preferencesView;
 
+    private final SupportedLanguageModel supportedLanguageModel;
 
     private final EventHandlerInitializer eventHandlerInitializer;
 
@@ -53,6 +55,11 @@ public class MainFx extends Application {
 
     public MainFx() {
         this.applicationTitle = "filesystem command interpreter simulator";
+
+        this.supportedLanguageModel = SupportedLanguageModel.getInstance();
+        this.supportedLanguageModel.setSupportedLanguagesTags();
+        this.supportedLanguageModel.setMapLanguages();
+        this.supportedLanguageModel.setLanguageTagSelected("de_CH"); // CAMBIARE CON VALORE PREFERITO
 
         // declaration
         this.menuBarView = MenuBarView.getInstance();
@@ -72,6 +79,7 @@ public class MainFx extends Application {
         this.aboutViewController = AboutController.getInstance();
         this.helpController = HelpController.getInstance();
         this.preferencesController = PreferencesController.getInstance();
+
     }
 
     @Override

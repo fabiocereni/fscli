@@ -21,7 +21,6 @@ public class PreferencesView implements IShow {
     private Stage stage;
     private ComboBox<String> languageComboBox;
 
-
     private PreferencesView() {
         supportedLanguageModel.setSupportedLanguagesTags();
     }
@@ -37,7 +36,7 @@ public class PreferencesView implements IShow {
         stage = new Stage();
         languageComboBox = new ComboBox<>();
 
-        stage.setTitle("preferences.title");
+        stage.setTitle(supportedLanguageModel.getTranslation("label.titlePreferences"));
         stage.initModality(Modality.APPLICATION_MODAL);
 
         GridPane root = new GridPane();
@@ -46,11 +45,11 @@ public class PreferencesView implements IShow {
         root.setHgap(10);
 
         // Label e comboBox lingua
-        Label languageLabel = new Label("title");
+        Label languageLabel = new Label(supportedLanguageModel.getTranslation("label.language"));
         languageComboBox.getItems().addAll(supportedLanguageModel.getSupportedLanguagesTags());
         languageComboBox.setValue(supportedLanguageModel.getSupportedLanguagesTags().get(0));
 
-        Button saveButton = new Button("save");
+        Button saveButton = new Button(supportedLanguageModel.getTranslation("label.save"));
         saveButton.setOnAction(e -> savePreferences());
 
         root.add(languageLabel, 0, 0);
