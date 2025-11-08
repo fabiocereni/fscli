@@ -12,7 +12,6 @@ public class SupportedLanguageDAO implements ISupportedLanguageDAO {
     private List<String> supportedLanguagesTags;
     private HashMap<String, HashMap<String, String>> mapLanguages;
 
-
     private SupportedLanguageDAO() {}
 
     public static SupportedLanguageDAO getInstance() {

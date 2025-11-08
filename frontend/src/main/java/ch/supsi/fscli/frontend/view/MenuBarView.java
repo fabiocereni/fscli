@@ -1,6 +1,8 @@
 package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
+import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
 import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
 import javafx.scene.Node;
