@@ -1,7 +1,4 @@
 package ch.supsi.fscli.frontend.model;
-
-import ch.supsi.fscli.frontend.controller.PreferencesController;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
