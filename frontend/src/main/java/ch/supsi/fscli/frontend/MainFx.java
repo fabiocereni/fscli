@@ -1,6 +1,10 @@
 package ch.supsi.fscli.frontend;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.director.WidgetDirector;
+import ch.supsi.fscli.frontend.modules.ControllerModule;
+import ch.supsi.fscli.frontend.modules.DirectorModule;
+import ch.supsi.fscli.frontend.modules.ViewModule;
 import ch.supsi.fscli.frontend.view.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -53,7 +57,9 @@ public class MainFx extends Application {
     private final EventHandler helpController;
     private final IQuitController quitController;
 
-    private final IFSStateDirector fsStateDirector;
+    private final WidgetDirector widgetDirector;
+
+    private final IFSCreationController fsStateDirector;
 
 
     public MainFx() {
@@ -78,7 +84,8 @@ public class MainFx extends Application {
         this.aboutViewController = injector.getInstance(AboutController.class);
         this.helpController = injector.getInstance(HelpController.class);
 
-        this.fsStateDirector = injector.getInstance(FSStateDirector.class);
+        this.fsStateDirector = injector.getInstance(FSCreationController.class);
+        this.widgetDirector = injector.getInstance(WidgetDirector.class);
     }
 
     @Override
