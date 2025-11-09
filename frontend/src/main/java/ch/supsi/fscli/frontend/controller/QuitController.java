@@ -1,6 +1,8 @@
 package ch.supsi.fscli.frontend.controller;
 
-import ch.supsi.fscli.frontend.view.IQuitView;
+import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
+
+import ch.supsi.fscli.frontend.model.IFSStateModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.stage.Stage;
@@ -9,18 +11,27 @@ import ch.supsi.fscli.frontend.MainFx;
 @Singleton
 public class QuitController implements IQuitController {
 
-    private final IQuitView quitView;
-
     @Inject
-    public QuitController(IQuitView quitView) {
-        this.quitView = quitView;
+    private IFSStateModel fsStateModel;
+    @Inject
+    private ConfirmExitDirector confirmExitDirector;
+
+
+    @Override
+    public boolean manageQuit() {
+
+        if(fsStateModel.isCloseable()) {
+            MainFx.getStageToClose().stream().toList().forEach(Stage::close);
+            return true;
+        } else {
+            this.confirmExitDirector.manageExit();
+            return false;
+        }
     }
 
     @Override
-    public boolean showQuitView() {
-        boolean confirmed = quitView.showConfirmation();
-         if(confirmed)
-             MainFx.getStageToClose().stream().toList().forEach(Stage::close);
-         return confirmed;
+    public void confirmQuit() {
+        MainFx.getStageToClose().stream().toList().forEach(Stage::close);
     }
+
 }

@@ -6,15 +6,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class FSStateDirector extends AbstractDirector {
+public class FSCreationDirector extends AbstractDirector {
 
     @Inject
     private IFSCreationApplication ifsCreationApplication;
 
     public void createFileSystem() {
-
         this.ifsCreationApplication.createFileSystem();
-
         firePropertyChange(new FilesystemCreatedEvent(this, "new", null, true));
     }
 

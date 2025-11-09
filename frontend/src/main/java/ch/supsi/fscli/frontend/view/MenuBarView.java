@@ -1,7 +1,7 @@
 package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.*;
-import ch.supsi.fscli.frontend.director.FSStateDirector;
+import ch.supsi.fscli.frontend.director.FSCreationDirector;
 import ch.supsi.fscli.frontend.director.WidgetDirector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -26,7 +26,7 @@ public class MenuBarView {
     @Inject
     private IFSCreationController fsCreationController;
     @Inject
-    private FSStateDirector fsStateDirector;
+    private FSCreationDirector fsCreationDirector;
     @Inject
     private WidgetDirector widgetDirector;
 
@@ -45,7 +45,7 @@ public class MenuBarView {
 
     @Inject
     public void initListeners() {
-        this.fsStateDirector.addPropertyChangeListener(widgetDirector);
+        this.fsCreationDirector.addPropertyChangeListener(widgetDirector);
     }
 
 
@@ -70,7 +70,7 @@ public class MenuBarView {
 
         MenuItem exitMenuItem = new MenuItem("Exit...");
         exitMenuItem.setId("exitMenuItem");
-        exitMenuItem.setOnAction((actionEvent) -> quitController.showQuitView());
+        exitMenuItem.setOnAction((actionEvent) -> quitController.manageQuit());
 
         this.widgetDirector.setColleagues(saveMenuItem, saveAsMenuItem);
 
