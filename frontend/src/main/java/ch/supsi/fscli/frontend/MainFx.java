@@ -1,9 +1,11 @@
 package ch.supsi.fscli.frontend;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
 import ch.supsi.fscli.frontend.director.WidgetDirector;
 import ch.supsi.fscli.frontend.modules.ControllerModule;
 import ch.supsi.fscli.frontend.modules.DirectorModule;
+import ch.supsi.fscli.frontend.modules.ModelModule;
 import ch.supsi.fscli.frontend.modules.ViewModule;
 import ch.supsi.fscli.frontend.view.*;
 import com.google.inject.Guice;
@@ -43,7 +45,7 @@ public class MainFx extends Application {
     private final OutputView outputView;
     private final LogView logView;
     private final IShow savingView;
-    private final IQuitView quitView;
+    private final QuitView quitView;
     private final IShow aboutView;
     private final IShow helpView;
 
@@ -58,6 +60,7 @@ public class MainFx extends Application {
     private final IQuitController quitController;
 
     private final WidgetDirector widgetDirector;
+    private final ConfirmExitDirector confirmExitDirector;
 
     private final IFSCreationController fsStateDirector;
 
@@ -65,7 +68,8 @@ public class MainFx extends Application {
     public MainFx() {
         this.applicationTitle = "filesystem command interpreter simulator";
 
-        this.injector = Guice.createInjector(new ViewModule(), new ControllerModule(), new DirectorModule());
+        this.injector = Guice.createInjector(new ViewModule(), new ControllerModule(),
+                                             new DirectorModule(), new ModelModule());
 
         // declaration
         this.menuBarView = injector.getInstance(MenuBarView.class);
@@ -86,6 +90,11 @@ public class MainFx extends Application {
 
         this.fsStateDirector = injector.getInstance(FSCreationController.class);
         this.widgetDirector = injector.getInstance(WidgetDirector.class);
+        this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
+
+
+        this.confirmExitDirector.addPropertyChangeListener(quitView);
+
     }
 
     @Override
@@ -157,8 +166,9 @@ public class MainFx extends Application {
             // to handle to exit process...
             //
             // for new we just close the app directly
-            boolean confirmed = this.quitController.showQuitView();
-            if(!confirmed)
+            boolean confirmed = this.quitController.manageQuit();
+            System.out.println(confirmed);
+            if(confirmed)
                 e.consume();
         });
 

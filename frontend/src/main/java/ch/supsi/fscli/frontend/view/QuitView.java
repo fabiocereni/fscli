@@ -1,23 +1,22 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.controller.IQuitController;
+import ch.supsi.fscli.frontend.event.ConfirmExitEvent;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Optional;
 
 @Singleton
-public class QuitView implements IQuitView {
+public class QuitView extends AbstractView {
 
-    //private TranslationsController translationsController;
+    @Inject
+    private IQuitController quitController;
 
-//    public void initialize(TranslationsController translationsController){
-//        this.translationsController = translationsController;
-//    }
-
-
-    @Override
     public boolean showConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma Uscita");
@@ -36,6 +35,18 @@ public class QuitView implements IQuitView {
         alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
         Optional<ButtonType> result = alert.showAndWait();
+
         return result.isPresent() && result.get() == buttonTypeYes;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if(evt instanceof ConfirmExitEvent) {
+            System.out.println("exit aborted picked-up");
+
+            if(this.showConfirmation())
+                this.quitController.confirmQuit();
+
+        }
     }
 }

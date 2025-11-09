@@ -21,7 +21,6 @@ public class WidgetDirector extends AbstractDirector implements PropertyChangeLi
     }
 
 
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
