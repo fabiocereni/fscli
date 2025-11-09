@@ -1,6 +1,8 @@
 package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.director.FSStateDirector;
+import ch.supsi.fscli.frontend.director.WidgetDirector;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.scene.Node;
@@ -12,11 +14,21 @@ import javafx.scene.control.SeparatorMenuItem;
 @Singleton
 public class MenuBarView {
 
-    private final IFSDataSaverController dataSaverController;
-    private final QuitController quitController;
-    private final IAboutView aboutViewController;
-    private final IHelpController helpController;
-    private final IFSStateDirector fsStateDirector;
+    @Inject
+    private IFSDataSaverController dataSaverController;
+    @Inject
+    private QuitController quitController;
+    @Inject
+    private IAboutView aboutViewController;
+    @Inject
+    private IHelpController helpController;
+
+    @Inject
+    private IFSCreationController fsCreationController;
+    @Inject
+    private FSStateDirector fsStateDirector;
+    @Inject
+    private WidgetDirector widgetDirector;
 
     private final MenuBar menuBar;
     private final Menu fileMenu;
@@ -24,26 +36,24 @@ public class MenuBarView {
     private final Menu helpMenu;
 
     @Inject
-    private MenuBarView (IFSDataSaverController dataSaverController,
-                         QuitController quitController, IAboutView aboutViewController,
-                         IHelpController helpController, IFSStateDirector fsStateDirector) {
-
-        this.dataSaverController = dataSaverController;
-        this.quitController = quitController;
-        this.aboutViewController = aboutViewController;
-        this.helpController = helpController;
-        this.fsStateDirector = fsStateDirector;
+    private MenuBarView () {
         this.fileMenu = new Menu("File");
         this.editMenu = new Menu("Edit");
         this.helpMenu = new Menu("Help");
         this.menuBar = new MenuBar();
     }
 
+    @Inject
+    public void initListeners() {
+        this.fsStateDirector.addPropertyChangeListener(widgetDirector);
+    }
+
+
     public void initMenuBarView() {
         // FILE MENU
         MenuItem newMenuItem = new MenuItem("New");
         newMenuItem.setId("newMenuItem");
-        newMenuItem.setOnAction(actionEvent -> fsStateDirector.createFileSystem());
+        newMenuItem.setOnAction(actionEvent -> fsCreationController.createFileSystem());
 
         MenuItem openMenuItem = new MenuItem("Open...");
         openMenuItem.setId("openMenuItem");
@@ -51,16 +61,18 @@ public class MenuBarView {
         MenuItem saveMenuItem = new MenuItem("Save");
         saveMenuItem.setId("saveMenuItem");
         saveMenuItem.setOnAction(actionEvent -> dataSaverController.save());
-        saveMenuItem.disableProperty().bind(fsStateDirector.fileSystemCreatedProperty().not());
+        saveMenuItem.setDisable(true);
 
         MenuItem saveAsMenuItem = new MenuItem("Save as...");
         saveAsMenuItem.setId("saveAsMenuItem");
         saveAsMenuItem.setOnAction((actionEvent) -> dataSaverController.showSavingView());
-        saveAsMenuItem.disableProperty().bind(fsStateDirector.fileSystemCreatedProperty().not());
+        saveAsMenuItem.setDisable(true);
 
         MenuItem exitMenuItem = new MenuItem("Exit...");
         exitMenuItem.setId("exitMenuItem");
         exitMenuItem.setOnAction((actionEvent) -> quitController.showQuitView());
+
+        this.widgetDirector.setColleagues(saveMenuItem, saveAsMenuItem);
 
         this.fileMenu.setId("fileMenu");
         this.fileMenu.getItems().add(newMenuItem);

@@ -1,6 +1,7 @@
-package ch.supsi.fscli.frontend.view;
+package ch.supsi.fscli.frontend.modules;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.view.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 
@@ -10,7 +11,7 @@ public class ViewModule extends AbstractModule {
         bind(IFSDataSaverController.class).to(FSDataSaverController.class).in(Singleton.class);
         bind(IAboutView.class).to(AboutController.class).in(Singleton.class);
         bind(IHelpController.class).to(HelpController.class).in(Singleton.class);
-        bind(IFSStateDirector.class).to(FSStateDirector.class).in(Singleton.class);
+        bind(IFSCreationController.class).to(FSCreationController.class).in(Singleton.class);
         bind(CommandLineView.class).in(Singleton.class);
         bind(IQuitView.class).to(QuitView.class).in(Singleton.class);
 
