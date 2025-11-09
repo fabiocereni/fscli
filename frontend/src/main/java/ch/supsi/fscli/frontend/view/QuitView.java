@@ -1,5 +1,7 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
+import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -8,9 +10,9 @@ import java.util.Optional;
 
 public class QuitView implements IQuitView {
 
-    private static QuitView myself;
+    private final ISupportedLanguageModel supportedLanguageModel = SupportedLanguageModel.getInstance();
 
-    //private TranslationsController translationsController;
+    private static QuitView myself;
 
     public static QuitView getInstance() {
         if (myself == null) {
@@ -19,24 +21,20 @@ public class QuitView implements IQuitView {
         return myself;
     }
 
-//    public void initialize(TranslationsController translationsController){
-//        this.translationsController = translationsController;
-//    }
-
 
     @Override
     public boolean showConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Conferma Uscita");
-        alert.setHeaderText("Sei sicuro di voler uscire?");
-        alert.setContentText("Qualsiasi modifica non salvata andrà persa.");
+        alert.setTitle(supportedLanguageModel.getTranslation("label.confirmExit"));
+        alert.setHeaderText(supportedLanguageModel.getTranslation("label.headerTextExit"));
+        alert.setContentText(supportedLanguageModel.getTranslation("label.contentTextExit"));
 
         ButtonType buttonTypeYes = new ButtonType(
-                "Sì" ,
+                supportedLanguageModel.getTranslation("label.yes") ,
                 ButtonBar.ButtonData.OK_DONE
         );
         ButtonType buttonTypeNo = new ButtonType(
-                "No",
+                supportedLanguageModel.getTranslation("label.no"),
                 ButtonBar.ButtonData.CANCEL_CLOSE
         );
 

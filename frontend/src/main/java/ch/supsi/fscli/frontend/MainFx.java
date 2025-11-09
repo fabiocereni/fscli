@@ -1,6 +1,10 @@
 package ch.supsi.fscli.frontend;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
+import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
+import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
+import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import ch.supsi.fscli.frontend.view.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -42,6 +46,7 @@ public class MainFx extends Application {
     private final IShow helpView;
     private final IShow preferencesView;
 
+    private final SupportedLanguageModel supportedLanguageModel;
 
     private final EventHandlerInitializer eventHandlerInitializer;
 
@@ -51,8 +56,17 @@ public class MainFx extends Application {
     private final EventHandler preferencesController;
     private final IQuitController quitController;
 
+    private final IPreferencesModel preferencesModel;
+
     public MainFx() {
         this.applicationTitle = "filesystem command interpreter simulator";
+
+        this.preferencesModel = PreferencesModel.getInstance();
+
+        this.supportedLanguageModel = SupportedLanguageModel.getInstance();
+        this.supportedLanguageModel.setSupportedLanguagesTags();
+        this.supportedLanguageModel.setMapLanguages();
+        this.supportedLanguageModel.setLanguageTagSelected(preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
 
         // declaration
         this.menuBarView = MenuBarView.getInstance();
@@ -72,12 +86,13 @@ public class MainFx extends Application {
         this.aboutViewController = AboutController.getInstance();
         this.helpController = HelpController.getInstance();
         this.preferencesController = PreferencesController.getInstance();
+
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // init
-        int outputRows = ((PreferencesController)preferencesController).getOutputLines();
+        int outputRows = Integer.parseInt(((PreferencesController)preferencesController).getProperty(PreferencesModel.KEY_LINES_NUMBER));
         this.menuBarView.initMenuBarView();
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
         this.outputView.initOutputView(outputRows);
