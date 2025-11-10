@@ -1,5 +1,7 @@
 package ch.supsi.fscli.frontend.model.preference;
 
+import ch.supsi.fscli.backend.application.preference.IPreferencesApplication;
+import ch.supsi.fscli.backend.application.preference.PreferencesApplication;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 
@@ -20,15 +22,13 @@ public class PreferencesModel implements IPreferencesModel {
     public static final String DEFAULT_FONT_LOG_AREA = "Comic Sans MS";
     public static final int DEFAULT_LINES_NUMBER = 25;
 
-
-    private final IPreferencesController preferenceController;
+    private final IPreferencesApplication preferencesApplication = PreferencesApplication.getInstance();
 
     private static PreferencesModel myself;
 
     private String preferencesPath;
 
     private PreferencesModel() {
-        preferenceController = PreferencesController.getInstance();
         manageProperties();
     }
 
@@ -85,17 +85,17 @@ public class PreferencesModel implements IPreferencesModel {
 
     @Override
     public String getProperty(String key) {
-        return preferenceController.getProperty(key);
+        return preferencesApplication.getProperty(key);
     }
 
     @Override
     public void setProperty(String key, String value) {
-        preferenceController.setProperty(key, value);
+        preferencesApplication.setProperty(key, value);
     }
 
     @Override
     public Properties getProperties() {
-        return preferenceController.getProperties();
+        return preferencesApplication.getProperties();
     }
 
 }

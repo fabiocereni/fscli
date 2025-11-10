@@ -1,6 +1,7 @@
 package ch.supsi.fscli.frontend;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
 import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
@@ -53,20 +54,23 @@ public class MainFx extends Application {
     private final EventHandler dataSaverController;
     private final EventHandler aboutViewController;
     private final EventHandler helpController;
-    private final EventHandler preferencesController;
+    private final IPreferencesController preferencesController;
     private final IQuitController quitController;
-
-    private final IPreferencesModel preferencesModel;
 
     public MainFx() {
         this.applicationTitle = "filesystem command interpreter simulator";
 
-        this.preferencesModel = PreferencesModel.getInstance();
+        this.dataSaverController = FSDataSaverController.getInstance();
+        this.quitController = QuitController.getInstance();
+        this.aboutViewController = AboutController.getInstance();
+        this.helpController = HelpController.getInstance();
+        this.preferencesController = PreferencesController.getInstance();
 
         this.supportedLanguageModel = SupportedLanguageModel.getInstance();
         this.supportedLanguageModel.setSupportedLanguagesTags();
         this.supportedLanguageModel.setMapLanguages();
-        this.supportedLanguageModel.setLanguageTagSelected(preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
+        this.supportedLanguageModel.setLanguageTagSelected(preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE));
+
 
         // declaration
         this.menuBarView = MenuBarView.getInstance();
@@ -80,19 +84,12 @@ public class MainFx extends Application {
         this.preferencesView = PreferencesView.getInstance();
 
         this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView, this.preferencesView);
-
-        this.dataSaverController = FSDataSaverController.getInstance();
-        this.quitController = QuitController.getInstance();
-        this.aboutViewController = AboutController.getInstance();
-        this.helpController = HelpController.getInstance();
-        this.preferencesController = PreferencesController.getInstance();
-
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         // init
-        int outputRows = Integer.parseInt(((PreferencesController)preferencesController).getProperty(PreferencesModel.KEY_LINES_NUMBER));
+        int outputRows = Integer.parseInt(preferencesController.getProperty(PreferencesModel.KEY_LINES_NUMBER));
         this.menuBarView.initMenuBarView();
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
         this.outputView.initOutputView(outputRows);
