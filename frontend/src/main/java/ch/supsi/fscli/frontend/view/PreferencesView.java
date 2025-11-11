@@ -1,0 +1,154 @@
+package ch.supsi.fscli.frontend.view;
+
+import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
+import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
+import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
+import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
+import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
+import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.util.List;
+
+public class PreferencesView implements IShow {
+
+    private final IPreferencesModel preferencesModel = PreferencesModel.getInstance();
+    private final ISupportedLanguageModel supportedLanguageModel = SupportedLanguageModel.getInstance();
+    private final IPreferencesController preferencesController = PreferencesController.getInstance();
+
+
+    private static PreferencesView myself;
+
+    // view
+    private Stage stage;
+    private ComboBox<String> languageComboBox;
+    private ComboBox<String> fontCommandLineComboBox;
+    private ComboBox<String> fontOutputAreaComboBox;
+    private ComboBox<String> fontLogAreaComboBox;
+    private TextField linesField;
+
+    private PreferencesView() {
+        supportedLanguageModel.setSupportedLanguagesTags();
+    }
+
+    public static PreferencesView getInstance() {
+        if (myself == null) {
+            myself = new PreferencesView();
+        }
+        return myself;
+    }
+
+    @Override
+    public void showMyView() {
+        stage = new Stage();
+
+        languageComboBox = new ComboBox<>();
+        fontCommandLineComboBox = new ComboBox<>();
+        fontOutputAreaComboBox = new ComboBox<>();
+        fontLogAreaComboBox = new ComboBox<>();
+
+        stage.setTitle(supportedLanguageModel.getTranslation("label.titlePreferences"));
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        GridPane root = new GridPane();
+        root.setPadding(new Insets(20));
+        root.setVgap(15);
+        root.setHgap(10);
+
+        Label languageLabel = new Label(supportedLanguageModel.getTranslation("label.language"));
+        languageComboBox.getItems().addAll(supportedLanguageModel.getSupportedLanguagesTags());
+        languageComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
+
+        Label fontCommandLineLabel = new Label("Font command line:");
+        fontCommandLineComboBox.getItems().addAll(Font.getFamilies());
+        fontCommandLineComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_FONT_COMMANDLINE));
+
+        Label fontOutputAreaLabel = new Label("Font output area:");
+        fontOutputAreaComboBox.getItems().addAll(Font.getFamilies());
+        fontOutputAreaComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA));
+
+        Label fontLogAreaLabel = new Label("Font log area:");
+        fontLogAreaComboBox.getItems().addAll(Font.getFamilies());
+        fontLogAreaComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_FONT_LOG_AREA));
+
+        root.add(languageLabel, 0, 0);
+        root.add(languageComboBox, 1, 0);
+        root.add(fontCommandLineLabel, 0, 1);
+        root.add(fontCommandLineComboBox, 1, 1);
+        root.add(fontOutputAreaLabel, 0, 2);
+        root.add(fontOutputAreaComboBox, 1, 2);
+        root.add(fontLogAreaLabel, 0, 3);
+        root.add(fontLogAreaComboBox, 1, 3);
+
+        Label linesLabel = new Label(supportedLanguageModel.getTranslation("label.line"));
+        linesField = new TextField(preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER));
+        linesField.setPrefColumnCount(4);
+        linesField.setEditable(true);
+
+        Button minusBtn = new Button("-");
+        Button plusBtn = new Button("+");
+        minusBtn.setOnAction(e -> changeValue(linesField, -1));
+        plusBtn.setOnAction(e -> changeValue(linesField, +1));
+
+        HBox spinnerBox = new HBox(5, minusBtn, linesField, plusBtn);
+        root.add(linesLabel, 0, 4);
+        root.add(spinnerBox, 1, 4);
+
+        Button saveButton = new Button(supportedLanguageModel.getTranslation("label.save"));
+        root.add(saveButton, 1, 5);
+
+        saveButton.setOnAction(e -> {
+            try {
+                int lines = Integer.parseInt(linesField.getText().trim());
+                if (lines < 5 || lines > 100) throw new NumberFormatException();
+                savePreferences();
+            } catch (NumberFormatException ex) {
+                showError(stage, "Enter a number between 5 and 100.");
+            }
+        });
+
+        stage.setScene(new Scene(root, 450, 300));
+        stage.showAndWait();
+    }
+
+    private void savePreferences() {
+        String lingua = languageComboBox.getValue();
+        String fontCommandLine = fontCommandLineComboBox.getValue();
+        String fontOutputArea = fontOutputAreaComboBox.getValue();
+        String fontLogArea = fontLogAreaComboBox.getValue();
+        int nLines = Integer.parseInt(linesField.getText().trim());
+
+        preferencesModel.setProperty(PreferencesModel.KEY_LANGUAGE, lingua);
+        preferencesModel.setProperty(PreferencesModel.KEY_FONT_COMMANDLINE, fontCommandLine);
+        preferencesModel.setProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA, fontOutputArea);
+        preferencesModel.setProperty(PreferencesModel.KEY_FONT_LOG_AREA, fontLogArea);
+        preferencesModel.setProperty(PreferencesModel.KEY_LINES_NUMBER, String.valueOf(nLines));
+
+
+        preferencesModel.savePreferences();
+        stage.close();
+    }
+
+    private void changeValue(TextField field, int delta) {
+        try {
+            int val = Integer.parseInt(field.getText());
+            val = Math.max(5, Math.min(100, val + delta));
+            field.setText(String.valueOf(val));
+        } catch (NumberFormatException e) {
+            field.setText("25");
+        }
+    }
+
+    private void showError(Stage owner, String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
+        alert.initOwner(owner);
+        alert.showAndWait();
+    }
+}
