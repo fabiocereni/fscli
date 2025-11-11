@@ -2,43 +2,45 @@ package ch.supsi.fscli.frontend.controller.i18n;
 
 import ch.supsi.fscli.backend.application.i18n.ISupportedLanguageApplication;
 import ch.supsi.fscli.backend.application.i18n.SupportedLanguageApplication;
+import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
+import com.google.inject.Inject;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class SupportedLanguageController implements ISupportedLanguageController {
 
-    private final ISupportedLanguageApplication supportedLanguageApplication;
+    @Inject
+    private ISupportedLanguageModel supportedLanguageModel;
 
-    private static SupportedLanguageController myself;
-
-    private SupportedLanguageController() {
-        supportedLanguageApplication = SupportedLanguageApplication.getInstance();
-    }
-
-    public static SupportedLanguageController getInstance() {
-        if(myself == null)
-            myself = new SupportedLanguageController();
-        return myself;
+    @Inject
+    @Override
+    public void setSupportedLanguagesTags() {
+        supportedLanguageModel.setSupportedLanguagesTags();
     }
 
     @Override
-    public void setSupportedLanguagesTags(List<String> supportedLanguagesTags) {
-        supportedLanguageApplication.setSupportedLanguagesTags(supportedLanguagesTags);
+    public void setMapLanguages() {
+        supportedLanguageModel.setMapLanguages();
+    }
+
+    public void setLanguageTagSelected(String languageTagSelected) {
+        supportedLanguageModel.setLanguageTagSelected(languageTagSelected);
     }
 
     @Override
     public List<String> getSupportedLanguagesTags() {
-        return supportedLanguageApplication.getSupportedLanguagesTags();
+        return supportedLanguageModel.getSupportedLanguagesTags();
     }
 
     @Override
-    public void setMapLanguages(HashMap<String, HashMap<String, String>> mapLanguages) {
-        supportedLanguageApplication.setMapLanguages(mapLanguages);
+    public HashMap<String, String> getMapLanguages() {
+        return supportedLanguageModel.getMapLanguages();
     }
 
     @Override
-    public HashMap<String, String> getMapLanguages(String languageTag) {
-        return supportedLanguageApplication.getMapLanguages(languageTag);
+    public String getTranslation(String key) {
+        return getMapLanguages().get(key);
     }
+
 }

@@ -4,7 +4,6 @@ import ch.supsi.fscli.frontend.controller.*;
 import ch.supsi.fscli.frontend.view.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
-import org.w3c.dom.views.AbstractView;
 
 public class ViewModule extends AbstractModule {
 
@@ -15,8 +14,8 @@ public class ViewModule extends AbstractModule {
 
 
         bind(IShow.class).annotatedWith(AboutViewQualifier.class).to(AboutView.class).in(Singleton.class);
-        bind(IShow.class).annotatedWith(HelpViewQualifier.class).to(AboutView.class).in(Singleton.class);
-
+        bind(IShow.class).annotatedWith(HelpViewQualifier.class).to(HelpView.class).in(Singleton.class);
+        bind(IShow.class).annotatedWith(PreferencesViewQualifier.class).to(PreferencesView.class).in(Singleton.class);
 
     }
 }

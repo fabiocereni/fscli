@@ -1,61 +1,54 @@
 package ch.supsi.fscli.frontend.model.i18n;
 
+import ch.supsi.fscli.backend.application.i18n.ISupportedLanguageApplication;
+import ch.supsi.fscli.backend.application.i18n.SupportedLanguageApplication;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
-import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.io.IOException;
 import java.util.*;
 
+@Singleton
 public class SupportedLanguageModel implements ISupportedLanguageModel {
 
-    private final ISupportedLanguageController supportedLanguageController;
 
-    private static SupportedLanguageModel myself;
+    private String languageTagSelected;
+
+
+    private ISupportedLanguageApplication supportedLanguageApplication = SupportedLanguageApplication.getInstance();
+
 
     private static final String supportedLanguagePropertiesPath = "/supported-languages.properties";
     private static final String translationPropertiesLabel = "i18n.labels";
 
-    private String languageTagSelected;
-
-    private SupportedLanguageModel() {
-        supportedLanguageController = SupportedLanguageController.getInstance();
-    }
-
-    public static SupportedLanguageModel getInstance() {
-        if (myself == null) {
-            myself = new SupportedLanguageModel();
-        }
-        return myself;
-    }
 
     @Override
     public void setSupportedLanguagesTags() {
-        supportedLanguageController.setSupportedLanguagesTags(loadSupportedLanguages());
+        supportedLanguageApplication.setSupportedLanguagesTags(loadSupportedLanguages());
+    }
+
+    @Override
+    public List<String> getSupportedLanguagesTags() {
+        return supportedLanguageApplication.getSupportedLanguagesTags();
     }
 
     @Override
     public void setMapLanguages() {
-        supportedLanguageController.setMapLanguages(loadTranslationLanguages());
+        supportedLanguageApplication.setMapLanguages(loadTranslationLanguages());
     }
 
+    @Override
     public void setLanguageTagSelected(String languageTagSelected) {
         this.languageTagSelected = languageTagSelected;
     }
 
     @Override
-    public List<String> getSupportedLanguagesTags() {
-        return supportedLanguageController.getSupportedLanguagesTags();
-    }
-
-    @Override
     public HashMap<String, String> getMapLanguages() {
-        return supportedLanguageController.getMapLanguages(languageTagSelected);
+        return supportedLanguageApplication.getMapLanguages(languageTagSelected);
     }
 
-    @Override
-    public String getTranslation(String key) {
-        return getMapLanguages().get(key);
-    }
+
 
     private List<String> loadSupportedLanguages() {
         Properties supportedLanguages = new Properties();

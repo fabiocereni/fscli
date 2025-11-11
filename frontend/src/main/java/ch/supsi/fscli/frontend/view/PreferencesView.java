@@ -1,11 +1,12 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
-import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
 import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
-import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
+import com.google.inject.Inject;
+import jakarta.inject.Singleton;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,16 +16,20 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.List;
-
+@Singleton
 public class PreferencesView implements IShow {
 
-    private final IPreferencesModel preferencesModel = PreferencesModel.getInstance();
-    private final ISupportedLanguageModel supportedLanguageModel = SupportedLanguageModel.getInstance();
-    private final IPreferencesController preferencesController = PreferencesController.getInstance();
+    @Inject
+    private IPreferencesModel preferencesModel;
+
+    @Inject
+    private IPreferencesController preferencesController;
+
+    @Inject
+    private ISupportedLanguageController supportedLanguageController;
 
 
-    private static PreferencesView myself;
+
 
     // view
     private Stage stage;
@@ -34,16 +39,7 @@ public class PreferencesView implements IShow {
     private ComboBox<String> fontLogAreaComboBox;
     private TextField linesField;
 
-    private PreferencesView() {
-        supportedLanguageModel.setSupportedLanguagesTags();
-    }
 
-    public static PreferencesView getInstance() {
-        if (myself == null) {
-            myself = new PreferencesView();
-        }
-        return myself;
-    }
 
     @Override
     public void showMyView() {
@@ -54,7 +50,7 @@ public class PreferencesView implements IShow {
         fontOutputAreaComboBox = new ComboBox<>();
         fontLogAreaComboBox = new ComboBox<>();
 
-        stage.setTitle(supportedLanguageModel.getTranslation("label.titlePreferences"));
+        stage.setTitle(supportedLanguageController.getTranslation("label.titlePreferences"));
         stage.initModality(Modality.APPLICATION_MODAL);
 
         GridPane root = new GridPane();
@@ -62,8 +58,8 @@ public class PreferencesView implements IShow {
         root.setVgap(15);
         root.setHgap(10);
 
-        Label languageLabel = new Label(supportedLanguageModel.getTranslation("label.language"));
-        languageComboBox.getItems().addAll(supportedLanguageModel.getSupportedLanguagesTags());
+        Label languageLabel = new Label(supportedLanguageController.getTranslation("label.language"));
+        languageComboBox.getItems().addAll(supportedLanguageController.getSupportedLanguagesTags());
         languageComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
 
         Label fontCommandLineLabel = new Label("Font command line:");
@@ -87,7 +83,7 @@ public class PreferencesView implements IShow {
         root.add(fontLogAreaLabel, 0, 3);
         root.add(fontLogAreaComboBox, 1, 3);
 
-        Label linesLabel = new Label(supportedLanguageModel.getTranslation("label.line"));
+        Label linesLabel = new Label(supportedLanguageController.getTranslation("label.line"));
         linesField = new TextField(preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER));
         linesField.setPrefColumnCount(4);
         linesField.setEditable(true);
@@ -101,7 +97,7 @@ public class PreferencesView implements IShow {
         root.add(linesLabel, 0, 4);
         root.add(spinnerBox, 1, 4);
 
-        Button saveButton = new Button(supportedLanguageModel.getTranslation("label.save"));
+        Button saveButton = new Button(supportedLanguageController.getTranslation("label.save"));
         root.add(saveButton, 1, 5);
 
         saveButton.setOnAction(e -> {
@@ -125,14 +121,14 @@ public class PreferencesView implements IShow {
         String fontLogArea = fontLogAreaComboBox.getValue();
         int nLines = Integer.parseInt(linesField.getText().trim());
 
-        preferencesModel.setProperty(PreferencesModel.KEY_LANGUAGE, lingua);
-        preferencesModel.setProperty(PreferencesModel.KEY_FONT_COMMANDLINE, fontCommandLine);
-        preferencesModel.setProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA, fontOutputArea);
-        preferencesModel.setProperty(PreferencesModel.KEY_FONT_LOG_AREA, fontLogArea);
-        preferencesModel.setProperty(PreferencesModel.KEY_LINES_NUMBER, String.valueOf(nLines));
+        preferencesController.setProperty(PreferencesModel.KEY_LANGUAGE, lingua);
+        preferencesController.setProperty(PreferencesModel.KEY_FONT_COMMANDLINE, fontCommandLine);
+        preferencesController.setProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA, fontOutputArea);
+        preferencesController.setProperty(PreferencesModel.KEY_FONT_LOG_AREA, fontLogArea);
+        preferencesController.setProperty(PreferencesModel.KEY_LINES_NUMBER, String.valueOf(nLines));
 
 
-        preferencesModel.savePreferences();
+        preferencesController.savePreferences();
         stage.close();
     }
 
