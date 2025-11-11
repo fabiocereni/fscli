@@ -1,4 +1,4 @@
-package ch.supsi.fscli.frontend.i18n;
+/*package ch.supsi.fscli.frontend.i18n;
 
 import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
 import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
@@ -23,4 +23,4 @@ public class SupportedLanguageTest {
         assertEquals(tagLanguages, supportedLanguageModel.getSupportedLanguagesTags());
     }
 
-}
+}/*

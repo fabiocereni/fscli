@@ -1,6 +1,7 @@
 package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.director.FSCreationDirector;
 import ch.supsi.fscli.frontend.director.WidgetDirector;
 import com.google.inject.Inject;
@@ -22,6 +23,8 @@ public class MenuBarView {
     private IAboutView aboutViewController;
     @Inject
     private IHelpController helpController;
+    @Inject
+    private IPreferencesController preferencesController;
 
     @Inject
     private IFSCreationController fsCreationController;
@@ -86,6 +89,7 @@ public class MenuBarView {
         // EDIT MENU
         MenuItem preferencesMenuItem = new MenuItem("Preferences...");
         preferencesMenuItem.setId("preferencesMenuItem");
+        preferencesMenuItem.setOnAction(actionEvent -> preferencesController.showPreferencesView());
 
         this.editMenu.setId("editMenu");
         this.editMenu.getItems().add(preferencesMenuItem);

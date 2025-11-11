@@ -8,12 +8,14 @@ import com.google.inject.Singleton;
 @Singleton
 public class HelpController implements IHelpController {
 
-    private final IShow helpView;
-
+    @HelpViewQualifier
     @Inject
-    public HelpController(@HelpViewQualifier IShow helpView) {
-        this.helpView = helpView;
-    }
+    private IShow helpView;
+
+//    @Inject
+//    public HelpController(@HelpViewQualifier IShow helpView) {
+//        this.helpView = helpView;
+//    }
 
     @Override
     public void showHelpView() {

@@ -1,8 +1,14 @@
 package ch.supsi.fscli.frontend;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
+import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
+import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
+import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
 import ch.supsi.fscli.frontend.director.WidgetDirector;
+import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
+import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import ch.supsi.fscli.frontend.modules.ControllerModule;
 import ch.supsi.fscli.frontend.modules.DirectorModule;
 import ch.supsi.fscli.frontend.modules.ModelModule;
@@ -48,7 +54,7 @@ public class MainFx extends Application {
     private final QuitView quitView;
     private final IShow aboutView;
     private final IShow helpView;
-
+    private final PreferencesView preferencesView;
 
     private final Injector injector;
 
@@ -63,7 +69,11 @@ public class MainFx extends Application {
     private final ConfirmExitDirector confirmExitDirector;
 
     private final IFSCreationController fsStateDirector;
+    private final ISupportedLanguageController supportedLanguageController;
+    private final IPreferencesController preferencesController;
 
+    //private final SupportedLanguageModel supportedLanguageModel;
+    private final PreferencesModel preferencesModel;
 
     public MainFx() {
         this.applicationTitle = "filesystem command interpreter simulator";
@@ -72,6 +82,7 @@ public class MainFx extends Application {
                                              new DirectorModule(), new ModelModule());
 
         // declaration
+        this.preferencesView = injector.getInstance(PreferencesView.class);
         this.menuBarView = injector.getInstance(MenuBarView.class);
         this.commandLineView = injector.getInstance(CommandLineView.class);
         this.outputView = injector.getInstance(OutputView.class);
@@ -81,16 +92,25 @@ public class MainFx extends Application {
         this.helpView = injector.getInstance(HelpView.class);
         this.quitView = injector.getInstance(QuitView.class);
 
+
+        this.supportedLanguageController = injector.getInstance(SupportedLanguageController.class);
+        this.preferencesModel = injector.getInstance(PreferencesModel.class);
+
         //this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView);
 
         this.dataSaverController = injector.getInstance(FSDataSaverController.class);
         this.quitController = injector.getInstance(QuitController.class);
         this.aboutViewController = injector.getInstance(AboutController.class);
         this.helpController = injector.getInstance(HelpController.class);
+        this.preferencesController = injector.getInstance(PreferencesController.class);
 
         this.fsStateDirector = injector.getInstance(FSCreationController.class);
         this.widgetDirector = injector.getInstance(WidgetDirector.class);
         this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
+
+        this.supportedLanguageController.setSupportedLanguagesTags();
+        this.supportedLanguageController.setMapLanguages();
+        this.supportedLanguageController.setLanguageTagSelected(preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE));
 
 
         this.confirmExitDirector.addPropertyChangeListener(quitView);

@@ -2,12 +2,13 @@ package ch.supsi.fscli.frontend.model.preference;
 
 import ch.supsi.fscli.backend.application.preference.IPreferencesApplication;
 import ch.supsi.fscli.backend.application.preference.PreferencesApplication;
-import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
-import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.io.*;
 import java.util.Properties;
 
+@Singleton
 public class PreferencesModel implements IPreferencesModel {
 
     public static final String KEY_LANGUAGE = "language-tag";
@@ -22,22 +23,13 @@ public class PreferencesModel implements IPreferencesModel {
     public static final String DEFAULT_FONT_LOG_AREA = "Comic Sans MS";
     public static final int DEFAULT_LINES_NUMBER = 25;
 
-    private final IPreferencesApplication preferencesApplication = PreferencesApplication.getInstance();
-
-    private static PreferencesModel myself;
+    // da iniettare manualmente
+    private IPreferencesApplication preferencesApplication = PreferencesApplication.getInstance();
 
     private String preferencesPath;
 
-    private PreferencesModel() {
-        manageProperties();
-    }
-
-    public static PreferencesModel getInstance() {
-        if(myself == null)
-            myself = new PreferencesModel();
-        return myself;
-    }
-
+    // da vedere
+    @Inject
     private void manageProperties() {
         String userHome = System.getProperty("user.home");
         String folderApp = userHome + File.separator + "user-pref";
