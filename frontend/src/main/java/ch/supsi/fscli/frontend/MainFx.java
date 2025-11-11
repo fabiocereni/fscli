@@ -81,6 +81,16 @@ public class MainFx extends Application {
         this.injector = Guice.createInjector(new ViewModule(), new ControllerModule(),
                                              new DirectorModule(), new ModelModule());
 
+
+        this.preferencesController = injector.getInstance(PreferencesController.class);
+        this.supportedLanguageController = injector.getInstance(SupportedLanguageController.class);
+        this.preferencesModel = injector.getInstance(PreferencesModel.class);
+        this.supportedLanguageController.setSupportedLanguagesTags();
+        this.supportedLanguageController.setMapLanguages();
+        this.supportedLanguageController.setLanguageTagSelected(preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE));
+
+
+
         // declaration
         this.preferencesView = injector.getInstance(PreferencesView.class);
         this.menuBarView = injector.getInstance(MenuBarView.class);
@@ -93,8 +103,6 @@ public class MainFx extends Application {
         this.quitView = injector.getInstance(QuitView.class);
 
 
-        this.supportedLanguageController = injector.getInstance(SupportedLanguageController.class);
-        this.preferencesModel = injector.getInstance(PreferencesModel.class);
 
         //this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView);
 
@@ -102,15 +110,11 @@ public class MainFx extends Application {
         this.quitController = injector.getInstance(QuitController.class);
         this.aboutViewController = injector.getInstance(AboutController.class);
         this.helpController = injector.getInstance(HelpController.class);
-        this.preferencesController = injector.getInstance(PreferencesController.class);
 
         this.fsStateDirector = injector.getInstance(FSCreationController.class);
         this.widgetDirector = injector.getInstance(WidgetDirector.class);
         this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
 
-        this.supportedLanguageController.setSupportedLanguagesTags();
-        this.supportedLanguageController.setMapLanguages();
-        this.supportedLanguageController.setLanguageTagSelected(preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE));
 
 
         this.confirmExitDirector.addPropertyChangeListener(quitView);
