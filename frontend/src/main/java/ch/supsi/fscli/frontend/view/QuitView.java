@@ -1,6 +1,7 @@
 package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.IQuitController;
+import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.event.ConfirmExitEvent;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -17,18 +18,21 @@ public class QuitView extends AbstractView {
     @Inject
     private IQuitController quitController;
 
+    @Inject
+    private ISupportedLanguageController supportedLanguageController;
+
     public boolean showConfirmation() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Conferma Uscita");
-        alert.setHeaderText("Sei sicuro di voler uscire?");
-        alert.setContentText("Qualsiasi modifica non salvata andrà persa.");
+        alert.setTitle(supportedLanguageController.getTranslation("label.confirmExit"));
+        alert.setHeaderText(supportedLanguageController.getTranslation("label.headerTextExit"));
+        alert.setContentText(supportedLanguageController.getTranslation("label.contentTextExit"));
 
         ButtonType buttonTypeYes = new ButtonType(
-                "Sì" ,
+                supportedLanguageController.getTranslation("label.yes") ,
                 ButtonBar.ButtonData.OK_DONE
         );
         ButtonType buttonTypeNo = new ButtonType(
-                "No",
+                supportedLanguageController.getTranslation("label.no"),
                 ButtonBar.ButtonData.CANCEL_CLOSE
         );
 

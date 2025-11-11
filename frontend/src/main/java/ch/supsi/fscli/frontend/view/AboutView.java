@@ -1,6 +1,7 @@
 package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.BuildInfoController;
+import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.scene.control.Alert;
@@ -8,26 +9,18 @@ import javafx.scene.control.Alert;
 @Singleton
 public class AboutView implements IShow {
 
-    private static AboutView myself;
-
-    //private TranslationsController translationsController;
-    private final BuildInfoController buildInfoController;
+    @Inject
+    private ISupportedLanguageController supportedLanguageController;
 
     @Inject
-    public AboutView(BuildInfoController buildInfoController) {
-        this.buildInfoController = buildInfoController;
-    }
+    private BuildInfoController buildInfoController;
 
-
-//    public void initialize(TranslationsController translationsController){
-//        this.translationsController = translationsController;
-//    }
 
     @Override
     public void showMyView() {
         Alert aboutDialog = new Alert(Alert.AlertType.INFORMATION);
-        aboutDialog.setTitle( "SUPSI FileSystem"); //TODO TRADUZIONE
-        aboutDialog.setHeaderText("PROGETTO"); //TODO TRADUZIONE
+        aboutDialog.setTitle(supportedLanguageController.getTranslation("label.titleAbout"));
+        aboutDialog.setHeaderText(supportedLanguageController.getTranslation("label.headerTextAbout"));
         aboutDialog.setContentText(buildInfoController.getVersion());
         aboutDialog.show();
     }
