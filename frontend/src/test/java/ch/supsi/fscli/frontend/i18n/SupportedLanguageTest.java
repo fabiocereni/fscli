@@ -23,4 +23,4 @@ public class SupportedLanguageTest {
         assertEquals(tagLanguages, supportedLanguageModel.getSupportedLanguagesTags());
     }
 
-}/*
+}*/
