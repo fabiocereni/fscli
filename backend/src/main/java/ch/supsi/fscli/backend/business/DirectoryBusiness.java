@@ -1,19 +1,55 @@
 package ch.supsi.fscli.backend.business;
 
-public class DirectoryBusiness extends FSElementBusiness implements IDirectoryBusiness {
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-    public DirectoryBusiness(FSElementBusiness parent, String name) {
-        super(parent, name);
+import java.util.ArrayList;
+import java.util.List;
+
+public class DirectoryBusiness implements IDirectoryBusiness {
+    private final Node node;
+
+    @JsonManagedReference
+    private final List<INode> content = new ArrayList<>();
+
+    public DirectoryBusiness(IDirectoryBusiness parent, String name) {
+        this.node = new Node(parent, name);
+        if (parent != null)
+            parent.addContent(this);
     }
 
     @Override
-    public void pwd() {
-        System.out.println("message from directory: pwd");
+    public void addContent(INode node) {
+        content.add(node);
     }
 
     @Override
-    public DirectoryBusiness mkdir() {
-        System.out.println("message from directory: mkdir");
-        return null;
+    public List<INode> getContent() {
+        return new ArrayList<>(content);
+    }
+
+    @Override
+    public String getName() {
+        return node.getName();
+    }
+
+    @Override
+    public void setName(String name) {
+        node.setName(name);
+    }
+
+    @Override
+    public IDirectoryBusiness getParent() {
+        return node.getParent();
+    }
+
+    @Override
+    public void setParent(IDirectoryBusiness parent) {
+        node.setParent(parent);
+    }
+
+    @Override
+    public String toString() {
+        return "Dir(" + getName() + ")";
     }
 }
