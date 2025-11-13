@@ -26,7 +26,9 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
     }
 
     @Override
-    public void save(Path path, AbstractFSBusiness abstractFSBusiness) {
+    public void save(Path path) {
+
+        FSStateBusiness stateToSerialize = FSStateBusiness.getInstance();
 
         if(Files.exists(path)) {
             try {
@@ -35,15 +37,18 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
                 System.err.println("Error when deleting the file at: " + path);
             }
 
-            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(abstractFSBusiness));
+            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(stateToSerialize));
         } else {
-            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(abstractFSBusiness));
+            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(stateToSerialize));
         }
 
     }
 
     @Override
-    public void save(AbstractFSBusiness abstractFSBusiness) {
+    public void save() {
+
+        FSStateBusiness stateToSerialize = FSStateBusiness.getInstance();
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH");
         String fileName = LocalDateTime.now().format(formatter) + ".json";
         Path path = Paths.get(System.getProperty("user.home"), "FileSystem Simulator", "Saved", fileName);
@@ -54,11 +59,11 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
             } catch (IOException e) {
                 System.err.println("Error when deleting the file at: " + path);
             }
-            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(abstractFSBusiness));
+            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(stateToSerialize));
         } else {
             try {
                 Files.createDirectories(path.getParent());
-                this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(abstractFSBusiness));
+                this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(stateToSerialize));
             } catch (IOException e) {
                 System.err.println("Default saving error");
             }

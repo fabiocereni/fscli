@@ -1,5 +1,8 @@
 package ch.supsi.fscli.backend.business;
 
-public interface IDirectoryBusiness extends FSCommandsBusiness, IFSElementBusiness<FSElementBusiness> {
-    DirectoryBusiness mkdir();
+import java.util.List;
+
+public interface IDirectoryBusiness extends INode {
+    void addContent(INode node);
+    List<INode> getContent();
 }

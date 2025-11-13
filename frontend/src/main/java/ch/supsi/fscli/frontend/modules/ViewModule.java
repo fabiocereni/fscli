@@ -16,6 +16,7 @@ public class ViewModule extends AbstractModule {
         bind(IShow.class).annotatedWith(AboutViewQualifier.class).to(AboutView.class).in(Singleton.class);
         bind(IShow.class).annotatedWith(HelpViewQualifier.class).to(HelpView.class).in(Singleton.class);
         bind(IShow.class).annotatedWith(PreferencesViewQualifier.class).to(PreferencesView.class).in(Singleton.class);
+        bind(IShow.class).annotatedWith(SavingViewQualifier.class).to(SaveAsView.class).in(Singleton.class);
 
     }
 }
