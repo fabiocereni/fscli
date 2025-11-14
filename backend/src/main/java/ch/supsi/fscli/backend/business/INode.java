@@ -5,4 +5,5 @@ public interface INode {
     void setName(String name);
     IDirectoryBusiness getParent();
     void setParent(IDirectoryBusiness parent);
+    NodeType getType();
 }
