@@ -4,7 +4,7 @@ public class FileBusiness implements IFileBusiness {
     private final Node node;
 
     public FileBusiness(IDirectoryBusiness parent, String name) {
-        this.node = new Node(parent, name);
+        this.node = new Node(parent, name,  NodeType.FILE);
         if (parent != null)
             parent.addContent(this);
     }
@@ -27,5 +27,10 @@ public class FileBusiness implements IFileBusiness {
     @Override
     public void setParent(IDirectoryBusiness parent) {
         node.setParent(parent);
+    }
+
+    @Override
+    public NodeType getType() {
+        return NodeType.FILE;
     }
 }
