@@ -40,9 +40,6 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
         // 4. Creazione directory
         DirectoryBusiness newDir = new DirectoryBusiness(currentDir, name);
 
-        // 5. Aggiunta alla directory corrente
-        currentDir.addContent(newDir);
-
         return true;
     }
 }
