@@ -13,7 +13,7 @@ public class DirectoryBusiness implements IDirectoryBusiness {
     private final List<INode> content = new ArrayList<>();
 
     public DirectoryBusiness(IDirectoryBusiness parent, String name) {
-        this.node = new Node(parent, name);
+        this.node = new Node(parent, name, NodeType.DIRECTORY);
         if (parent != null)
             parent.addContent(this);
     }
@@ -25,7 +25,7 @@ public class DirectoryBusiness implements IDirectoryBusiness {
 
     @Override
     public List<INode> getContent() {
-        return new ArrayList<>(content);
+        return content;
     }
 
     @Override
@@ -46,6 +46,11 @@ public class DirectoryBusiness implements IDirectoryBusiness {
     @Override
     public void setParent(IDirectoryBusiness parent) {
         node.setParent(parent);
+    }
+
+    @Override
+    public NodeType getType() {
+        return NodeType.DIRECTORY;
     }
 
     @Override

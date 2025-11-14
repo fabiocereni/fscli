@@ -11,7 +11,7 @@ public class Node {
     private static int inodeCounter = 0;
     private int inodeId;
 
-    public Node(IDirectoryBusiness parent, String name) {
+    public Node(IDirectoryBusiness parent, String name, NodeType type) {
         this.parent = parent;
         this.name = name;
         this.inodeId = ++inodeCounter;
