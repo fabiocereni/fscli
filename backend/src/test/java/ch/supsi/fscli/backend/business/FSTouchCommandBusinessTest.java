@@ -4,11 +4,10 @@ import ch.supsi.fscli.backend.business.FSCommands.FSTouchCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.IFSTouchCommandBusiness;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FSTouchCommandBusinessTest {
 
@@ -23,27 +22,24 @@ public class FSTouchCommandBusinessTest {
         DirectoryBusiness home = new DirectoryBusiness(root, "home");
         DirectoryBusiness user = new DirectoryBusiness(home, "user");
 
-        touchCommandBusiness = FSTouchCommandBusiness.getInstance();
-
-        fsState = FSStateBusiness.getInstance();
-
-
         root.addContent(home);
         home.addContent(user);
 
+        touchCommandBusiness = FSTouchCommandBusiness.getInstance();
+        fsState = FSStateBusiness.getInstance();
         fsState.setCurrentWorkingDirectory(user);
     }
 
     @Test
-    public void touchTest() {
+    public void touchInSpecificPathTest() {
         String path = "/home/user";
-        touchCommandBusiness.touch("test.txt", path);
+        boolean result = touchCommandBusiness.touch("test.txt", path);
+        assertTrue(result);
 
         Optional<INode> tmp = PathSolver.resolvePath(path);
         assertTrue(tmp.isPresent());
 
         IDirectoryBusiness dir = (DirectoryBusiness) tmp.get();
-
         Optional<INode> elem = dir.getContent().stream()
                 .filter(e -> e.getName().equals("test.txt"))
                 .findFirst();
@@ -51,4 +47,22 @@ public class FSTouchCommandBusinessTest {
         assertTrue(elem.isPresent());
     }
 
+    @Test
+    public void touchInCurrentDirectoryTest() {
+        boolean result = touchCommandBusiness.touch("file.txt", null);
+        assertTrue(result);
+
+        IDirectoryBusiness cwd = fsState.getCurrentWorkingDirectory();
+        Optional<INode> elem = cwd.getContent().stream()
+                .filter(e -> e.getName().equals("file.txt"))
+                .findFirst();
+
+        assertTrue(elem.isPresent());
+    }
+
+    @Test
+    public void touchInvalidPathTest() {
+        boolean result = touchCommandBusiness.touch("fail.txt", "/invalid/path");
+        assertFalse(result);
+    }
 }
