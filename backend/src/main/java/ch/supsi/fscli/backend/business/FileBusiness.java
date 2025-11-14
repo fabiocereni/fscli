@@ -33,4 +33,9 @@ public class FileBusiness implements IFileBusiness {
     public NodeType getType() {
         return NodeType.FILE;
     }
+
+    @Override
+    public String toString() {
+        return "File(" + getName() + ")";
+    }
 }
