@@ -36,15 +36,15 @@ public class FSPwdCommandBusinessTest {
     @Test
     public void pwdTest() {
         fsState.setCurrentWorkingDirectory(new DirectoryBusiness(fsState.getRoot(), "Test"));
-        assertEquals(pwdCommandBusiness.pwd(), "/Test");
+        assertEquals("/Test", pwdCommandBusiness.pwd());
         System.out.println(pwdCommandBusiness.pwd());
 
         fsState.setCurrentWorkingDirectory(user);
-        assertEquals(pwdCommandBusiness.pwd(), "/home/user");
+        assertEquals("/home/user", pwdCommandBusiness.pwd());
         System.out.println(pwdCommandBusiness.pwd());
 
         fsState.setCurrentWorkingDirectory(home);
-        assertEquals(pwdCommandBusiness.pwd(), "/home");
+        assertEquals("/home", pwdCommandBusiness.pwd());
         System.out.println(pwdCommandBusiness.pwd());
     }
 }
