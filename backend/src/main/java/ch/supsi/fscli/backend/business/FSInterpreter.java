@@ -28,6 +28,7 @@ public class FSInterpreter implements IFSInterpreter {
         this.commands.put("rmdir", this::handleRmDir);
         this.commands.put("rm", this::handleRmFile);
         this.commands.put("touch", this::handleTouch);
+        this.commands.put("clear", this::handleClear);
     }
 
     public static FSInterpreter getInstance() {
@@ -53,7 +54,7 @@ public class FSInterpreter implements IFSInterpreter {
 
         Function<List<String>, String> handler = commands.get(command);
         if (handler == null) {
-            return "cd: comando non trovato.";
+            return "comando non trovato.";
         } else {
             return handler.apply(args);
         }
@@ -111,5 +112,11 @@ public class FSInterpreter implements IFSInterpreter {
         }
     }
 
+    private String handleClear(List<String> args) {
+        if (!args.isEmpty()) {
+            return "clear: il comando non accetta argomenti.";
+        }
+        return "clear";
+    }
 
 }
