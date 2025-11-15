@@ -2,15 +2,16 @@ package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
-import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
-import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
-import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
+
+
 @Singleton
 public class CommandLineView {
 
@@ -31,15 +32,25 @@ public class CommandLineView {
     public void init() {
         fontCommandLine = preferencesController.getProperty(PreferencesModel.KEY_FONT_COMMANDLINE);
 
-        this.enter = new Button(supportedLanguageController.getTranslation("label.enter"));
-        this.enter.setId("enter");
-        this.enter.setStyle("-fx-font-family: " + fontCommandLine + ";");
-
         this.commandLineLabel = new Label(supportedLanguageController.getTranslation("label.commandLine"));
         this.commandLineLabel.setStyle("-fx-font-family: " + fontCommandLine + ";");
 
         this.commandLine = new TextField();
         this.commandLine.setStyle("-fx-font-family: " + fontCommandLine + ";");
+
+        this.enter = new Button(supportedLanguageController.getTranslation("label.enter"));
+        this.enter.setId("enter");
+        this.enter.setStyle("-fx-font-family: " + fontCommandLine + ";");
+
+        // evento per poter schiacciare il tasto invio
+        EventHandler<ActionEvent> submitCommandHandler = actionEvent -> {
+            String command = commandLine.getText();
+            System.out.println(command);
+            commandLine.clear();
+        };
+
+        this.enter.setOnAction(submitCommandHandler);
+        this.commandLine.setOnAction(submitCommandHandler);
     }
 
     public void initCommandLineView(int commandLinePrefColumnCount) {
