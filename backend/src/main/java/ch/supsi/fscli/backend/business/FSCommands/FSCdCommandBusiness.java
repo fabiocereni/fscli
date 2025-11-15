@@ -29,7 +29,9 @@ public class FSCdCommandBusiness implements IFSCdCommandBusiness {
         }
 
         INode targetNode = targetNodeOpt.get();
-
+        if (targetNode.getType() != NodeType.DIRECTORY) {
+            return false;
+        }
         stateBusiness.setCurrentWorkingDirectory((DirectoryBusiness) targetNode);
         return true;
 
@@ -71,6 +73,7 @@ public class FSCdCommandBusiness implements IFSCdCommandBusiness {
         }
 
         stateBusiness.setCurrentWorkingDirectory((DirectoryBusiness) target);
-        return true;*/
+        return true;
+         */
     }
 }
