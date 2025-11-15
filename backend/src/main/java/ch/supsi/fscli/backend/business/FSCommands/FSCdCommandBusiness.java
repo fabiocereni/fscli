@@ -22,6 +22,18 @@ public class FSCdCommandBusiness implements IFSCdCommandBusiness {
     @Override
     public boolean cd(String name) {
 
+        Optional<INode> targetNodeOpt = PathSolver.resolvePath(name);
+
+        if (targetNodeOpt.isEmpty()) {
+            return false;
+        }
+
+        INode targetNode = targetNodeOpt.get();
+
+        stateBusiness.setCurrentWorkingDirectory((DirectoryBusiness) targetNode);
+        return true;
+
+        /*
         if (name == null || name.isBlank())
             return false;
 
@@ -59,6 +71,6 @@ public class FSCdCommandBusiness implements IFSCdCommandBusiness {
         }
 
         stateBusiness.setCurrentWorkingDirectory((DirectoryBusiness) target);
-        return true;
+        return true;*/
     }
 }
