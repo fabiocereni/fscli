@@ -14,6 +14,11 @@ public class CommandLineController implements ICommandLineController {
     public CommandLineController() {}
 
     @Override
+    public String getCurrentPath() {
+        return interpreterApplication.getCurrentpath();
+    }
+
+    @Override
     public String executeCommand(String commandLine) {
         return interpreterApplication.execute(commandLine);
     }

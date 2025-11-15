@@ -18,6 +18,11 @@ public class FSInterpreterApplication implements IFSInterpreterApplication {
     }
 
     @Override
+    public String getCurrentpath() {
+        return interpreter.getCurrentpath();
+    }
+
+    @Override
     public String execute(String commandLine) {
         return interpreter.execute(commandLine);
     }

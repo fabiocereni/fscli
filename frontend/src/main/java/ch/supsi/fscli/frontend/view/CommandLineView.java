@@ -58,10 +58,10 @@ public class CommandLineView {
             if (outputView.getText().equals(supportedLanguageController.getTranslation("label.textOutput") + "\n"))
                 outputView.clear();
 
-            outputView.appendText("> " + command + "\n");
+            outputView.appendText(commandLineController.getCurrentPath() + "> " + command + "\n");
             String output = commandLineController.executeCommand(command);
             if (output != null && !output.isBlank())
-                outputView.appendText(output + "\n");
+                outputView.appendText(commandLineController.getCurrentPath() + "> " + output + "\n");
 
             commandLine.clear();
         };
