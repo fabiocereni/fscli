@@ -12,7 +12,6 @@ public class ViewModule extends AbstractModule {
         bind(IAboutView.class).to(AboutController.class).in(Singleton.class);
         bind(CommandLineView.class).in(Singleton.class);
 
-
         bind(IShow.class).annotatedWith(AboutViewQualifier.class).to(AboutView.class).in(Singleton.class);
         bind(IShow.class).annotatedWith(HelpViewQualifier.class).to(HelpView.class).in(Singleton.class);
         bind(IShow.class).annotatedWith(PreferencesViewQualifier.class).to(PreferencesView.class).in(Singleton.class);

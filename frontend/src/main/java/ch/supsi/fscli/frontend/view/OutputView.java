@@ -41,6 +41,18 @@ public class OutputView {
         outputView.setPrefRowCount(prefRowCount);
     }
 
+    public void clear() {
+        outputView.clear();
+    }
+
+    public void appendText(String text) {
+        outputView.appendText(text);
+    }
+
+    public String getText() {
+        return outputView.getText();
+    }
+
     public Node getNode() {
         return this.outputView;
     }

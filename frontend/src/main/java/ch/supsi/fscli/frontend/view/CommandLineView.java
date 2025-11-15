@@ -20,6 +20,8 @@ public class CommandLineView {
     @Inject
     private ISupportedLanguageController supportedLanguageController;
 
+    private OutputView outputView;
+
     private static CommandLineView myself;
 
     private String fontCommandLine;
@@ -45,7 +47,17 @@ public class CommandLineView {
         // evento per poter schiacciare il tasto invio
         EventHandler<ActionEvent> submitCommandHandler = actionEvent -> {
             String command = commandLine.getText();
-            System.out.println(command);
+            if (command.isEmpty() || outputView == null) {
+                commandLine.clear();
+                return;
+            }
+
+            if (outputView.getText().equals(supportedLanguageController.getTranslation("label.textOutput") + "\n"))
+                outputView.clear();
+
+            outputView.appendText("> " + command + "\n");
+
+
             commandLine.clear();
         };
 
@@ -67,5 +79,9 @@ public class CommandLineView {
 
     public TextField getCommandLine() {
         return commandLine;
+    }
+
+    public void setOutputView(OutputView outputView) {
+        this.outputView = outputView;
     }
 }
