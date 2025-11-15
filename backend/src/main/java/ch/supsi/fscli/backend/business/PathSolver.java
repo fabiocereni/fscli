@@ -16,7 +16,7 @@ public class PathSolver {
         INode current = isAbsolute ? ifsStateBusiness.getRoot()
                 : ifsStateBusiness.getCurrentWorkingDirectory();
 
-        INode previousDirectory = current;
+//        INode previousDirectory = current;
 
         for (String token : tokens) {
 
@@ -28,7 +28,7 @@ public class PathSolver {
                 } else {
                     current = ifsStateBusiness.getRoot();
                 }
-                previousDirectory = current;
+//                previousDirectory = current;
                 continue;
             }
 
@@ -44,17 +44,18 @@ public class PathSolver {
                 return Optional.empty();
             }
 
-            previousDirectory = current;
+//            previousDirectory = current;
             current = next.get();
         }
 
+        /*
         if (current.getType() == NodeType.FILE) {
             return Optional.ofNullable(
                     previousDirectory.getType() == NodeType.DIRECTORY
                             ? previousDirectory
                             : current.getParent()
             );
-        }
+        }*/
 
         return Optional.of(current);
     }
