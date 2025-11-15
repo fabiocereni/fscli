@@ -27,14 +27,6 @@ public class FSTouchCommandBusiness implements IFSTouchCommandBusiness {
             this.ifsStateBusiness.getCurrentWorkingDirectory()
                     .addContent(new FileBusiness(this.ifsStateBusiness.getCurrentWorkingDirectory(), fileName));
             return true;
-        } else {
-            Optional<INode> tmp = PathSolver.resolvePath(path);
-            IDirectoryBusiness directory;
-            if(tmp.isPresent()) {
-                directory = (DirectoryBusiness) tmp.get();
-                directory.addContent(new FileBusiness(directory, fileName));
-                return true;
-            }
         }
         return false;
     }
