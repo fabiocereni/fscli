@@ -60,8 +60,12 @@ public class CommandLineView {
 
             outputView.appendText(commandLineController.getCurrentPath() + "> " + command + "\n");
             String output = commandLineController.executeCommand(command);
-            if (output != null && !output.isBlank())
-                outputView.appendText(commandLineController.getCurrentPath() + "> " + output + "\n");
+
+            if ("clear".equals(output)) {
+                outputView.clear();
+            } else if (output != null && !output.isBlank()) {
+                outputView.appendText(output + "\n");
+            }
 
             commandLine.clear();
         };
