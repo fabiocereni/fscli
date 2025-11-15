@@ -17,6 +17,7 @@ public class FSInterpreter implements IFSInterpreter {
     private final IFSRmdirCommandBusiness rmdirCommandBusiness = FSRmdirCommandBusiness.getInstance();
     private final IFSRmfileCommandBusiness rmfileCommandBusiness = FSRmfilecommandBusiness.getInstance();
     private final IFSTouchCommandBusiness touchCommandBusiness = FSTouchCommandBusiness.getInstance();
+    private final IFSLsiCommandBusiness lssiCommandBusiness = FSLsiCommandBusiness.getInstance();
 
     private final Map<String, Function<List<String>, String>> commands;
 
@@ -29,6 +30,7 @@ public class FSInterpreter implements IFSInterpreter {
         this.commands.put("rm", this::handleRmFile);
         this.commands.put("touch", this::handleTouch);
         this.commands.put("clear", this::handleClear);
+        this.commands.put("ls", this::handleLs);
     }
 
     public static FSInterpreter getInstance() {
@@ -119,4 +121,19 @@ public class FSInterpreter implements IFSInterpreter {
         return "clear";
     }
 
+    private String handleLs(List<String> args) {
+        boolean flagI = false;
+        boolean flagS = false;
+        String path = null;
+
+        for (String arg : args) {
+            if (arg.equals("-i")) flagI = true;
+            else if (arg.equals("-s")) flagS = true;
+            else path = arg; // primo argomento che non è flag → percorso
+        }
+
+        if (flagI) return lssiCommandBusiness.lsi(path);
+        //if (flagS) return lssiCommandBusiness.lss(path); // se lss accetta percorso
+        return "il comando ls non esiste, prova con ls -i / ls -s"; // fallback ls semplice
+    }
 }
