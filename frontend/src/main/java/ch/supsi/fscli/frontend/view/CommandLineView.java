@@ -3,6 +3,7 @@ package ch.supsi.fscli.frontend.view;
 import ch.supsi.fscli.frontend.controller.ICommandLineController;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
+import ch.supsi.fscli.frontend.director.FSCreationDirector;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -12,9 +13,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 
 @Singleton
-public class CommandLineView {
+public class CommandLineView implements PropertyChangeListener {
 
     @Inject
     private IPreferencesController preferencesController;
@@ -22,6 +26,8 @@ public class CommandLineView {
     private ISupportedLanguageController supportedLanguageController;
     @Inject
     private ICommandLineController commandLineController;
+    @Inject
+    private FSCreationDirector fsCreationDirector;
 
     private OutputView outputView;
 
@@ -42,10 +48,12 @@ public class CommandLineView {
 
         this.commandLine = new TextField();
         this.commandLine.setStyle("-fx-font-family: " + fontCommandLine + ";");
+        this.commandLine.setDisable(true);
 
         this.enter = new Button(supportedLanguageController.getTranslation("label.enter"));
         this.enter.setId("enter");
         this.enter.setStyle("-fx-font-family: " + fontCommandLine + ";");
+        this.enter.setDisable(true);
 
         // evento per poter schiacciare il tasto invio
         EventHandler<ActionEvent> submitCommandHandler = actionEvent -> {
@@ -72,6 +80,8 @@ public class CommandLineView {
 
         this.enter.setOnAction(submitCommandHandler);
         this.commandLine.setOnAction(submitCommandHandler);
+
+        this.fsCreationDirector.addPropertyChangeListener(this);
     }
 
     public void initCommandLineView(int commandLinePrefColumnCount) {
@@ -92,5 +102,11 @@ public class CommandLineView {
 
     public void setOutputView(OutputView outputView) {
         this.outputView = outputView;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        commandLine.setDisable(false);
+        enter.setDisable(false);
     }
 }
