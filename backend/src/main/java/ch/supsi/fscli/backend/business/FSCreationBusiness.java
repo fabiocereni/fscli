@@ -18,7 +18,9 @@ public class FSCreationBusiness implements IFSCreationBusiness {
     @Override
     public void newfs() {
         if(this.ifsStateBusiness.getRoot() == null) {
-            this.ifsStateBusiness.setRoot(new DirectoryBusiness(null, "root"));
+            DirectoryBusiness root = new DirectoryBusiness(null, "root");
+            this.ifsStateBusiness.setRoot(root);
+            this.ifsStateBusiness.setCurrentWorkingDirectory(root);
             System.out.println("ROOT CREATED");
         }
     }

@@ -1,5 +1,6 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.controller.ICommandLineController;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
@@ -19,6 +20,8 @@ public class CommandLineView {
     private IPreferencesController preferencesController;
     @Inject
     private ISupportedLanguageController supportedLanguageController;
+    @Inject
+    private ICommandLineController commandLineController;
 
     private OutputView outputView;
 
@@ -56,7 +59,9 @@ public class CommandLineView {
                 outputView.clear();
 
             outputView.appendText("> " + command + "\n");
-
+            String output = commandLineController.executeCommand(command);
+            if (output != null && !output.isBlank())
+                outputView.appendText(output + "\n");
 
             commandLine.clear();
         };

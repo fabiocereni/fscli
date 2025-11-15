@@ -52,8 +52,6 @@ public class MenuBarView {
 
     }
 
-
-
     public void initMenuBarView() {
         // FILE MENU
         MenuItem newMenuItem = new MenuItem(supportedLanguageController.getTranslation("label.new"));        newMenuItem.setId("newMenuItem");

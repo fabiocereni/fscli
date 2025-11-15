@@ -89,8 +89,6 @@ public class MainFx extends Application {
         this.supportedLanguageController.setMapLanguages();
         this.supportedLanguageController.setLanguageTagSelected(preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE));
 
-
-
         // declaration
         this.preferencesView = injector.getInstance(PreferencesView.class);
         this.menuBarView = injector.getInstance(MenuBarView.class);
@@ -101,6 +99,7 @@ public class MainFx extends Application {
         this.aboutView = injector.getInstance(AboutView.class);
         this.helpView = injector.getInstance(HelpView.class);
         this.quitView = injector.getInstance(QuitView.class);
+
 
         commandLineView.setOutputView(outputView); // imposto l'output view sul command line view
 
@@ -115,10 +114,7 @@ public class MainFx extends Application {
         this.widgetDirector = injector.getInstance(WidgetDirector.class);
         this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
 
-
-
         this.confirmExitDirector.addPropertyChangeListener(quitView);
-
     }
 
     @Override
@@ -129,7 +125,6 @@ public class MainFx extends Application {
         this.outputView.initOutputView(PREF_OUTPUT_VIEW_ROW_COUNT);
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
         //this.aboutView.initialize(translationController);
-
 
         // horizontal box to hold the command line
         HBox commandLinePane = new HBox();

@@ -15,6 +15,8 @@ public class ControllerModule extends AbstractModule {
         bind(ISupportedLanguageController.class).to(SupportedLanguageController.class).in(Singleton.class);
         bind(IPreferencesController.class).to(PreferencesController.class).in(Singleton.class);
 
+        bind(ICommandLineController.class).to(CommandLineController.class).in(Singleton.class);
+
         // TODO da sistemare
         bind(IAboutView.class).to(AboutController.class).in(Singleton.class);
 
