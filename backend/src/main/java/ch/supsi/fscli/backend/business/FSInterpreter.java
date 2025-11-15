@@ -25,7 +25,7 @@ public class FSInterpreter implements IFSInterpreter {
         this.commands.put("cd", this::handleCd);
         this.commands.put("mkdir", this::handleMkdir);
         this.commands.put("pwd", this::handlePwd);
-        this.commands.put("rmdir", this::handleRm);
+        this.commands.put("rmdir", this::handleRmDir);
         this.commands.put("rm", this::handleRmFile);
         this.commands.put("touch", this::handleTouch);
     }
@@ -34,6 +34,11 @@ public class FSInterpreter implements IFSInterpreter {
         if(myself == null)
             myself = new FSInterpreter();
         return myself;
+    }
+
+    @Override
+    public String getCurrentpath() {
+        return pwdCommandBusiness.pwd();
     }
 
     @Override
@@ -70,7 +75,7 @@ public class FSInterpreter implements IFSInterpreter {
         return null;
     }
 
-    private String handleRm(List<String> args) {
+    private String handleRmDir(List<String> args) {
         if (args.size() != 1) return "rm: numero di argomenti errato - (uso: rm <nome_file>)";
         if (!rmdirCommandBusiness.rmdir(args.get(0))) {
             return "rm: impossibile rimuovere (non trovato o è una directory).";
@@ -88,7 +93,7 @@ public class FSInterpreter implements IFSInterpreter {
 
     private String handlePwd(List<String> args) {
         if (!args.isEmpty()) {
-            return "pwd: il comando non accetta argomenti.";
+            return null;
         }
         return pwdCommandBusiness.pwd();
     }
