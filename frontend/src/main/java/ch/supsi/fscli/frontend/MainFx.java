@@ -102,7 +102,7 @@ public class MainFx extends Application {
         this.helpView = injector.getInstance(HelpView.class);
         this.quitView = injector.getInstance(QuitView.class);
 
-
+        commandLineView.setOutputView(outputView); // imposto l'output view sul command line view
 
         //this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView);
 
