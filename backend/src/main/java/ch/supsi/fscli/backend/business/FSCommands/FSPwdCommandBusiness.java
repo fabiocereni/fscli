@@ -21,7 +21,6 @@ public class FSPwdCommandBusiness implements IFSPwdCommandBusiness {
         return myself;
     }
 
-
     @Override
     public String pwd() {
         IDirectoryBusiness currentDir = this.ifsStateBusiness.getCurrentWorkingDirectory();
@@ -31,7 +30,6 @@ public class FSPwdCommandBusiness implements IFSPwdCommandBusiness {
             sb.insert(0, "/" + currentDir.getName());
             currentDir = currentDir.getParent();
         }
-
 
         if (sb.isEmpty()) {
             return "/";
