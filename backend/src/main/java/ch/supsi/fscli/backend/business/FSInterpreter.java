@@ -18,6 +18,7 @@ public class FSInterpreter implements IFSInterpreter {
     private final IFSRmfileCommandBusiness rmfileCommandBusiness = FSRmfilecommandBusiness.getInstance();
     private final IFSTouchCommandBusiness touchCommandBusiness = FSTouchCommandBusiness.getInstance();
     private final IFSLsiCommandBusiness lssiCommandBusiness = FSLsiCommandBusiness.getInstance();
+    private final IFSMvCommandBusiness mvCommandBusiness = FSMvCommandBusiness.getInstance();
 
     private final Map<String, Function<List<String>, String>> commands;
 
@@ -31,6 +32,8 @@ public class FSInterpreter implements IFSInterpreter {
         this.commands.put("touch", this::handleTouch);
         this.commands.put("clear", this::handleClear);
         this.commands.put("ls", this::handleLs);
+        this.commands.put("mv", this::handleMv);
+
     }
 
     public static FSInterpreter getInstance() {
@@ -136,4 +139,15 @@ public class FSInterpreter implements IFSInterpreter {
         //if (flagS) return lssiCommandBusiness.lss(path); // se lss accetta percorso
         return "il comando ls non esiste, prova con ls -i / ls -s"; // fallback ls semplice
     }
+
+    private String handleMv(List<String> args) {
+        if (args.size() != 2)
+            return "mv: numero di argomenti errato - (uso: mv <nome_file> <percorso_destinazione>)";
+
+        if (!mvCommandBusiness.mv(args.get(0), args.get(1))) {
+            return "mv: impossibile spostare il file o rinominarlo";
+        }
+        return null;
+    }
+
 }
