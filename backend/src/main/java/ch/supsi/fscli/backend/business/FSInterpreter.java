@@ -126,18 +126,15 @@ public class FSInterpreter implements IFSInterpreter {
 
     private String handleLs(List<String> args) {
         boolean flagI = false;
-        boolean flagS = false;
         String path = null;
 
         for (String arg : args) {
             if (arg.equals("-i")) flagI = true;
-            else if (arg.equals("-s")) flagS = true;
             else path = arg; // primo argomento che non è flag → percorso
         }
 
         if (flagI) return lssiCommandBusiness.lsi(path);
-        //if (flagS) return lssiCommandBusiness.lss(path); // se lss accetta percorso
-        return "il comando ls non esiste, prova con ls -i / ls -s"; // fallback ls semplice
+        return "il comando ls non esiste, prova con ls -i"; // fallback ls semplice
     }
 
     private String handleMv(List<String> args) {
