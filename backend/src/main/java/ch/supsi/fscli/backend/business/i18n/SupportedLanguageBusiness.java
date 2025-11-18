@@ -41,4 +41,9 @@ public class SupportedLanguageBusiness implements ISupportedLanguageBusiness {
     public HashMap<String, String> getMapLanguages(String languageTag) {
         return supportedLanguageDAO.getMapLanguages(languageTag);
     }
+
+    @Override
+    public String getTranslation(String key) {
+        return key;
+    }
 }

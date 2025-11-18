@@ -1,10 +1,8 @@
-package ch.supsi.fscli.backend.business.FSCommands;
+package ch.supsi.fscli.backend.business.FSCommands.pwd;
 
 import ch.supsi.fscli.backend.business.FSStateBusiness;
 import ch.supsi.fscli.backend.business.IDirectoryBusiness;
 import ch.supsi.fscli.backend.business.IFSStateBusiness;
-
-import java.awt.*;
 
 public class FSPwdCommandBusiness implements IFSPwdCommandBusiness {
 

@@ -1,8 +1,7 @@
-package ch.supsi.fscli.backend.business.FSCommands;
+package ch.supsi.fscli.backend.business.FSCommands.mv;
 
 import ch.supsi.fscli.backend.business.*;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class FSMvCommandBusiness implements IFSMvCommandBusiness {

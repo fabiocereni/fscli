@@ -1,7 +1,7 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.FSTouchCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.IFSTouchCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.touch.FSTouchCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.touch.IFSTouchCommandBusiness;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

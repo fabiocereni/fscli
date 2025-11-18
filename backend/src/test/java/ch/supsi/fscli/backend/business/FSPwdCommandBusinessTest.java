@@ -1,7 +1,7 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.FSPwdCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.IFSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.pwd.FSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.pwd.IFSPwdCommandBusiness;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
