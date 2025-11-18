@@ -41,4 +41,9 @@ public class SupportedLanguageApplication implements ISupportedLanguageApplicati
     public HashMap<String, String> getMapLanguages(String languageTag) {
         return supportedLanguageBusiness.getMapLanguages(languageTag);
     }
+
+    public String getTranslation(String key) {
+        return "";
+    }
+
 }

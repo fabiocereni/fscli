@@ -71,6 +71,8 @@ public class CommandLineView implements PropertyChangeListener {
 
             if ("clear".equals(output)) {
                 outputView.clear();
+            } else if ("label.infoHelp".equals(output)) {
+                outputView.appendText(supportedLanguageController.getTranslation(output));
             } else if (output != null && !output.isBlank()) {
                 outputView.appendText(output + "\n");
             }

@@ -1,12 +1,8 @@
 package ch.supsi.fscli.backend.business.FSCommands.help;
 
-import ch.supsi.fscli.backend.business.i18n.SupportedLanguageBusiness;
-
 public class FSHelpCommandBusiness implements IFSHelpCommandBusiness {
 
     private static FSHelpCommandBusiness myself;
-
-    private final SupportedLanguageBusiness supportedLanguageBusiness = SupportedLanguageBusiness.getInstance();
 
     private FSHelpCommandBusiness() {}
 
@@ -18,6 +14,9 @@ public class FSHelpCommandBusiness implements IFSHelpCommandBusiness {
 
     @Override
     public boolean help() {
-        return false;
+
+        //supportedLanguageBusiness.getTranslation("help");
+
+        return true;
     }
 }
