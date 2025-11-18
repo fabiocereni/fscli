@@ -167,7 +167,7 @@ public class FSInterpreter implements IFSInterpreter {
 
     private String handleHelp(List<String> args) {
         if (args.isEmpty())
-            return "--- HELP ---";
+            return "label.infoHelp";
         return "help: numero di argomenti errato - (uso: help)";
     }
 
