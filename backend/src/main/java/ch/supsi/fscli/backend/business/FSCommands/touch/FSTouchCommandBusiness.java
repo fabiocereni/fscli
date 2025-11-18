@@ -1,8 +1,6 @@
-package ch.supsi.fscli.backend.business.FSCommands;
+package ch.supsi.fscli.backend.business.FSCommands.touch;
 
 import ch.supsi.fscli.backend.business.*;
-
-import java.util.Optional;
 
 public class FSTouchCommandBusiness implements IFSTouchCommandBusiness {
 

@@ -1,4 +1,4 @@
-package ch.supsi.fscli.backend.business.FSCommands;
+package ch.supsi.fscli.backend.business.FSCommands.mkdir;
 
 public interface IFSMkdirCommandBusiness{
 

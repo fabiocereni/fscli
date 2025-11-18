@@ -1,6 +1,23 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.*;
+import ch.supsi.fscli.backend.business.FSCommands.cd.FSCdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.cd.IFSCdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.help.FSHelpCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.help.IFSHelpCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ls.FSLsiCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ls.IFSLsiCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mkdir.FSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mkdir.IFSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mv.FSMvCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mv.IFSMvCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.pwd.FSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.pwd.IFSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmdir.FSRmdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmdir.IFSRmdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmfile.FSRmfilecommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmfile.IFSRmfileCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.touch.FSTouchCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.touch.IFSTouchCommandBusiness;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +36,7 @@ public class FSInterpreter implements IFSInterpreter {
     private final IFSTouchCommandBusiness touchCommandBusiness = FSTouchCommandBusiness.getInstance();
     private final IFSLsiCommandBusiness lssiCommandBusiness = FSLsiCommandBusiness.getInstance();
     private final IFSMvCommandBusiness mvCommandBusiness = FSMvCommandBusiness.getInstance();
+    private final IFSHelpCommandBusiness helpCommandBusiness = FSHelpCommandBusiness.getInstance();
 
     private final Map<String, Function<List<String>, String>> commands;
 
@@ -33,7 +51,7 @@ public class FSInterpreter implements IFSInterpreter {
         this.commands.put("clear", this::handleClear);
         this.commands.put("ls", this::handleLs);
         this.commands.put("mv", this::handleMv);
-
+        this.commands.put("help", this::handleHelp);
     }
 
     public static FSInterpreter getInstance() {
@@ -145,6 +163,12 @@ public class FSInterpreter implements IFSInterpreter {
             return "mv: impossibile spostare il file o rinominarlo";
         }
         return null;
+    }
+
+    private String handleHelp(List<String> args) {
+        if (args.isEmpty())
+            return "label.infoHelp";
+        return "help: numero di argomenti errato - (uso: help)";
     }
 
 }
