@@ -1,4 +1,4 @@
-package ch.supsi.fscli.backend.business.FSCommands;
+package ch.supsi.fscli.backend.business.FSCommands.rmdir;
 
 import ch.supsi.fscli.backend.business.*;
 

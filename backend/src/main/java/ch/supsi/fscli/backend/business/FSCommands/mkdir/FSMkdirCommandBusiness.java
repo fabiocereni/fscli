@@ -1,4 +1,4 @@
-package ch.supsi.fscli.backend.business.FSCommands;
+package ch.supsi.fscli.backend.business.FSCommands.mkdir;
 
 import ch.supsi.fscli.backend.business.DirectoryBusiness;
 import ch.supsi.fscli.backend.business.FSStateBusiness;
