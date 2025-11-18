@@ -1,6 +1,6 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.FSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mkdir.FSMkdirCommandBusiness;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

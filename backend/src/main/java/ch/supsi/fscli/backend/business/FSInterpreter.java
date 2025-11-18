@@ -1,6 +1,21 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.*;
+import ch.supsi.fscli.backend.business.FSCommands.cd.FSCdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.cd.IFSCdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ls.FSLsiCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ls.IFSLsiCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mkdir.FSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mkdir.IFSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mv.FSMvCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mv.IFSMvCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.pwd.FSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.pwd.IFSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmdir.FSRmdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmdir.IFSRmdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmfile.FSRmfilecommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmfile.IFSRmfileCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.touch.FSTouchCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.touch.IFSTouchCommandBusiness;
 
 import java.util.HashMap;
 import java.util.List;
