@@ -16,6 +16,8 @@ public class PathSolver {
         INode current = isAbsolute ? ifsStateBusiness.getRoot()
                 : ifsStateBusiness.getCurrentWorkingDirectory();
 
+
+
         for (String token : tokens) {
 
             if (token.isEmpty() || token.equals(".")) continue;
@@ -33,6 +35,8 @@ public class PathSolver {
                 return Optional.empty();
             }
 
+            System.out.println(current.getName());
+
             Optional<INode> next = dir.getContent().stream()
                     .filter(n -> n.getName().equals(token))
                     .findFirst();
@@ -45,6 +49,28 @@ public class PathSolver {
         }
 
         return Optional.of(current);
+    }
+
+
+    public static IDirectoryBusiness extractParentDirectory(String path) {
+
+        int lastIndex = path.lastIndexOf("/");
+
+        if(lastIndex < 0)
+            return ifsStateBusiness.getCurrentWorkingDirectory();
+
+        String parentPath = path.substring(0, lastIndex);
+        Optional<INode> node = PathSolver.resolvePath(parentPath);
+
+        if(node.isPresent() && node.get().getType().equals(NodeType.DIRECTORY))
+            return (IDirectoryBusiness) node.get();
+
+        return null;
+    }
+
+    public static String extractFileName(String path) {
+        int lastIndex = path.lastIndexOf("/");
+        return path.substring(lastIndex + 1);
     }
 
     public static boolean nameAlreadyExists(IDirectoryBusiness dir, String fileToCheck) {

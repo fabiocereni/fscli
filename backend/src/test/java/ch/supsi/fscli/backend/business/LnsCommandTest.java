@@ -9,93 +9,80 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 public class LnsCommandTest {
 
-    private DirectoryBusiness root = new DirectoryBusiness(null, "root");
+    private DirectoryBusiness root;
     private DirectoryBusiness dir1;
-    private DirectoryBusiness dir2;
     private FileBusiness file;
-
     private FSLnCommandBusiness lnCommand;
 
     @BeforeEach
     void setup() {
-
-        lnCommand = new FSLnCommandBusiness();
-
+        root = new DirectoryBusiness(null, "root");
         dir1 = new DirectoryBusiness(root, "dir1");
-
-        dir2 = new DirectoryBusiness(root, "dir2");
-
         file = new FileBusiness(dir1, "test.txt");
 
+        lnCommand = new FSLnCommandBusiness();
+        FSStateBusiness.getInstance().setRoot(root);
     }
-
-    //@Test
-    void testSoftlinkCreatedCorrectly() throws Exception {
-        assertTrue(lnCommand.lns("dir1/test.txt", "dir2/slink.txt"));
-
-        Optional<INode> slink = PathSolver.resolvePath("dir2/slink.txt");
-        assertTrue(slink.isPresent());
-
-        FileBusiness fb = (FileBusiness) slink.get();
-        assertTrue(fb.isSoftLink());
-        assertEquals("dir1/test.txt", fb.getLinkPath());
-    }
-
-    //@Test
-    void testSoftlinkTargetNotFound() {
-        assertThrows(DirectoryNotFoundException.class, () ->
-                lnCommand.lns("dir1/NOFILE", "dir2/slink.txt")
-        );
-    }
-
-    //@Test
-    void testSoftlinkParentDirNotFound() {
-        assertThrows(DirectoryNotFoundException.class, () ->
-                lnCommand.lns("dir1/test.txt", "missingDir/link.txt")
-        );
-    }
-
-    //@Test
-    void testSoftlinkAlreadyExists() throws Exception {
-        FileBusiness exists = new FileBusiness(dir2, "slink.txt");
-        dir2.addContent(exists);
-
-        assertThrows(NodeAlreadyExistsException.class, () ->
-                lnCommand.lns("dir1/test.txt", "dir2/slink.txt")
-        );
-    }
-
-    //@Test
-    void testSoftlinkRelativePath() throws Exception {
-        FSStateBusiness.getInstance().setCurrentWorkingDirectory(dir2);
-
-        lnCommand.lns("../dir1/test.txt", "mysym.txt");
-
-        assertTrue(PathSolver.resolvePath("dir2/mysym.txt").isPresent());
-    }
-
 
     @Test
-    void extractParentDirectory() {
+    void testLnsCreatesLinkSuccessfully() throws Exception {
+        String targetPath = "/dir1/test.txt";
+        String linkPath = "/dir1/test_link.txt";
 
-        String path = "/dir1/dir2";
+        assertTrue(PathSolver.resolvePath(targetPath).isPresent());
 
-        int lastIndex = path.lastIndexOf("/");
-        String parentPath = path.substring(0, lastIndex);
-        assertEquals("/dir1", parentPath);
-        assertTrue(PathSolver.resolvePath(parentPath).isPresent());
+        boolean result = lnCommand.lns(targetPath, linkPath);
+        assertTrue(result);
 
+        IDirectoryBusiness parentDir = PathSolver.extractParentDirectory(linkPath);
+        assertNotNull(parentDir);
+
+        Optional<INode> linkNode = parentDir.getContent().stream()
+                .filter(n -> n.getName().equals("test_link.txt"))
+                .findFirst();
+
+        assertTrue(linkNode.isPresent());
+        assertEquals(NodeType.FILE, linkNode.get().getType());
+
+        FileBusiness softLink = (FileBusiness) linkNode.get();
+        assertTrue(softLink.isSoftLink());
+        assertEquals(targetPath, softLink.getLinkPath());
     }
 
+    @Test
+    void testLnsFailsIfTargetDoesNotExist() {
+        String targetPath = "/dir1/nonexistent.txt";
+        String linkPath = "/dir1/test_link.txt";
+
+        DirectoryNotFoundException ex = assertThrows(DirectoryNotFoundException.class, () -> {
+            lnCommand.lns(targetPath, linkPath);
+        });
+        assertEquals("ln: softlink target does not exist", ex.getMessage());
+    }
 
     @Test
-    void extractRelativePath() {
-        String path;
+    void testLnsFailsIfLinkAlreadyExists() {
+        String targetPath = "/dir1/test.txt";
+        String linkPath = "/dir1/test.txt";
 
-        if(!path.startsWith("/"))
-            System.out.println("relativePath");
+        NodeAlreadyExistsException ex = assertThrows(NodeAlreadyExistsException.class, () -> {
+            lnCommand.lns(targetPath, linkPath);
+        });
+        assertEquals("ln: file with same name already exists", ex.getMessage());
+    }
+
+    @Test
+    void testLnsFailsIfParentDirectoryDoesNotExist() {
+        String targetPath = "/dir1/test.txt";
+        String linkPath = "/dir2/test_link.txt";
+
+        DirectoryNotFoundException ex = assertThrows(DirectoryNotFoundException.class, () -> {
+            lnCommand.lns(targetPath, linkPath);
+        });
+        assertEquals("ln: parent directory does not exist", ex.getMessage());
     }
 
 }

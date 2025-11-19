@@ -1,9 +1,6 @@
 package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.FSCommands.ln.FSLnCommandBusiness;
-import ch.supsi.fscli.backend.exception.DirectoryNotFoundException;
-import ch.supsi.fscli.backend.exception.MyFileNotFoundException;
-import ch.supsi.fscli.backend.exception.NodeAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,76 +8,76 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class LnCommandTest {
+class LnCommandTest {
 
     private DirectoryBusiness root;
     private DirectoryBusiness dir1;
-    private DirectoryBusiness dir2;
     private FileBusiness file;
-
     private FSLnCommandBusiness lnCommand;
 
     @BeforeEach
     void setup() {
+        root = new DirectoryBusiness(null, "root");
+        dir1 = new DirectoryBusiness(root, "dir1");
+        file = new FileBusiness(dir1, "test.txt");
 
         lnCommand = new FSLnCommandBusiness();
 
-        // filesystem di test
-        root = new DirectoryBusiness(null, "root");
+        FSStateBusiness.getInstance().setRoot(root);
+    }
 
-        dir1 = new DirectoryBusiness(root, "dir1");
-        root.addContent(dir1);
+    @Test
+    void testLnCreatesLinkSuccessfully() {
+        String targetPath = "/dir1/test.txt";
+        String linkPath = "/dir1/test_link.txt";
 
-        dir2 = new DirectoryBusiness(root, "dir2");
-        root.addContent(dir2);
+        assertTrue(PathSolver.resolvePath(targetPath).isPresent());
 
-        file = new FileBusiness(dir1, "test.txt");
-        dir1.addContent(file);
+        boolean result = lnCommand.ln(targetPath, linkPath);
+        assertTrue(result);
 
+        IDirectoryBusiness parentDir = PathSolver.extractParentDirectory(linkPath);
+        assertNotNull(parentDir);
+
+        Optional<INode> linkNode = parentDir.getContent().stream()
+                .filter(n -> n.getName().equals("test_link.txt"))
+                .findFirst();
+
+        assertTrue(linkNode.isPresent());
+        assertEquals(NodeType.FILE, linkNode.get().getType());
 
     }
 
     @Test
-    void testHardlinkCreatedCorrectly() throws Exception {
-        assertTrue(lnCommand.ln("dir1/test.txt", "dir2/link.txt"));
+    void testLnFailsIfTargetDoesNotExist() {
+        String targetPath = "/dir1/nonexistent.txt";
+        String linkPath = "/dir1/test_link.txt";
 
-        Optional<INode> link = PathSolver.resolvePath("dir2/link.txt");
-        assertTrue(link.isPresent());
-        assertEquals(NodeType.FILE, link.get().getType());
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            lnCommand.ln(targetPath, linkPath);
+        });
+        assertEquals("ln: target file does not exist", ex.getMessage());
     }
 
     @Test
-    void testHardlinkTargetNotFound() {
-        assertThrows(MyFileNotFoundException.class, () ->
-                lnCommand.ln("dir1/NOFILE", "dir2/link.txt")
-        );
+    void testLnFailsIfLinkAlreadyExists() {
+        String targetPath = "/dir1/test.txt";
+        String linkPath = "/dir1/test.txt";
+
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            lnCommand.ln(targetPath, linkPath);
+        });
+        assertEquals("ln: file with same name already exists", ex.getMessage());
     }
 
     @Test
-    void testHardlinkParentDirNotFound() {
-        assertThrows(DirectoryNotFoundException.class, () ->
-                lnCommand.ln("dir1/test.txt", "missingDir/link.txt")
-        );
-    }
+    void testLnFailsIfParentDirectoryDoesNotExist() {
+        String targetPath = "/dir1/test.txt";
+        String linkPath = "/dir2/test_link.txt";
 
-    @Test
-    void testHardlinkAlreadyExists() throws Exception {
-        // create file in dir2 with name link.txt
-        FileBusiness already = new FileBusiness(dir2, "link.txt");
-        dir2.addContent(already);
-
-        assertThrows(NodeAlreadyExistsException.class, () ->
-                lnCommand.ln("dir1/test.txt", "dir2/link.txt")
-        );
-    }
-
-
-    @Test
-    void testHardlinkRelativePath() throws Exception {
-        FSStateBusiness.getInstance().setCurrentWorkingDirectory(dir2);
-
-        lnCommand.ln("../dir1/test.txt", "myHardLink.txt");
-
-        assertTrue(PathSolver.resolvePath("dir2/myHardLink.txt").isPresent());
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> {
+            lnCommand.ln(targetPath, linkPath);
+        });
+        assertEquals("ln: parent directory does not exist", ex.getMessage());
     }
 }
