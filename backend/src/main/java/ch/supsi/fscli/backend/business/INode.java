@@ -6,4 +6,8 @@ public interface INode {
     IDirectoryBusiness getParent();
     void setParent(IDirectoryBusiness parent);
     NodeType getType();
+    boolean isSoftLink();
+    void setSoftLink(boolean value);
+    String getLinkPath();
+    void setLinkPath(String linkPath);
 }
