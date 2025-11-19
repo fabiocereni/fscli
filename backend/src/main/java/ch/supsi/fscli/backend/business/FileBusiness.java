@@ -18,7 +18,6 @@ public class FileBusiness implements IFileBusiness {
     }
 
 
-
     @Override
     public String getName() {
         return node.getName();

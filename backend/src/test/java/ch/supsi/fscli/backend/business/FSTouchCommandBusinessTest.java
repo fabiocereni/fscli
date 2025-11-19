@@ -18,12 +18,10 @@ public class FSTouchCommandBusinessTest {
     void setup() {
         FSStateBusiness.getInstance().setRoot(new DirectoryBusiness(null, "root"));
         DirectoryBusiness root = FSStateBusiness.getInstance().getRoot();
-        root.getContent().clear();
+
         DirectoryBusiness home = new DirectoryBusiness(root, "home");
         DirectoryBusiness user = new DirectoryBusiness(home, "user");
 
-        root.addContent(home);
-        home.addContent(user);
 
         touchCommandBusiness = FSTouchCommandBusiness.getInstance();
         fsState = FSStateBusiness.getInstance();
@@ -32,24 +30,32 @@ public class FSTouchCommandBusinessTest {
 
     @Test
     public void touchInSpecificPathTest() {
-        String path = "/home/user";
-        boolean result = touchCommandBusiness.touch("test.txt", path);
+        String path = "/home/user/test.txt";
+        boolean result = touchCommandBusiness.touch(path);
         assertTrue(result);
 
         Optional<INode> tmp = PathSolver.resolvePath(path);
         assertTrue(tmp.isPresent());
 
-        IDirectoryBusiness dir = (DirectoryBusiness) tmp.get();
-        Optional<INode> elem = dir.getContent().stream()
-                .filter(e -> e.getName().equals("test.txt"))
-                .findFirst();
+        Optional<INode> elem;
+
+        if(tmp.get().getType().equals(NodeType.DIRECTORY)) {
+            IDirectoryBusiness dir = (DirectoryBusiness) tmp.get();
+
+            elem = dir.getContent().stream()
+                    .filter(e -> e.getName().equals("test.txt"))
+                    .findFirst();
+        } else {
+            elem = tmp;
+        }
+
 
         assertTrue(elem.isPresent());
     }
 
     @Test
     public void touchInCurrentDirectoryTest() {
-        boolean result = touchCommandBusiness.touch("file.txt", null);
+        boolean result = touchCommandBusiness.touch("file.txt");
         assertTrue(result);
 
         IDirectoryBusiness cwd = fsState.getCurrentWorkingDirectory();
@@ -62,7 +68,6 @@ public class FSTouchCommandBusinessTest {
 
     @Test
     public void touchInvalidPathTest() {
-        boolean result = touchCommandBusiness.touch("fail.txt", "/invalid/path");
-        assertFalse(result);
+        assertThrows(IllegalArgumentException.class, () -> touchCommandBusiness.touch("/invalid/path/fail.txt"));
     }
 }
