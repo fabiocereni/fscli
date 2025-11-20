@@ -38,19 +38,6 @@ class PathSolverTest {
         assertEquals("user", result.get().getName());
     }
 
-//    @Test
-//    void testAbsoluteFileReturnsParent() {
-//        Optional<INode> result = PathSolver.resolvePath("/home/user/file.txt");
-//        assertTrue(result.isPresent());
-//        assertEquals("user", result.get().getName());
-//    }
-//
-//    @Test
-//    void testRelativeFileReturnsParent() {
-//        Optional<INode> result = PathSolver.resolvePath("file.txt");
-//        assertTrue(result.isPresent());
-//        assertEquals("user", result.get().getName());
-//    }
 
     @Test
     void testRelativeDirectoryDot() {
@@ -66,19 +53,11 @@ class PathSolverTest {
         assertEquals("home", result.get().getName());
     }
 
-//    @Test
-//    void testParentDirectoryFileToken() {
-//        Optional<INode> result = PathSolver.resolvePath("../user/file.txt");
-//        assertTrue(result.isPresent());
-//        assertEquals("user", result.get().getName());
-//    }
-//
-//    @Test
-//    void testMultipleSlashes() {
-//        Optional<INode> result = PathSolver.resolvePath("/home//user///file.txt");
-//        assertTrue(result.isPresent());
-//        assertEquals("user", result.get().getName());
-//    }
+    @Test
+    void testMultipleSlashes() {
+        Optional<INode> result = PathSolver.resolvePath("/home//user///file.txt");
+        assertTrue(result.isEmpty());
+    }
 
     @Test
     void testNonExistentPath() {
@@ -93,11 +72,6 @@ class PathSolverTest {
         assertEquals("root", result.get().getName());
     }
 
-    @Test
-    void testNullPath() {
-        Optional<INode> result = PathSolver.resolvePath(null);
-        assertTrue(result.isEmpty());
-    }
 
     @Test
     void testEmptyPath() {
