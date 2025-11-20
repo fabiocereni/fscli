@@ -7,7 +7,11 @@ public class PathSolver {
     private static final IFSStateBusiness ifsStateBusiness = FSStateBusiness.getInstance();
 
     public static Optional<INode> resolvePath(String path) {
-        if (path == null || path.isEmpty())
+
+        if(path.matches(".*/{2,}.*"))
+            return Optional.empty();
+
+        if (path.isEmpty())
             return Optional.empty();
 
         boolean isAbsolute = path.startsWith("/");
@@ -53,6 +57,9 @@ public class PathSolver {
 
 
     public static IDirectoryBusiness extractParentDirectory(String path) {
+
+        if(path.matches(".*/{2,}.*"))
+            return null;
 
         int lastIndex = path.lastIndexOf("/");
 
