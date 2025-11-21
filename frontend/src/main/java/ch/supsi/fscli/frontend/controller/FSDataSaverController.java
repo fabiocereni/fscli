@@ -1,5 +1,6 @@
 package ch.supsi.fscli.frontend.controller;
 
+import ch.supsi.fscli.frontend.director.SaveEventDirector;
 import ch.supsi.fscli.frontend.model.IFSDataSaverModel;
 import ch.supsi.fscli.frontend.model.IFSStateModel;
 import ch.supsi.fscli.frontend.view.IShow;
@@ -14,25 +15,32 @@ public class FSDataSaverController implements IFSDataSaverController {
 
     @Inject
     private IFSDataSaverModel ifsDataWriterModel;
+
+    @Inject
+    private SaveEventDirector saveEventDirector;
+
     @Inject
     private IFSStateModel ifsStateModel;
+
     @Inject
     @SavingViewQualifier
     private IShow savingView;
 
 
-
-
     @Override
     public void save(Path path) {
-        this.ifsDataWriterModel.save(path);
         this.ifsStateModel.setCloseable(true);
+        this.ifsDataWriterModel.save(path);
+        // da decidere
+        saveEventDirector.manageSaveAs();
     }
 
     @Override
     public void save() {
-        this.ifsDataWriterModel.save();
         this.ifsStateModel.setCloseable(true);
+        this.ifsDataWriterModel.save();
+        // da decidere
+        saveEventDirector.manageSave();
     }
 
     @Override

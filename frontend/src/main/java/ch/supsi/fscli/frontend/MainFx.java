@@ -7,7 +7,6 @@ import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
 import ch.supsi.fscli.frontend.director.WidgetDirector;
-import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import ch.supsi.fscli.frontend.modules.ControllerModule;
 import ch.supsi.fscli.frontend.modules.DirectorModule;
@@ -58,8 +57,6 @@ public class MainFx extends Application {
 
     private final Injector injector;
 
-    //private final EventHandlerInitializer eventHandlerInitializer;
-
     private final EventHandler dataSaverController;
     private final EventHandler aboutViewController;
     private final EventHandler helpController;
@@ -72,7 +69,6 @@ public class MainFx extends Application {
     private final ISupportedLanguageController supportedLanguageController;
     private final IPreferencesController preferencesController;
 
-    //private final SupportedLanguageModel supportedLanguageModel;
     private final PreferencesModel preferencesModel;
 
     public MainFx() {
@@ -103,7 +99,6 @@ public class MainFx extends Application {
 
         commandLineView.setOutputView(outputView); // imposto l'output view sul command line view
 
-        //this.eventHandlerInitializer = new EventHandlerInitializer(this.savingView, this.quitView, this.helpView, this.aboutView);
 
         this.dataSaverController = injector.getInstance(FSDataSaverController.class);
         this.quitController = injector.getInstance(QuitController.class);
