@@ -1,6 +1,7 @@
 package ch.supsi.fscli.frontend.controller;
 
 
+import ch.supsi.fscli.backend.application.IFSCreationApplication;
 import ch.supsi.fscli.frontend.director.FSCreationDirector;
 import ch.supsi.fscli.frontend.model.IFSStateModel;
 import com.google.inject.Inject;
@@ -16,9 +17,14 @@ public class FSCreationController implements IFSCreationController {
     private IFSStateModel ifsStateModel;
 
 
+    @Inject
+    private IFSCreationApplication ifsCreationApplication;
+
+
     @Override
     public void createFileSystem() {
-        this.fsCreationDirector.createFileSystem();
+        this.ifsCreationApplication.createFileSystem();
+        this.fsCreationDirector.manageFileSystemCreation();
         this.ifsStateModel.setCloseable(false);
     }
 }

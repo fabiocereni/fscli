@@ -6,6 +6,7 @@ import ch.supsi.fscli.backend.application.IFSCreationApplication;
 import ch.supsi.fscli.backend.application.IFSStateApplication;
 import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
 import ch.supsi.fscli.frontend.director.FSCreationDirector;
+import ch.supsi.fscli.frontend.director.SaveEventDirector;
 import ch.supsi.fscli.frontend.director.WidgetDirector;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
@@ -19,5 +20,6 @@ public class DirectorModule extends AbstractModule {
         bind(FSCreationDirector.class).in(Singleton.class);
         bind(WidgetDirector.class).in(Singleton.class);
         bind(ConfirmExitDirector.class).in(Singleton.class);
+        bind(SaveEventDirector.class).in(Singleton.class);
     }
 }

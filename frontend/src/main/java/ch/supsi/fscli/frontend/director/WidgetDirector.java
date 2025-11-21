@@ -2,6 +2,8 @@ package ch.supsi.fscli.frontend.director;
 
 
 import ch.supsi.fscli.frontend.event.FilesystemCreatedEvent;
+import ch.supsi.fscli.frontend.event.InputEvent;
+import ch.supsi.fscli.frontend.event.SaveEvent;
 import com.google.inject.Singleton;
 import javafx.scene.control.MenuItem;
 
@@ -15,6 +17,7 @@ public class WidgetDirector extends AbstractDirector implements PropertyChangeLi
     private MenuItem saveAsMenuItem;
 
 
+
     public void setColleagues(MenuItem saveMenuItem, MenuItem saveAsMenuItem) {
         this.saveMenuItem = saveMenuItem;
         this.saveAsMenuItem = saveAsMenuItem;
@@ -26,6 +29,21 @@ public class WidgetDirector extends AbstractDirector implements PropertyChangeLi
 
         if(evt instanceof FilesystemCreatedEvent) {
             System.out.println("Filesystem created!");
+            this.saveMenuItem.setDisable(false);
+            this.saveAsMenuItem.setDisable(false);
+        }
+
+        if(evt instanceof SaveEvent) {
+            System.out.println("Filesystem saved!");
+
+            if(evt.getPropertyName().equalsIgnoreCase("save as"))
+                this.saveAsMenuItem.setDisable(true);
+            else
+                this.saveMenuItem.setDisable(true);
+        }
+
+
+        if(evt instanceof InputEvent) {
             this.saveMenuItem.setDisable(false);
             this.saveAsMenuItem.setDisable(false);
         }

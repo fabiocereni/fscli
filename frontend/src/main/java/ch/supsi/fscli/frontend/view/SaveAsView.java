@@ -1,6 +1,5 @@
 package ch.supsi.fscli.frontend.view;
 
-import ch.supsi.fscli.frontend.controller.FSDataSaverController;
 import ch.supsi.fscli.frontend.controller.IFSDataSaverController;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -13,12 +12,9 @@ import java.nio.file.Path;
 @Singleton
 public class SaveAsView implements IShow {
 
-    private final IFSDataSaverController dataSaverController;
-
     @Inject
-    public SaveAsView(IFSDataSaverController dataSaverController) {
-        this.dataSaverController = dataSaverController;
-    }
+    private IFSDataSaverController dataSaverController;
+
 
     @Override
     public void showMyView() {

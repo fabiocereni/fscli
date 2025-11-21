@@ -4,14 +4,16 @@ import ch.supsi.fscli.frontend.controller.ICommandLineController;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.director.FSCreationDirector;
+import ch.supsi.fscli.frontend.director.InputDirector;
+import ch.supsi.fscli.frontend.event.FilesystemCreatedEvent;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.event.ActionEvent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -28,6 +30,8 @@ public class CommandLineView implements PropertyChangeListener {
     private ICommandLineController commandLineController;
     @Inject
     private FSCreationDirector fsCreationDirector;
+    @Inject
+    private InputDirector inputDirector;
 
     private OutputView outputView;
 
@@ -77,6 +81,9 @@ public class CommandLineView implements PropertyChangeListener {
                 outputView.appendText(output + "\n");
             }
 
+            // da decidere
+            this.inputDirector.manageInput();
+
             commandLine.clear();
         };
 
@@ -108,7 +115,10 @@ public class CommandLineView implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        commandLine.setDisable(false);
-        enter.setDisable(false);
+
+        if(evt instanceof FilesystemCreatedEvent) {
+            commandLine.setDisable(false);
+            enter.setDisable(false);
+        }
     }
 }
