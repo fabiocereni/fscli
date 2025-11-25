@@ -6,8 +6,6 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
 
     private static FSMkdirCommandBusiness myself;
 
-    private final IFSStateBusiness stateBusiness = FSStateBusiness.getInstance();
-
     private FSMkdirCommandBusiness() {}
 
     public static FSMkdirCommandBusiness getInstance() {
@@ -19,27 +17,28 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
     @Override
     public Boolean mkdir(String path) {
 
-        // 1. Invalid input
         if (path == null || path.isBlank())
             return false;
 
-        // 2. Parent directory tramite PathSolver
+        if(path.charAt(0) == '/')
+            path = path.substring(1);
+
         IDirectoryBusiness parentDir = PathSolver.extractParentDirectory(path);
         if (parentDir == null)
-            return false;  // parent non valido o non directory
+            return false; // parent non trovato
 
-        // 3. Estraggo il nome finale
-        String name = PathSolver.extractFileName(path);
+        String newDirName = PathSolver.extractFileName(path);
 
-        if (name.isBlank())
+        // no: "" non è valido
+        if (newDirName.isBlank())
             return false;
 
-        // 4. Controllo se esiste già
-        if (PathSolver.nameAlreadyExists(parentDir, name))
+        // controllo duplicati
+        if (PathSolver.nameAlreadyExists(parentDir, newDirName))
             return false;
 
-        // 5. Creo la directory
-        new DirectoryBusiness(parentDir, name);
+        // crea directory (aggiunta automaticamente al parent)
+        new DirectoryBusiness(parentDir, newDirName);
 
         return true;
     }
