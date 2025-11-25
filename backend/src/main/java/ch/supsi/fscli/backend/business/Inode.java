@@ -1,6 +1,6 @@
 package ch.supsi.fscli.backend.business;
 
-abstract class Inode {
+public abstract class Inode {
     private final long id;
     private final InodeType type;
     private int linkCount;
