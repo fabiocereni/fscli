@@ -2,7 +2,8 @@ package ch.supsi.fscli.backend.business;
 
 public class FSCreationBusiness implements IFSCreationBusiness {
 
-    IFSStateBusiness ifsStateBusiness = FSStateBusiness.getInstance();
+    private final FileSystem fileSystem = FileSystem.getInstance();
+    private final IFSStateBusiness ifsStateBusiness = FSStateBusiness.getInstance();
 
     private static FSCreationBusiness myself;
 
@@ -17,11 +18,9 @@ public class FSCreationBusiness implements IFSCreationBusiness {
 
     @Override
     public void newfs() {
-        if(this.ifsStateBusiness.getRoot() == null) {
-            DirectoryBusiness root = new DirectoryBusiness(null, "root");
-            this.ifsStateBusiness.setRoot(root);
-            this.ifsStateBusiness.setCurrentWorkingDirectory(root);
-            System.out.println("ROOT CREATED");
-        }
+        DirectoryInodeBusiness root = fileSystem.getRoot();
+        this.ifsStateBusiness.setRoot(root);
+        this.ifsStateBusiness.setCurrentWorkingDirectory(root);
+        System.out.println("NEW FILESYSTEM CREATED");
     }
 }

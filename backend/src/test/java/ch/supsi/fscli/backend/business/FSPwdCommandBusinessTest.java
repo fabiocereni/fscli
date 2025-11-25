@@ -11,40 +11,56 @@ public class FSPwdCommandBusinessTest {
 
     private IFSStateBusiness fsState;
     private IFSPwdCommandBusiness pwdCommandBusiness;
-    private DirectoryBusiness home;
-    private DirectoryBusiness user;
+
+    private DirectoryInodeBusiness root;
+    private DirectoryInodeBusiness home;
+    private DirectoryInodeBusiness user;
 
     @BeforeEach
     void setup() {
-        FSStateBusiness.getInstance().setRoot(new DirectoryBusiness(null, "/"));
-        DirectoryBusiness root = FSStateBusiness.getInstance().getRoot();
-        root.getContent().clear();
-        this.home = new DirectoryBusiness(root, "home");
-        this.user = new DirectoryBusiness(home, "user");
 
-        pwdCommandBusiness = FSPwdCommandBusiness.getInstance();
-
+        FSCreationBusiness.getInstance().newfs();
         fsState = FSStateBusiness.getInstance();
 
+        // crea root
+        root = FileSystem.getInstance().createDirectory();
+        fsState.setRoot(root);
+        fsState.setCurrentWorkingDirectoryPath("/");
+        fsState.setCurrentWorkingDirectory(root);
 
-        root.addContent(home);
-        home.addContent(user);
+        // crea /home
+        home = FileSystem.getInstance().createDirectory();
+        root.addEntry("home", home);
 
-        fsState.setCurrentWorkingDirectory(user);
+        // crea /home/user
+        user = FileSystem.getInstance().createDirectory();
+        home.addEntry("user", user);
+
+        pwdCommandBusiness = FSPwdCommandBusiness.getInstance();
     }
 
     @Test
     public void pwdTest() {
-        fsState.setCurrentWorkingDirectory(new DirectoryBusiness(fsState.getRoot(), "Test"));
+
+        // CWD = /Test
+        DirectoryInodeBusiness testDir = FileSystem.getInstance().createDirectory();
+        root.addEntry("Test", testDir);
+
+        fsState.setCurrentWorkingDirectory(testDir);
+        fsState.setCurrentWorkingDirectoryPath("/Test");
+
         assertEquals("/Test", pwdCommandBusiness.pwd());
-        System.out.println(pwdCommandBusiness.pwd());
 
+        // CWD = /home/user
         fsState.setCurrentWorkingDirectory(user);
-        assertEquals("/home/user", pwdCommandBusiness.pwd());
-        System.out.println(pwdCommandBusiness.pwd());
+        fsState.setCurrentWorkingDirectoryPath("/home/user");
 
+        assertEquals("/home/user", pwdCommandBusiness.pwd());
+
+        // CWD = /home
         fsState.setCurrentWorkingDirectory(home);
+        fsState.setCurrentWorkingDirectoryPath("/home");
+
         assertEquals("/home", pwdCommandBusiness.pwd());
-        System.out.println(pwdCommandBusiness.pwd());
     }
 }
