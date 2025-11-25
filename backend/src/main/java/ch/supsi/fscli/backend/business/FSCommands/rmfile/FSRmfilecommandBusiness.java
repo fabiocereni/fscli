@@ -28,9 +28,7 @@ public class FSRmfilecommandBusiness implements IFSRmfileCommandBusiness {
         if (currentDir == null)
             return false;
 
-        Optional<INode> targetNode = currentDir.getContent().stream()
-                .filter(node -> node.getName().equals(name))
-                .findFirst();
+        Optional<INode> targetNode = PathSolver.resolvePath(name);
 
         if (targetNode.isEmpty()) {
             System.out.println("rmfile: file not found '" + name + "'");
