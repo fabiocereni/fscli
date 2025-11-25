@@ -10,4 +10,5 @@ public interface INode {
     void setSoftLink(boolean value);
     String getLinkPath();
     void setLinkPath(String linkPath);
+    int getInodeId();
 }

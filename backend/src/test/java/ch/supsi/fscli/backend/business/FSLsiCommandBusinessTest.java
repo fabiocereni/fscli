@@ -1,6 +1,6 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.ls.FSLsiCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ls.FSLsCommandBusiness;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FSLsiCommandBusinessTest {
 
-    private FSLsiCommandBusiness lsiCommand;
+    private FSLsCommandBusiness lsCommand;
     private FSStateBusiness stateBusiness;
     private DirectoryBusiness rootDir;
     private DirectoryBusiness subDir;
@@ -16,10 +16,10 @@ public class FSLsiCommandBusinessTest {
 
     @BeforeEach
     void setUp() {
-        lsiCommand = FSLsiCommandBusiness.getInstance();
+        lsCommand = FSLsCommandBusiness.getInstance();
         stateBusiness = FSStateBusiness.getInstance();
 
-        // reset state
+        // reset stato file system
         rootDir = new DirectoryBusiness(null, "root");
         stateBusiness.setRoot(rootDir);
         stateBusiness.setCurrentWorkingDirectory(rootDir);
@@ -29,28 +29,35 @@ public class FSLsiCommandBusinessTest {
     }
 
     @Test
-    void testLsiOnDirectory() {
-        String result = lsiCommand.lsi("/");
+    void testLsOnRootDirectoryWithoutId() {
+        String result = lsCommand.ls("/", false);
         assertTrue(result.contains("subdir"));
         assertTrue(result.contains("file.txt"));
+        assertFalse(result.contains("["));
     }
 
     @Test
-    void testLsiOnFile() {
-        String result = lsiCommand.lsi("file.txt");
+    void testLsOnRootDirectoryWithId() {
+        String result = lsCommand.ls("/", true);
+        assertTrue(result.contains("subdir ["));
+        assertTrue(result.contains("file.txt ["));
+    }
+
+    @Test
+    void testLsOnFile() {
+        String result = lsCommand.ls("file.txt", false);
         assertEquals("That is not a directory", result);
     }
 
     @Test
-    void testLsiNonExisting() {
-        String result = lsiCommand.lsi("nonexistent");
+    void testLsNonExisting() {
+        String result = lsCommand.ls("nonexistent", false);
         assertEquals("Directory not found", result);
     }
 
     @Test
-    void testLsiCurrentDirectoryWhenNull() {
-        // pass null to list current working directory
-        String result = lsiCommand.lsi(null);
+    void testLsCurrentDirectoryWithNullName() {
+        String result = lsCommand.ls(null, false);
         assertTrue(result.contains("subdir"));
         assertTrue(result.contains("file.txt"));
     }

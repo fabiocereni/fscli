@@ -74,6 +74,10 @@ public class DirectoryBusiness implements IDirectoryBusiness {
         this.linkPath = linkPath;
     }
 
+    @Override
+    public int getInodeId() {
+        return node.getInodeId();
+    }
 
     @Override
     public String toString() {

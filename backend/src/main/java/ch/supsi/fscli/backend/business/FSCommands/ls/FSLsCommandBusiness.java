@@ -5,31 +5,34 @@ import ch.supsi.fscli.backend.business.*;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FSLsiCommandBusiness implements IFSLsiCommandBusiness {
+public class FSLsCommandBusiness implements IFSLsCommandBusiness {
 
-    private static FSLsiCommandBusiness myself;
+    private static FSLsCommandBusiness myself;
 
     private final IFSStateBusiness stateBusiness = FSStateBusiness.getInstance();
 
-    private FSLsiCommandBusiness() {}
+    private FSLsCommandBusiness() {}
 
-    public static FSLsiCommandBusiness getInstance() {
+    public static FSLsCommandBusiness getInstance() {
         if (myself == null)
-            myself = new FSLsiCommandBusiness();
+            myself = new FSLsCommandBusiness();
         return myself;
     }
 
     @Override
-    public String lsi(String name) {
-
+    public String ls(String name, boolean id) {
         DirectoryBusiness currentDir = stateBusiness.getCurrentWorkingDirectory();
         if (currentDir == null)
             return "Directory not found";
 
+        // Funzione per generare output con o senza ID
+        java.util.function.Function<INode, String> formatNode = n ->
+                id ? n.getName() + " [" + n.getInodeId() + "]" : n.getName();
+
         // Caso: nessun argomento → lista della directory corrente
         if (name == null || name.isBlank()) {
             return currentDir.getContent().stream()
-                    .map(INode::getName)
+                    .map(formatNode)
                     .distinct()
                     .collect(Collectors.joining("\n"));
         }
@@ -46,7 +49,7 @@ public class FSLsiCommandBusiness implements IFSLsiCommandBusiness {
 
             DirectoryBusiness d = (DirectoryBusiness) found;
             return d.getContent().stream()
-                    .map(INode::getName)
+                    .map(formatNode)
                     .distinct()
                     .collect(Collectors.joining("\n"));
         }
@@ -57,17 +60,13 @@ public class FSLsiCommandBusiness implements IFSLsiCommandBusiness {
             return "Directory not found";
 
         INode node = targetNodeOpt.get();
-
         if (node.getType() != NodeType.DIRECTORY)
             return "That is not a directory";
 
         DirectoryBusiness targetDir = (DirectoryBusiness) node;
-
         return targetDir.getContent().stream()
-                .map(INode::getName)
+                .map(formatNode)
                 .distinct()
                 .collect(Collectors.joining("\n"));
     }
-
-
 }
