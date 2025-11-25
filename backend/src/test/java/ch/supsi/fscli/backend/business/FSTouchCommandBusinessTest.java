@@ -2,6 +2,7 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.FSCommands.touch.FSTouchCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.touch.IFSTouchCommandBusiness;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,60 +15,68 @@ public class FSTouchCommandBusinessTest {
     private IFSStateBusiness fsState;
     private IFSTouchCommandBusiness touchCommandBusiness;
 
+    private DirectoryInodeBusiness root;
+    private DirectoryInodeBusiness home;
+    private DirectoryInodeBusiness user;
+
     @BeforeEach
     void setup() {
-        FSStateBusiness.getInstance().setRoot(new DirectoryBusiness(null, "root"));
-        DirectoryBusiness root = FSStateBusiness.getInstance().getRoot();
 
-        DirectoryBusiness home = new DirectoryBusiness(root, "home");
-        DirectoryBusiness user = new DirectoryBusiness(home, "user");
+        FSCreationBusiness.getInstance().newfs();
+        fsState = FSStateBusiness.getInstance();
 
+        // crea root
+        root = FileSystem.getInstance().createDirectory();
+        fsState.setRoot(root);
+
+        // crea /home
+        home = FileSystem.getInstance().createDirectory();
+        root.addEntry("home", home);
+
+        // crea /home/user
+        user = FileSystem.getInstance().createDirectory();
+        home.addEntry("user", user);
+
+        // CWD = /home/user
+        fsState.setCurrentWorkingDirectory(user);
 
         touchCommandBusiness = FSTouchCommandBusiness.getInstance();
-        fsState = FSStateBusiness.getInstance();
-        fsState.setCurrentWorkingDirectory(user);
     }
 
     @Test
     public void touchInSpecificPathTest() {
         String path = "/home/user/test.txt";
+
         boolean result = touchCommandBusiness.touch(path);
         assertTrue(result);
 
-        Optional<INode> tmp = PathSolver.resolvePath(path);
-        assertTrue(tmp.isPresent());
+        Optional<Inode> resolved = PathSolver.resolvePath(path);
+        assertTrue(resolved.isPresent());
 
-        Optional<INode> elem;
+        // verifico che il file sia realmente nella directory corretta
+        DirectoryInodeBusiness parent = PathSolver.extractParentDirectory(path);
+        assertNotNull(parent);
 
-        if(tmp.get().getType().equals(NodeType.DIRECTORY)) {
-            IDirectoryBusiness dir = (DirectoryBusiness) tmp.get();
-
-            elem = dir.getContent().stream()
-                    .filter(e -> e.getName().equals("test.txt"))
-                    .findFirst();
-        } else {
-            elem = tmp;
-        }
-
-
-        assertTrue(elem.isPresent());
+        Inode file = parent.getEntry("test.txt");
+        assertNotNull(file);
     }
 
     @Test
     public void touchInCurrentDirectoryTest() {
+
         boolean result = touchCommandBusiness.touch("file.txt");
         assertTrue(result);
 
-        IDirectoryBusiness cwd = fsState.getCurrentWorkingDirectory();
-        Optional<INode> elem = cwd.getContent().stream()
-                .filter(e -> e.getName().equals("file.txt"))
-                .findFirst();
+        DirectoryInodeBusiness cwd = fsState.getCurrentWorkingDirectory();
+        Inode file = cwd.getEntry("file.txt");
 
-        assertTrue(elem.isPresent());
+        assertNotNull(file);
     }
 
     @Test
     public void touchInvalidPathTest() {
-        assertThrows(IllegalArgumentException.class, () -> touchCommandBusiness.touch("/invalid/path/fail.txt"));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> touchCommandBusiness.touch("/invalid/path/fail.txt"));
     }
 }

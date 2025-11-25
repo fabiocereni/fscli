@@ -1,87 +1,108 @@
 package ch.supsi.fscli.backend.business;
 
-import java.util.Optional;
+import java.util.*;
 
 public class PathSolver {
 
     private static final IFSStateBusiness ifsStateBusiness = FSStateBusiness.getInstance();
 
-    public static Optional<INode> resolvePath(String path) {
+    public static Optional<Inode> resolvePath(String path) {
 
-        if(path.matches(".*/{2,}.*"))
+        if (path == null || path.isBlank())
             return Optional.empty();
 
-        if (path.isEmpty())
+        if (path.contains("//"))
             return Optional.empty();
 
         boolean isAbsolute = path.startsWith("/");
-        String[] tokens = path.split("/");
 
-        INode current = isAbsolute ? ifsStateBusiness.getRoot()
-                : ifsStateBusiness.getCurrentWorkingDirectory();
+        // caso root
+        if (path.equals("/"))
+            return Optional.of(ifsStateBusiness.getRoot());
 
+        // 1) NORMALIZZAZIONE SOLO CON TOKENIZER
+        List<String> tokens = new ArrayList<>();
 
+        // se path è relativo → NON aggiungere nulla (CWD = implicit root)
+        StringTokenizer tokenizer = new StringTokenizer(path, "/");
 
-        for (String token : tokens) {
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken().trim();
 
-            if (token.isEmpty() || token.equals(".")) continue;
+            if (token.isEmpty() || token.equals("."))
+                continue;
 
             if (token.equals("..")) {
-                if (current.getParent() != null) {
-                    current = current.getParent();
-                } else {
-                    current = ifsStateBusiness.getRoot();
+                // sali di un livello solo se puoi
+                if (!tokens.isEmpty()) {
+                    tokens.remove(tokens.size() - 1);
                 }
                 continue;
             }
 
-            if (!(current instanceof DirectoryBusiness dir)) {
+            // token normale
+            tokens.add(token);
+        }
+
+        // 2) NAVIGAZIONE SUGLI INODE
+        Inode current = isAbsolute
+                ? ifsStateBusiness.getRoot()
+                : ifsStateBusiness.getCurrentWorkingDirectory();
+
+        for (String part : tokens) {
+
+            if (!(current instanceof DirectoryInodeBusiness dir))
                 return Optional.empty();
-            }
 
-            System.out.println(current.getName());
-
-            Optional<INode> next = dir.getContent().stream()
-                    .filter(n -> n.getName().equals(token))
-                    .findFirst();
-
-            if (next.isEmpty()) {
+            Inode next = dir.getEntry(part);
+            if (next == null)
                 return Optional.empty();
-            }
 
-            current = next.get();
+            current = next;
         }
 
         return Optional.of(current);
     }
 
 
-    public static IDirectoryBusiness extractParentDirectory(String path) {
 
-        if(path.matches(".*/{2,}.*"))
+
+    public static DirectoryInodeBusiness extractParentDirectory(String path) {
+
+        if (path == null || path.isBlank())
             return null;
 
-        int lastIndex = path.lastIndexOf("/");
+        if (path.contains("//"))
+            return null;
 
-        if(lastIndex < 0)
+        // togli eventuale "/" finale (escluso il root)
+        if (path.endsWith("/") && !path.equals("/"))
+            path = path.substring(0, path.length() - 1);
+
+        int lastSlash = path.lastIndexOf("/");
+
+        if (lastSlash < 0)
             return ifsStateBusiness.getCurrentWorkingDirectory();
 
-        String parentPath = path.substring(0, lastIndex);
-        Optional<INode> node = PathSolver.resolvePath(parentPath);
+        if (lastSlash == 0)
+            return ifsStateBusiness.getRoot();
 
-        if(node.isPresent() && node.get().getType().equals(NodeType.DIRECTORY))
-            return (IDirectoryBusiness) node.get();
+        String parentPath = path.substring(0, lastSlash);
+        Optional<Inode> parent = resolvePath(parentPath);
 
-        return null;
+        return parent.isPresent() && parent.get().getType() == InodeType.DIRECTORY
+                ? (DirectoryInodeBusiness) parent.get()
+                : null;
     }
+
 
     public static String extractFileName(String path) {
-        int lastIndex = path.lastIndexOf("/");
-        return path.substring(lastIndex + 1);
+        int idx = path.lastIndexOf("/");
+        return path.substring(idx + 1);
     }
 
-    public static boolean nameAlreadyExists(IDirectoryBusiness dir, String fileToCheck) {
-        return dir.getContent().stream().anyMatch(f -> f.getName().equals(fileToCheck));
-    }
 
+    public static boolean nameAlreadyExists(DirectoryInodeBusiness dir, String name) {
+        return dir.getEntry(name) != null;
+    }
 }

@@ -2,8 +2,10 @@ package ch.supsi.fscli.backend.business;
 
 public interface IFSStateBusiness {
     boolean changeSavedStateAndGet();
-    void setRoot(DirectoryBusiness root);
-    DirectoryBusiness getRoot();
-    DirectoryBusiness getCurrentWorkingDirectory();
-    void setCurrentWorkingDirectory(DirectoryBusiness directory);
+    void setRoot(DirectoryInodeBusiness root);
+    DirectoryInodeBusiness getRoot();
+    DirectoryInodeBusiness getCurrentWorkingDirectory();
+    void setCurrentWorkingDirectory(DirectoryInodeBusiness directory);
+    String getCurrentWorkingDirectoryPath();
+    void setCurrentWorkingDirectoryPath(String currentWorkingDirectoryPath);
 }

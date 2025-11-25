@@ -3,29 +3,69 @@ package ch.supsi.fscli.backend.business;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 public class FSTest {
 
-    private IDirectoryBusiness directory;
-    private IFileBusiness file;
+    private DirectoryInodeBusiness directory;
+    private FileInodeBusiness file;
+
+    private final FileSystem fileSystem = FileSystem.getInstance();
+    private final IFSStateBusiness ifsStateBusiness = FSStateBusiness.getInstance();
+
 
     @BeforeEach
     public void setup() {
-        this.directory = new DirectoryBusiness(null, "Test directory name");
-        this.file = new FileBusiness(directory, "Test file name");
+
+        FSCreationBusiness.getInstance().newfs();
+
+        // crea directory e file
+        this.directory = fileSystem.createDirectory();
+        this.file = fileSystem.createFile();
+
+        // aggiungi alla CWD con un nome
+        DirectoryInodeBusiness cwd = ifsStateBusiness.getCurrentWorkingDirectory();
+        cwd.addEntry("TestDir", directory);
+        cwd.addEntry("TestFile", file);
     }
 
     @Test
     public void testDirectoryMethods() {
-        System.out.println("Directory name: " + this.directory.getName());
-        System.out.println("Directory parent name: " + this.directory.getParent());
-        System.out.println("Directory is a: " + this.directory.getClass().getSimpleName());
+        DirectoryInodeBusiness cwd = ifsStateBusiness.getCurrentWorkingDirectory();
 
+        System.out.println("--- DIRECTORY TEST ---");
+
+        // 1) ID corretto
+        System.out.println("ID directory: " + directory.getId());
+
+        // 2) Verificare che la CWD contiene la directory
+        for (Map.Entry<String, Inode> entry : cwd.getEntries().entrySet()) {
+            if (entry.getValue() == directory) {
+                System.out.println("Directory name: " + entry.getKey());
+            }
+        }
+
+        // 3) Tipo
+        System.out.println("Directory type: " + directory.getClass().getSimpleName());
     }
 
     @Test
     public void testFileMethods() {
-        System.out.println("File name: " + this.file.getName());
-        System.out.println("File parent name: " + this.file.getParent().getName());
-        System.out.println("File is a: " + this.file.getClass().getSimpleName());
+        DirectoryInodeBusiness cwd = ifsStateBusiness.getCurrentWorkingDirectory();
+
+        System.out.println("--- FILE TEST ---");
+
+        // 1) ID file
+        System.out.println("ID file: " + file.getId());
+
+        // 2) Nome del file (contenuto nella directory, non nell’inode)
+        for (Map.Entry<String, Inode> entry : cwd.getEntries().entrySet()) {
+            if (entry.getValue() == file) {
+                System.out.println("File name: " + entry.getKey());
+            }
+        }
+
+        // 3) Tipo
+        System.out.println("File type: " + file.getClass().getSimpleName());
     }
 }

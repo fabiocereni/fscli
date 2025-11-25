@@ -6,7 +6,7 @@ public class FSTouchCommandBusiness implements IFSTouchCommandBusiness {
 
     private static FSTouchCommandBusiness myself;
 
-    private final IFSStateBusiness ifsStateBusiness = FSStateBusiness.getInstance();
+    private final FileSystem fileSystem = FileSystem.getInstance();
 
     private FSTouchCommandBusiness() {}
 
@@ -25,7 +25,7 @@ public class FSTouchCommandBusiness implements IFSTouchCommandBusiness {
             throw new IllegalArgumentException("touch: path not valid");
 
 
-        IDirectoryBusiness parentDirectory = PathSolver.extractParentDirectory(path);
+        DirectoryInodeBusiness parentDirectory = PathSolver.extractParentDirectory(path);
 
         if (parentDirectory == null)
             throw new IllegalArgumentException("touch: path not valid");
@@ -35,7 +35,8 @@ public class FSTouchCommandBusiness implements IFSTouchCommandBusiness {
         if (PathSolver.nameAlreadyExists(parentDirectory, newFileName))
             throw new IllegalArgumentException("touch: file with same name already exists");
 
-        new FileBusiness(parentDirectory, newFileName);
+        FileInodeBusiness toCreate = fileSystem.createFile();
+        parentDirectory.addEntry(newFileName, toCreate);
 
         return true;
     }
