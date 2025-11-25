@@ -4,8 +4,8 @@ import ch.supsi.fscli.backend.business.FSCommands.cd.FSCdCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.cd.IFSCdCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.help.FSHelpCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.help.IFSHelpCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.ls.FSLsiCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.ls.IFSLsiCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ls.FSLsCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ls.IFSLsCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.mkdir.FSMkdirCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.mkdir.IFSMkdirCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.mv.FSMvCommandBusiness;
@@ -34,7 +34,7 @@ public class FSInterpreter implements IFSInterpreter {
     private final IFSRmdirCommandBusiness rmdirCommandBusiness = FSRmdirCommandBusiness.getInstance();
     private final IFSRmfileCommandBusiness rmfileCommandBusiness = FSRmfilecommandBusiness.getInstance();
     private final IFSTouchCommandBusiness touchCommandBusiness = FSTouchCommandBusiness.getInstance();
-    private final IFSLsiCommandBusiness lssiCommandBusiness = FSLsiCommandBusiness.getInstance();
+    private final IFSLsCommandBusiness lssCommandBusiness = FSLsCommandBusiness.getInstance();
     private final IFSMvCommandBusiness mvCommandBusiness = FSMvCommandBusiness.getInstance();
     private final IFSHelpCommandBusiness helpCommandBusiness = FSHelpCommandBusiness.getInstance();
 
@@ -143,16 +143,19 @@ public class FSInterpreter implements IFSInterpreter {
     }
 
     private String handleLs(List<String> args) {
-        boolean flagI = false;
         String path = null;
+        boolean flagI = false;
 
         for (String arg : args) {
             if (arg.equals("-i")) flagI = true;
             else path = arg; // primo argomento che non è flag → percorso
         }
 
-        if (flagI) return lssiCommandBusiness.lsi(path);
-        return "il comando ls non esiste, prova con ls -i"; // fallback ls semplice
+        String result = lssCommandBusiness.ls(path,  flagI);
+
+        if (result.isEmpty())
+            return "ls: errore comando";
+        return result;
     }
 
     private String handleMv(List<String> args) {

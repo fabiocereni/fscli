@@ -69,6 +69,11 @@ public class FileBusiness implements IFileBusiness {
         this.linkPath = linkPath;
     }
 
+    @Override
+    public int getInodeId() {
+        return node.getInodeId();
+    }
+
 
     @Override
     public int getLinkCounter() {
