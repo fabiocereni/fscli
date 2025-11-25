@@ -1,8 +1,6 @@
 package ch.supsi.fscli.backend.business.FSCommands;
 
-import ch.supsi.fscli.backend.business.DirectoryBusiness;
-import ch.supsi.fscli.backend.business.FSStateBusiness;
-import ch.supsi.fscli.backend.business.IFSStateBusiness;
+import ch.supsi.fscli.backend.business.*;
 
 public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
 
@@ -19,26 +17,29 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
     }
 
     @Override
-    public Boolean mkdir(String name) {
+    public Boolean mkdir(String path) {
 
-        // 1. Validazione input
-        if (name == null || name.isBlank())
+        // 1. Invalid input
+        if (path == null || path.isBlank())
             return false;
 
-        // 2. Directory corrente
-        DirectoryBusiness currentDir = stateBusiness.getCurrentWorkingDirectory();
-        if (currentDir == null)
+        // 2. Parent directory tramite PathSolver
+        IDirectoryBusiness parentDir = PathSolver.extractParentDirectory(path);
+        if (parentDir == null)
+            return false;  // parent non valido o non directory
+
+        // 3. Estraggo il nome finale
+        String name = PathSolver.extractFileName(path);
+
+        if (name.isBlank())
             return false;
 
-        // 3. Controllo esistenza
-        boolean exists = currentDir.getContent()
-                .stream()
-                .anyMatch(d -> d.getName().equals(name));
+        // 4. Controllo se esiste già
+        if (PathSolver.nameAlreadyExists(parentDir, name))
+            return false;
 
-        if (exists) return false;
-
-        // 4. Creazione directory
-        DirectoryBusiness newDir = new DirectoryBusiness(currentDir, name);
+        // 5. Creo la directory
+        new DirectoryBusiness(parentDir, name);
 
         return true;
     }
