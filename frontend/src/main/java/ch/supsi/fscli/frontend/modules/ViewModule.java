@@ -9,6 +9,7 @@ public class ViewModule extends AbstractModule {
 
     protected void configure() {
         bind(IFSDataSaverController.class).to(FSDataSaverController.class).in(Singleton.class);
+        bind(IFSDataLoaderController.class).to(FSDataLoaderController.class).in(Singleton.class);
         bind(IAboutView.class).to(AboutController.class).in(Singleton.class);
         bind(CommandLineView.class).in(Singleton.class);
 
@@ -16,6 +17,6 @@ public class ViewModule extends AbstractModule {
         bind(IShow.class).annotatedWith(HelpViewQualifier.class).to(HelpView.class).in(Singleton.class);
         bind(IShow.class).annotatedWith(PreferencesViewQualifier.class).to(PreferencesView.class).in(Singleton.class);
         bind(IShow.class).annotatedWith(SavingViewQualifier.class).to(SaveAsView.class).in(Singleton.class);
-
+        bind(IShow.class).annotatedWith(LoadingViewQualifier.class).to(LoadView.class).in(Singleton.class);
     }
 }
