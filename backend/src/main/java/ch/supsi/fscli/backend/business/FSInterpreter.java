@@ -123,16 +123,14 @@ public class FSInterpreter implements IFSInterpreter {
     }
 
     private String handleTouch(List<String> args) {
-        /*if (args.size() == 1) {
-            boolean success = touchCommandBusiness.touch(args.get(0), null);
-            return success ? null : "touch: impossibile creare il file.";
+        if(args.size() != 1) {
+            return "touch: numero di argomenti errato - (uso: touch <nome_file>)";
+        }
 
-        } else if (args.size() == 2) {
-            boolean success = touchCommandBusiness.touch(args.get(0), args.get(1));
-            return success ? null : "touch: impossibile creare il file (percorso non valido?).";
-        } else {*/
-            return "touch: numero di argomenti errato. (uso: touch <nome_file> [percorso_destinazione])";
-        //}
+        if(!touchCommandBusiness.touch(args.get(0)))
+            return "touch: impossibile creare il file.";
+
+        return null;
     }
 
     private String handleClear(List<String> args) {
