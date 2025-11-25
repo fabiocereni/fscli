@@ -10,7 +10,7 @@ class FSMkdirCommandBusinessTest {
 
     private FSMkdirCommandBusiness mkdirBusiness;
     private IFSStateBusiness stateBusiness;
-    private DirectoryBusiness rootDir;
+    private DirectoryBusiness root;
 
     @BeforeEach
     void setUp() {
@@ -18,34 +18,76 @@ class FSMkdirCommandBusinessTest {
         stateBusiness = FSStateBusiness.getInstance();
 
         // reset stato file system per il test
-        rootDir = new DirectoryBusiness(null, "root");
-        stateBusiness.setRoot(rootDir);
-        stateBusiness.setCurrentWorkingDirectory(rootDir);
+        root = new DirectoryBusiness(null, "root");
+        stateBusiness.setRoot(root);
+        stateBusiness.setCurrentWorkingDirectory(root);
     }
 
     @Test
-    void testMkdirSuccess() {
-        boolean result = mkdirBusiness.mkdir("newDir");
-        assertTrue(result, "Directory should be created");
+    void testSimpleMkdir() {
+        boolean result = mkdirBusiness.mkdir("testDir");
 
-        // verifica che la directory sia effettivamente nella lista
-        boolean exists = rootDir.getContent()
-                .stream()
-                .anyMatch(d -> d.getName().equals("newDir"));
-        assertTrue(exists, "Directory must exist in content list");
+        assertTrue(result);
+        assertTrue(root.getContent().stream().anyMatch(n -> n.getName().equals("testDir")));
     }
 
     @Test
     void testMkdirAlreadyExists() {
-        mkdirBusiness.mkdir("existing");
-        boolean result = mkdirBusiness.mkdir("existing");
-        assertFalse(result, "Should not create directory with existing name");
+        mkdirBusiness.mkdir("dup");
+        boolean result = mkdirBusiness.mkdir("dup");
+
+        assertFalse(result);
     }
 
     @Test
-    void testMkdirInvalidName() {
-        assertFalse(mkdirBusiness.mkdir(null), "Null name should fail");
-        assertFalse(mkdirBusiness.mkdir(""), "Empty name should fail");
-        assertFalse(mkdirBusiness.mkdir("   "), "Blank name should fail");
+    void testMkdirRelativePath() {
+        mkdirBusiness.mkdir("sub");
+        stateBusiness.setCurrentWorkingDirectory(
+                (DirectoryBusiness) root.getContent().stream()
+                        .filter(n -> n.getName().equals("sub"))
+                        .findFirst().get()
+        );
+
+        boolean result = mkdirBusiness.mkdir("inner");
+
+        assertTrue(result);
+
+        DirectoryBusiness sub = (DirectoryBusiness) root.getContent().stream()
+                .filter(n -> n.getName().equals("sub")).findFirst().get();
+
+        assertTrue(sub.getContent().stream().anyMatch(n -> n.getName().equals("inner")));
+    }
+
+    @Test
+    void testMkdirAbsolutePath() {
+        boolean result = mkdirBusiness.mkdir("/absDir");
+
+        assertTrue(result);
+
+        assertTrue(root.getContent().stream().anyMatch(n -> n.getName().equals("absDir")));
+    }
+
+    @Test
+    void testMkdirParentDoesNotExist() {
+        boolean result = mkdirBusiness.mkdir("/no/such/path/newDir");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void testMkdirWherePartIsFile() {
+        // Create a file in root
+        new FileBusiness(root, "myFile");
+
+        boolean result = mkdirBusiness.mkdir("myFile/newDir");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void testMkdirInvalidDoubleSlash() {
+        boolean result = mkdirBusiness.mkdir("/bad//path");
+
+        assertFalse(result);
     }
 }

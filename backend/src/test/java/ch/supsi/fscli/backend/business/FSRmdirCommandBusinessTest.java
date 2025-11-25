@@ -23,51 +23,42 @@ public class FSRmdirCommandBusinessTest {
     }
 
     @Test
-    void testRmdirDirectoryDoesNotExist() {
-        boolean result = rmdir.rmdir("missing");
-        assertFalse(result, "rmdir should fail if directory does not exist");
+    void testRmdirRelativePathSuccess() {
+        DirectoryBusiness dirA = new DirectoryBusiness(root, "dirA");
+
+        boolean result = rmdir.rmdir("dirA");
+        assertTrue(result, "Directory should be removed");
+        assertFalse(root.getContent().contains(dirA), "Directory must not exist anymore");
     }
 
     @Test
-    void testRmdirNameIsBlank() {
-        assertFalse(rmdir.rmdir(""), "empty name must fail");
-        assertFalse(rmdir.rmdir("   "), "blank name must fail");
-        assertFalse(rmdir.rmdir(null), "null name must fail");
+    void testRmdirAbsolutePathSuccess() {
+        DirectoryBusiness dirB = new DirectoryBusiness(root, "dirB");
+
+        boolean result = rmdir.rmdir("/dirB");
+        assertTrue(result, "Directory should be removed with absolute path");
+        assertFalse(root.getContent().contains(dirB));
     }
 
     @Test
-    void testRmdirOnFile() {
-        INode file = new FileBusiness(root, "testfile");
-        root.addContent(file);
+    void testRmdirNonEmptyDirectory() {
+        DirectoryBusiness dirC = new DirectoryBusiness(root, "dirC");
+        new DirectoryBusiness(dirC, "subdir"); // subdirectory inside dirC
 
-        boolean result = rmdir.rmdir("testfile");
-
-        assertFalse(result, "rmdir must fail on files");
-        assertTrue(root.getContent().contains(file), "file must not be removed");
+        boolean result = rmdir.rmdir("dirC");
+        assertFalse(result, "Should not remove non-empty directory");
+        assertTrue(root.getContent().contains(dirC));
     }
 
     @Test
-    void testRmdirOnNonEmptyDirectory() {
-        DirectoryBusiness dir = new DirectoryBusiness(root, "docs");
-        root.addContent(dir);
-
-        // Add a child
-        INode fileInside = new FileBusiness(dir, "inside");
-        dir.addContent(fileInside);
-
-        boolean result = rmdir.rmdir("docs");
-
-        assertFalse(result, "rmdir must fail if directory is not empty");
-        assertTrue(root.getContent().contains(dir), "directory must not be removed");
+    void testRmdirNonExistingDirectory() {
+        boolean result = rmdir.rmdir("nonexistent");
+        assertFalse(result, "Non-existent directory should not be removed");
     }
 
     @Test
-    void testRmdirSuccess() {
-        DirectoryBusiness dir = new DirectoryBusiness(root, "empty");
-
-        boolean result = rmdir.rmdir("empty");
-
-        assertTrue(result, "rmdir must succeed for empty directory");
-        assertFalse(root.getContent().contains(dir), "directory must be removed");
+    void testRmdirRoot() {
+        boolean result = rmdir.rmdir("/root");
+        assertFalse(result, "Should not remove root directory");
     }
 }

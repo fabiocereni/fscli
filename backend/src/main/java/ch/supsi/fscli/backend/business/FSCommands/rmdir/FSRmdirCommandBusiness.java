@@ -19,25 +19,27 @@ public class FSRmdirCommandBusiness implements IFSRmdirCommandBusiness {
     }
 
     @Override
-    public boolean rmdir(String name) {
-        if (name == null || name.isBlank())
+    public boolean rmdir(String path) {
+        if (path == null || path.isBlank())
             return false;
 
-        DirectoryBusiness current = stateBusiness.getCurrentWorkingDirectory();
+        if(path.charAt(0) == '/')
+            path = path.substring(1);
 
-        Iterator<INode> it = current.getContent().iterator();
-        while (it.hasNext()) {
-            INode i = it.next();
-            if (i.getName().equals(name) && i.getType() == NodeType.DIRECTORY) {
-                DirectoryBusiness dir = (DirectoryBusiness) i;
-                if (!dir.getContent().isEmpty()) {
-                    return false; // non vuota
-                }
-                System.out.println("Checking node: " + i.getName() + ", type=" + i.getType());
-                it.remove(); // rimuove correttamente dalla lista
-                return true;
-            }
-        }
-        return false;
+        // Risolvo il nodo target usando PathSolver
+        INode targetNode = PathSolver.resolvePath(path).orElse(null);
+        if (targetNode == null || targetNode.getType() != NodeType.DIRECTORY)
+            return false; // non esiste o non è una directory
+
+        DirectoryBusiness targetDir = (DirectoryBusiness) targetNode;
+
+        if (!targetDir.getContent().isEmpty())
+            return false; // directory non vuota
+
+        IDirectoryBusiness parentDir = targetDir.getParent();
+        if (parentDir == null)
+            return false; // non si può rimuovere la root
+
+        return parentDir.getContent().remove(targetDir);
     }
 }
