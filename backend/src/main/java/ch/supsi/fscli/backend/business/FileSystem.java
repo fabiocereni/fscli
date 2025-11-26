@@ -32,6 +32,10 @@ public class FileSystem {
         DirectoryInodeBusiness dir = new DirectoryInodeBusiness(id);
         inodeTable.put(id, dir);
         dir.incLinkCount(); // ogni directory deve avere almeno un link
+
+        // TODO da sistemare
+//        dir.addEntry(".", dir);
+//        dir.addEntry("..", findParent(dir.getParentId()));
         return dir;
     }
 
