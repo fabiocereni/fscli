@@ -27,7 +27,7 @@ public class FileSystem {
         inodeTable.put(id, root);
     }
 
-    public DirectoryInodeBusiness createDirectory() {
+    public DirectoryInodeBusiness createDirectory(DirectoryInodeBusiness parent) {
         long id = allocateInodeId();
         DirectoryInodeBusiness dir = new DirectoryInodeBusiness(id);
         inodeTable.put(id, dir);

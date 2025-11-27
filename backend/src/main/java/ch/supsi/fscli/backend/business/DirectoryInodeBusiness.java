@@ -7,6 +7,7 @@ public class DirectoryInodeBusiness extends Inode {
 
     public DirectoryInodeBusiness(long id) {
         super(id, InodeType.DIRECTORY);
+
     }
 
     public Map<String, Inode> getEntries() {
