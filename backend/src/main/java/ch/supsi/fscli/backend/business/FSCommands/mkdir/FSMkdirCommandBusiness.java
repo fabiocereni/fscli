@@ -22,8 +22,8 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
         if (path == null || path.isBlank())
             return false;
 
-        if(path.charAt(0) == '/')
-            path = path.substring(1);
+        // NON rimuovere lo slash!
+        // PathSolver ora gestisce correttamente gli absolute path
 
         DirectoryInodeBusiness parentDir = PathSolver.extractParentDirectory(path);
         if (parentDir == null)
@@ -31,7 +31,7 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
 
         String newDirName = PathSolver.extractFileName(path);
 
-        // no: "" non è valido
+        // "" non valido
         if (newDirName.isBlank())
             return false;
 
@@ -39,9 +39,11 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
         if (PathSolver.nameAlreadyExists(parentDir, newDirName))
             return false;
 
-        // crea directory (aggiunta automaticamente al parent)
-        DirectoryInodeBusiness toAdd = fileSystem.createDirectory(parentDir);
-        toAdd.addEntry(newDirName, parentDir);
+        // crea la directory
+        DirectoryInodeBusiness newDir = fileSystem.createDirectory(parentDir);
+
+        // registra nel parent la nuova entry
+        parentDir.addEntry(newDirName, newDir);
 
         return true;
     }
