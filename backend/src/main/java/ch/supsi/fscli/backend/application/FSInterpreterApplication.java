@@ -1,4 +1,4 @@
-/*package ch.supsi.fscli.backend.application;
+package ch.supsi.fscli.backend.application;
 
 import ch.supsi.fscli.backend.business.FSInterpreter;
 import ch.supsi.fscli.backend.business.IFSInterpreter;
@@ -27,4 +27,3 @@ public class FSInterpreterApplication implements IFSInterpreterApplication {
         return interpreter.execute(commandLine);
     }
 }
-*/
