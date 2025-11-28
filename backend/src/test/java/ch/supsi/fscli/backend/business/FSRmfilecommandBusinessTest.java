@@ -1,80 +1,107 @@
 package ch.supsi.fscli.backend.business;
 
-//import ch.supsi.fscli.backend.business.FSCommands.rmfile.FSRmfilecommandBusiness;
+
+import ch.supsi.fscli.backend.business.FSCommands.mkdir.FSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmfile.FSRmfilecommandBusiness;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FSRmfilecommandBusinessTest {
 
-//    private FSRmfilecommandBusiness rmfileBusiness;
-//    private IFSStateBusiness stateBusiness;
-//    private DirectoryBusiness rootDir;
-//    private DirectoryBusiness subDir;
-//    private FileBusiness fileInRoot;
-//    private FileBusiness fileInSubDir;
-//
-//    @BeforeEach
-//    void setUp() {
-//        rmfileBusiness = FSRmfilecommandBusiness.getInstance();
-//        stateBusiness = FSStateBusiness.getInstance();
-//
-//        rootDir = new DirectoryBusiness(null, "root");
-//        fileInRoot = new FileBusiness(rootDir, "fileRoot.txt");
-//        subDir = new DirectoryBusiness(rootDir, "sub");
-//        fileInSubDir = new FileBusiness(subDir, "fileSub.txt");
-//
-//        stateBusiness.setRoot(rootDir);
-//        stateBusiness.setCurrentWorkingDirectory(rootDir);
-//    }
-//
-//    @Test
-//    void testRmFile_Success_SimpleFile() {
-//        assertEquals(2, rootDir.getContent().size(), "La root dovrebbe contenere 2 elementi inizialmente");
-//        boolean result = rmfileBusiness.rmfile("fileRoot.txt");
-//        assertTrue(result, "Il metodo dovrebbe ritornare true per un file esistente");
-//
-//        assertEquals(1, rootDir.getContent().size(), "La root dovrebbe avere ora 1 solo elemento");
-//        assertFalse(rootDir.getContent().contains(fileInRoot), "Il file non dovrebbe più essere nella lista dei contenuti");
-//
-//        assertNull(fileInRoot.getParent(), "Il file rimosso non dovrebbe avere più un parent");
-//    }
-//
-//    @Test
-//    void testRmFile_Failure_FileNotFound() {
-//        boolean result = rmfileBusiness.rmfile("nonEsisto.txt");
-//
-//        assertFalse(result, "Dovrebbe ritornare false se il file non esiste");
-//        assertEquals(2, rootDir.getContent().size(), "Il contenuto della directory non deve cambiare");
-//    }
-//
-//    @Test
-//    void testRmFile_Failure_IsDirectory() {
-//        boolean result = rmfileBusiness.rmfile("sub");
-//
-//        assertFalse(result, "Dovrebbe ritornare false se si prova a rimuovere una directory");
-//        assertTrue(rootDir.getContent().contains(subDir), "La directory 'sub' deve esistere ancora");
-//    }
-//
-//    @Test
-//    void testRmFile_Failure_InvalidInput() {
-//        assertFalse(rmfileBusiness.rmfile(null));
-//        assertFalse(rmfileBusiness.rmfile(""));
-//        assertFalse(rmfileBusiness.rmfile("   "));
-//    }
-//
-//    @Test
-//    void testRmFile_Success_PathResolution() {
-//        boolean result = rmfileBusiness.rmfile("sub/fileSub.txt");
-//
-//        if (result) {
-//            assertTrue(result);
-//            assertEquals(0, subDir.getContent().size(), "La sottocartella dovrebbe essere vuota");
-//        } else {
-//            System.out.println("WARN: Path resolution test skipped or failed implies simple name matching only.");
-//        }
-//    }
+    private FSRmfilecommandBusiness rmFileCommand;
+    private FileSystem fileSystem;
+    private FSStateBusiness fsState;
+    private DirectoryInodeBusiness root;
+
+    @BeforeEach
+    void setUp() {
+        rmFileCommand = FSRmfilecommandBusiness.getInstance();
+        fileSystem = FileSystem.getInstance();
+        fsState = FSStateBusiness.getInstance();
+
+        root = fileSystem.getRoot();
+        fsState.setRoot(root);
+        fsState.setCurrentWorkingDirectory(root);
+        fsState.setCurrentWorkingDirectoryPath("/");
+    }
+
+    void createFileInRoot(String fileName) {
+        FileInodeBusiness file = fileSystem.createFile();
+        root.addEntry(fileName, file);
+    }
+
+    void createDirectoryInRoot(String dirName) {
+        DirectoryInodeBusiness dir = fileSystem.createDirectory(root);
+        root.addEntry(dirName, dir);
+    }
+
+    @Test
+    void testRemoveExistingFileCurrentDirectory() {
+        createFileInRoot("test.txt");
+
+        assertNotNull(root.getEntry("test.txt"), "File not created");
+
+        boolean result = rmFileCommand.rmfile("test.txt");
+        assertTrue(result, "File removed");
+        assertNull(root.getEntry("test.txt"), "File not removed");
+    }
+
+    @Test
+    void testRemoveExistingFileAbsolutePath() {
+        DirectoryInodeBusiness homeDir = fileSystem.createDirectory(root);
+        root.addEntry("home", homeDir);
+
+        FileInodeBusiness file = fileSystem.createFile();
+        homeDir.addEntry("test1.txt", file);
+
+        boolean result = rmFileCommand.rmfile("/home/test1.txt");
+        assertTrue(result, "File removed");
+        assertNull(homeDir.getEntry("test1.txt"), "File not removed");
+    }
+
+    @Test
+    void testRmFile_DecrementsLinkCount() {
+        String fileName = "linkTest.txt";
+        FileInodeBusiness file = fileSystem.createFile();
+        root.addEntry(fileName, file);
+
+        assertEquals(1, file.getLinkCount());
+        rmFileCommand.rmfile(fileName);
+        assertEquals(0, file.getLinkCount());
+    }
+
+    @Test
+    void testRmFile_FileDoesNotExist() {
+        boolean result = rmFileCommand.rmfile("nonExistentFile.txt");
+        assertFalse(result);
+    }
+
+    @Test
+    void testRmFileIfTryToRemoveDirectory() {
+        createDirectoryInRoot("folder");
+        boolean result = rmFileCommand.rmfile("folder");
+        assertFalse(result);
+        assertNotNull(root.getEntry("folder"));
+    }
+
+    @Test
+    void testRmFileNullOrEmpty() {
+        assertFalse(rmFileCommand.rmfile(null));
+        assertFalse(rmFileCommand.rmfile(""));
+        assertFalse(rmFileCommand.rmfile(" "));
+    }
+
+    @Test
+    void testRmFileSpecialPath() {
+        assertFalse(rmFileCommand.rmfile("/"));
+        assertFalse(rmFileCommand.rmfile("."));
+        assertFalse(rmFileCommand.rmfile(".."));
+    }
+
 }
