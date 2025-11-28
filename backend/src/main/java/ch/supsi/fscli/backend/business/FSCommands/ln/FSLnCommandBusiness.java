@@ -14,7 +14,6 @@ public class FSLnCommandBusiness implements IFSLnCommandBusiness {
     @Override
     public boolean ln(String target, String linkName) {
 
-        // 1) risolvi target
         Optional<Inode> targetOpt = PathSolver.resolvePath(target);
         if (targetOpt.isEmpty())
             throw new IllegalArgumentException("ln: target file does not exist");
@@ -23,19 +22,20 @@ public class FSLnCommandBusiness implements IFSLnCommandBusiness {
         if (targetNode.getType() != InodeType.FILE)
             throw new IllegalArgumentException("ln: target is not a file");
 
-        // 2) trova directory padre del nuovo link
         DirectoryInodeBusiness parent = PathSolver.extractParentDirectory(linkName);
         if (parent == null)
             throw new IllegalArgumentException("ln: parent directory does not exist");
 
         String newName = PathSolver.extractFileName(linkName);
 
-        // 3) controlla conflitti
         if (PathSolver.nameAlreadyExists(parent, newName))
             throw new IllegalArgumentException("ln: file with same name already exists");
 
-        // 4) HARD LINK = aggiungere nella dir un puntamento allo STESSO inode
+        // HARD LINK → aggiungi altra entry che punta allo stesso inode
         parent.addEntry(newName, targetNode);
+
+        // Incrementa il link count del file originale
+        targetNode.incLinkCount();
 
         System.out.println("Hardlink created: " + newName);
         return true;
@@ -45,28 +45,24 @@ public class FSLnCommandBusiness implements IFSLnCommandBusiness {
     public boolean lns(String target, String linkName)
             throws DirectoryNotFoundException, NodeAlreadyExistsException {
 
-        // 1) risolvi target
         Optional<Inode> targetOpt = PathSolver.resolvePath(target);
         if (targetOpt.isEmpty())
             throw new DirectoryNotFoundException("ln: softlink target does not exist");
 
-        // 2) directory padre
         DirectoryInodeBusiness parent = PathSolver.extractParentDirectory(linkName);
         if (parent == null)
             throw new DirectoryNotFoundException("ln: parent directory does not exist");
 
         String newName = PathSolver.extractFileName(linkName);
 
-        // 3) conflitti
         if (PathSolver.nameAlreadyExists(parent, newName))
             throw new NodeAlreadyExistsException("ln: file with same name already exists");
 
-        // 4) SOFT LINK = creare inode nuovo, con flag softlink
+        // Crei un nuovo inode FILE che rappresenta un softlink
         FileInodeBusiness softLink = fileSystem.createFile();
         softLink.setSoftLink(true);
         softLink.setLinkPath(target);
 
-        // 5) aggiungerlo nella cartella
         parent.addEntry(newName, softLink);
 
         System.out.println("Softlink created: " + newName);
