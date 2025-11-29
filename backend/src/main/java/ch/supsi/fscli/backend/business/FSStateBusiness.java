@@ -1,5 +1,8 @@
 package ch.supsi.fscli.backend.business;
 
+import com.google.inject.Singleton;
+
+@Singleton
 public class FSStateBusiness implements IFSStateBusiness {
 
     private boolean saved = false;
@@ -7,16 +10,7 @@ public class FSStateBusiness implements IFSStateBusiness {
     private DirectoryInodeBusiness currentWorkingDirectory;
     private String currentWorkingDirectoryPath = "/";
 
-    private static FSStateBusiness myself;
-
-    private FSStateBusiness() {}
-
-    public static FSStateBusiness getInstance() {
-        if (myself == null)
-            myself = new FSStateBusiness();
-
-        return myself;
-    }
+    public FSStateBusiness() {}
 
     @Override
     public boolean changeSavedStateAndGet() {

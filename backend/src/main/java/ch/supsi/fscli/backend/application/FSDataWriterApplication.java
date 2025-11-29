@@ -1,34 +1,28 @@
 package ch.supsi.fscli.backend.application;
 
-import ch.supsi.fscli.backend.business.FSDataWriterBusiness;
 import ch.supsi.fscli.backend.business.IFSDataWriterBusiness;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.nio.file.Path;
 
+@Singleton
 public class FSDataWriterApplication implements IFSDataWriterApplication {
 
-    private final IFSDataWriterBusiness fsDataWriterBusiness = FSDataWriterBusiness.getInstance();
+    private final IFSDataWriterBusiness fsDataWriterBusiness;
 
-    private static FSDataWriterApplication myself;
-
-    private FSDataWriterApplication() {}
-
-    public static FSDataWriterApplication getInstance() {
-        if (myself == null)
-            myself = new FSDataWriterApplication();
-
-        return myself;
+    @Inject
+    public FSDataWriterApplication(IFSDataWriterBusiness fsDataWriterBusiness) {
+        this.fsDataWriterBusiness = fsDataWriterBusiness;
     }
 
     @Override
     public void save(Path path) {
-        this.fsDataWriterBusiness.save(path);
+        fsDataWriterBusiness.save(path);
     }
 
     @Override
     public void save() {
-        this.fsDataWriterBusiness.save();
+        fsDataWriterBusiness.save();
     }
-
-
 }

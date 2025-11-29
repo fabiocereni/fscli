@@ -6,7 +6,6 @@ public class PersistedWrapper {
     private FSStateBusiness stateBusiness;
     private FileSystem fileSystem;
 
-    // necessario per Jackson ma SENZA logica interna
     public PersistedWrapper() {}
 
     public FSStateBusiness getStateBusiness() {

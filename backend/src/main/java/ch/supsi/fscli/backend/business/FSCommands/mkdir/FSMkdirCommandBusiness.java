@@ -1,19 +1,21 @@
 package ch.supsi.fscli.backend.business.FSCommands.mkdir;
 
-import ch.supsi.fscli.backend.business.*;
+import ch.supsi.fscli.backend.business.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.FileSystem;
+import ch.supsi.fscli.backend.business.PathSolver;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
 
-    private static FSMkdirCommandBusiness myself;
-    private final FileSystem fileSystem = FileSystem.getInstance();
+    private final FileSystem fileSystem;
+    private final PathSolver pathSolver;
 
-
-    private FSMkdirCommandBusiness() {}
-
-    public static FSMkdirCommandBusiness getInstance() {
-        if (myself == null)
-            myself = new FSMkdirCommandBusiness();
-        return myself;
+    @Inject
+    public FSMkdirCommandBusiness(FileSystem fileSystem, PathSolver pathSolver) {
+        this.fileSystem = fileSystem;
+        this.pathSolver = pathSolver;
     }
 
     @Override
@@ -22,27 +24,19 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
         if (path == null || path.isBlank())
             return false;
 
-        // NON rimuovere lo slash!
-        // PathSolver ora gestisce correttamente gli absolute path
-
-        DirectoryInodeBusiness parentDir = PathSolver.extractParentDirectory(path);
+        DirectoryInodeBusiness parentDir = pathSolver.extractParentDirectory(path);
         if (parentDir == null)
-            return false; // parent non trovato
+            return false;
 
-        String newDirName = PathSolver.extractFileName(path);
+        String newDirName = pathSolver.extractFileName(path);
 
-        // "" non valido
         if (newDirName.isBlank())
             return false;
 
-        // controllo duplicati
-        if (PathSolver.nameAlreadyExists(parentDir, newDirName))
+        if (pathSolver.nameAlreadyExists(parentDir, newDirName))
             return false;
 
-        // crea la directory
         DirectoryInodeBusiness newDir = fileSystem.createDirectory(parentDir);
-
-        // registra nel parent la nuova entry
         parentDir.addEntry(newDirName, newDir);
 
         return true;

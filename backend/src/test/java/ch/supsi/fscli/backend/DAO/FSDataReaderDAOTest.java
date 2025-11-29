@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FSDataReaderDAOTest {
 
-    private FSDataReaderDAO dao;
+    private IFSDataReaderDAO dao;
 
     @BeforeEach
     void setUp() {
-        dao = FSDataReaderDAO.getInstance();
+        dao = new FSDataReaderDAO();
     }
 
     @Test
@@ -37,7 +37,7 @@ class FSDataReaderDAOTest {
         } catch (IOException ignored) {}
 
         Properties props = dao.getPreferences();
-        assertTrue(props.isEmpty(), "Le properties devono essere vuote se il file non esiste");
+        assertTrue(props.isEmpty(), "Properties devono essere vuote se il file non esiste");
     }
 
     @Test

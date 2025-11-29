@@ -1,12 +1,22 @@
 package ch.supsi.fscli.backend.business;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import java.util.*;
 
+@Singleton
 public class PathSolver {
 
-    private static final IFSStateBusiness ifsStateBusiness = FSStateBusiness.getInstance();
+    private final IFSStateBusiness ifsStateBusiness;
 
-    public static Optional<Inode> resolvePath(String path) {
+    @Inject
+    protected PathSolver(IFSStateBusiness ifsStateBusiness) {
+
+        this.ifsStateBusiness = ifsStateBusiness;
+    }
+
+    public Optional<Inode> resolvePath(String path) {
 
         if (path == null || path.isBlank())
             return Optional.empty();
@@ -67,7 +77,7 @@ public class PathSolver {
 
 
 
-    public static DirectoryInodeBusiness extractParentDirectory(String path) {
+    public DirectoryInodeBusiness extractParentDirectory(String path) {
 
         if (path == null || path.isBlank())
             return null;
@@ -96,13 +106,13 @@ public class PathSolver {
     }
 
 
-    public static String extractFileName(String path) {
+    public String extractFileName(String path) {
         int idx = path.lastIndexOf("/");
         return path.substring(idx + 1);
     }
 
 
-    public static boolean nameAlreadyExists(DirectoryInodeBusiness dir, String name) {
+    public boolean nameAlreadyExists(DirectoryInodeBusiness dir, String name) {
         return dir.getEntry(name) != null;
     }
 }

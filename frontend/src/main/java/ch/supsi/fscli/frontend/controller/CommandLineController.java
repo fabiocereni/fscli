@@ -8,10 +8,12 @@ import com.google.inject.Singleton;
 @Singleton
 public class CommandLineController implements ICommandLineController {
 
-    private final IFSInterpreterApplication interpreterApplication = FSInterpreterApplication.getInstance();
+    private final IFSInterpreterApplication interpreterApplication;
 
     @Inject
-    public CommandLineController() {}
+    public CommandLineController(IFSInterpreterApplication interpreterApplication) {
+        this.interpreterApplication = interpreterApplication;
+    }
 
     @Override
     public String getCurrentPath() {

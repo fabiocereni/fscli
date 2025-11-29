@@ -2,6 +2,7 @@ package ch.supsi.fscli.frontend.model.i18n;
 
 import ch.supsi.fscli.backend.application.i18n.ISupportedLanguageApplication;
 import ch.supsi.fscli.backend.application.i18n.SupportedLanguageApplication;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.io.IOException;
@@ -14,11 +15,17 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
     private String languageTagSelected;
 
 
-    private ISupportedLanguageApplication supportedLanguageApplication = SupportedLanguageApplication.getInstance();
+    @Inject
+    private final ISupportedLanguageApplication supportedLanguageApplication;
 
 
     private static final String supportedLanguagePropertiesPath = "/supported-languages.properties";
     private static final String translationPropertiesLabel = "i18n.labels";
+
+    @Inject
+    public SupportedLanguageModel(ISupportedLanguageApplication supportedLanguageApplication) {
+        this.supportedLanguageApplication = supportedLanguageApplication;
+    }
 
 
     @Override

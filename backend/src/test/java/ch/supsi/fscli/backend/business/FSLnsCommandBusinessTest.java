@@ -1,8 +1,11 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.ln.FSLnCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ln.IFSLnCommandBusiness;
 import ch.supsi.fscli.backend.exception.DirectoryNotFoundException;
 import ch.supsi.fscli.backend.exception.NodeAlreadyExistsException;
+import ch.supsi.fscli.backend.modules.FileSystemModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,27 +13,31 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FSLnsCommandBusinessTest {
 
-    private FSLnCommandBusiness ln;
-    private FSStateBusiness state;
+    private Injector injector;
+    private IFSLnCommandBusiness ln;
+
     private FileSystem fs;
+    private IFSStateBusiness state;
 
     private DirectoryInodeBusiness root;
     private FileInodeBusiness fileA;
 
     @BeforeEach
     void setUp() {
-        state = FSStateBusiness.getInstance();
-        fs = FileSystem.getInstance();
 
-        // reset root manuale
-        root = new DirectoryInodeBusiness(5000);
+        injector = Guice.createInjector(new FileSystemModule());
+
+        ln = injector.getInstance(IFSLnCommandBusiness.class);
+        fs = injector.getInstance(FileSystem.class);
+        state = injector.getInstance(IFSStateBusiness.class);
+
+        // reset root del test
+        root = fs.getRoot();
         state.setRoot(root);
         state.setCurrentWorkingDirectory(root);
 
-        ln = new FSLnCommandBusiness();
-
-        // crea file
-        fileA = fs.createFile();  // createFile() già fa incLinkCount()
+        // crea file di test
+        fileA = fs.createFile();
         root.addEntry("fileA", fileA);
     }
 
@@ -46,7 +53,7 @@ public class FSLnsCommandBusinessTest {
         FileInodeBusiness soft = (FileInodeBusiness) inode;
         assertTrue(soft.isSoftLink());
         assertEquals("fileA", soft.getLinkPath());
-        assertEquals(1, soft.getLinkCount()); // 1 (createFile)
+        assertEquals(1, soft.getLinkCount());
     }
 
     @Test
@@ -64,16 +71,15 @@ public class FSLnsCommandBusinessTest {
     @Test
     void testSoftLinkAlreadyExists() {
         assertThrows(NodeAlreadyExistsException.class,
-                () -> ln.lns("fileA", "fileA")); // esiste già
+                () -> ln.lns("fileA", "fileA"));
     }
 
     @Test
     void testSoftLinkDoesNotFollowDirectoryRules() throws Exception {
-        // soft link to fileA in root
         ln.lns("fileA", "alias");
 
         Inode link = root.getEntry("alias");
         assertNotNull(link);
-        assertEquals(InodeType.FILE, link.getType()); // NON deve diventare DIRECTORY
+        assertEquals(InodeType.FILE, link.getType());
     }
 }

@@ -1,5 +1,6 @@
 package ch.supsi.fscli.frontend;
 
+import ch.supsi.fscli.backend.modules.FileSystemModule;
 import ch.supsi.fscli.frontend.controller.*;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
@@ -75,7 +76,8 @@ public class MainFx extends Application {
         this.applicationTitle = "filesystem command interpreter simulator";
 
         this.injector = Guice.createInjector(new ViewModule(), new ControllerModule(),
-                                             new DirectorModule(), new ModelModule());
+                                             new DirectorModule(), new ModelModule(),
+                                             new FileSystemModule());
 
 
         this.preferencesController = injector.getInstance(PreferencesController.class);
@@ -113,7 +115,7 @@ public class MainFx extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         // init
         this.menuBarView.initMenuBarView();
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);

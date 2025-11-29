@@ -1,44 +1,54 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.cd.FSCdCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.cd.IFSCdCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.help.FSHelpCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.help.IFSHelpCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.mkdir.FSMkdirCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.mkdir.IFSMkdirCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.mv.FSMvCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.mv.IFSMvCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.pwd.FSPwdCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.pwd.IFSPwdCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.rmdir.FSRmdirCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.rmdir.IFSRmdirCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.rmfile.FSRmfilecommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.rmfile.IFSRmfileCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.touch.FSTouchCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.touch.IFSTouchCommandBusiness;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+@Singleton
 public class FSInterpreter implements IFSInterpreter {
 
-    private static FSInterpreter myself;
-
-    private final IFSCdCommandBusiness cdCommandBusiness = FSCdCommandBusiness.getInstance();
-    private final IFSMkdirCommandBusiness mkdirCommandBusiness = FSMkdirCommandBusiness.getInstance();
-    private final IFSPwdCommandBusiness pwdCommandBusiness = FSPwdCommandBusiness.getInstance();
-    private final IFSRmdirCommandBusiness rmdirCommandBusiness = FSRmdirCommandBusiness.getInstance();
-    private final IFSRmfileCommandBusiness rmfileCommandBusiness = FSRmfilecommandBusiness.getInstance();
-    private final IFSTouchCommandBusiness touchCommandBusiness = FSTouchCommandBusiness.getInstance();
-    //private final IFSLsCommandBusiness lssCommandBusiness = IFSLsCommandBusiness.getInstance();
-    private final IFSMvCommandBusiness mvCommandBusiness = FSMvCommandBusiness.getInstance();
-    private final IFSHelpCommandBusiness helpCommandBusiness = FSHelpCommandBusiness.getInstance();
+    private final IFSCdCommandBusiness cdCommandBusiness;
+    private final IFSMkdirCommandBusiness mkdirCommandBusiness;
+    private final IFSPwdCommandBusiness pwdCommandBusiness;
+    private final IFSRmdirCommandBusiness rmdirCommandBusiness;
+    private final IFSRmfileCommandBusiness rmfileCommandBusiness;
+    private final IFSTouchCommandBusiness touchCommandBusiness;
+    private final IFSMvCommandBusiness mvCommandBusiness;
+    private final IFSHelpCommandBusiness helpCommandBusiness;
 
     private final Map<String, Function<List<String>, String>> commands;
 
-    private FSInterpreter() {
+    @Inject
+    protected FSInterpreter(IFSCdCommandBusiness cdCommandBusiness,
+                            IFSMkdirCommandBusiness mkdirCommandBusiness,
+                            IFSPwdCommandBusiness pwdCommandBusiness,
+                            IFSRmdirCommandBusiness rmdirCommandBusiness,
+                            IFSRmfileCommandBusiness rmfileCommandBusiness,
+                            IFSTouchCommandBusiness touchCommandBusiness,
+                            IFSMvCommandBusiness mvCommandBusiness,
+                            IFSHelpCommandBusiness helpCommandBusiness) {
+
+        this.cdCommandBusiness = cdCommandBusiness;
+        this.mkdirCommandBusiness = mkdirCommandBusiness;
+        this.pwdCommandBusiness = pwdCommandBusiness;
+        this.rmdirCommandBusiness = rmdirCommandBusiness;
+        this.rmfileCommandBusiness = rmfileCommandBusiness;
+        this.touchCommandBusiness = touchCommandBusiness;
+        this.mvCommandBusiness = mvCommandBusiness;
+        this.helpCommandBusiness = helpCommandBusiness;
+
         this.commands = new HashMap<>();
         this.commands.put("cd", this::handleCd);
         this.commands.put("mkdir", this::handleMkdir);
@@ -47,15 +57,8 @@ public class FSInterpreter implements IFSInterpreter {
         this.commands.put("rm", this::handleRmFile);
         this.commands.put("touch", this::handleTouch);
         this.commands.put("clear", this::handleClear);
-        //this.commands.put("ls", this::handleLs);
         this.commands.put("mv", this::handleMv);
         this.commands.put("help", this::handleHelp);
-    }
-
-    public static FSInterpreter getInstance() {
-        if(myself == null)
-            myself = new FSInterpreter();
-        return myself;
     }
 
     @Override
@@ -68,7 +71,6 @@ public class FSInterpreter implements IFSInterpreter {
         if (commandLine == null || commandLine.isBlank())
             return null;
 
-        // faccio il parsing qui per dividere comando e argomenti
         String[] tokens = commandLine.trim().split("\\s+");
         String command = tokens[0].toLowerCase();
         List<String> args = List.of(tokens).subList(1, tokens.length);
@@ -76,9 +78,8 @@ public class FSInterpreter implements IFSInterpreter {
         Function<List<String>, String> handler = commands.get(command);
         if (handler == null) {
             return "comando non trovato.";
-        } else {
-            return handler.apply(args);
         }
+        return handler.apply(args);
     }
 
     private String handleCd(List<String> args){
@@ -114,16 +115,13 @@ public class FSInterpreter implements IFSInterpreter {
     }
 
     private String handlePwd(List<String> args) {
-        if (!args.isEmpty()) {
-            return null;
-        }
+        if (!args.isEmpty()) return null;
         return pwdCommandBusiness.pwd();
     }
 
     private String handleTouch(List<String> args) {
-        if(args.size() != 1) {
+        if(args.size() != 1)
             return "touch: numero di argomenti errato - (uso: touch <nome_file>)";
-        }
 
         if(!touchCommandBusiness.touch(args.get(0)))
             return "touch: impossibile creare il file.";
@@ -137,22 +135,6 @@ public class FSInterpreter implements IFSInterpreter {
         }
         return "clear";
     }
-
-//    private String handleLs(List<String> args) {
-//        String path = null;
-//        boolean flagI = false;
-//
-//        for (String arg : args) {
-//            if (arg.equals("-i")) flagI = true;
-//            else path = arg; // primo argomento che non è flag → percorso
-//        }
-//
-//        String result = lssCommandBusiness.ls(path,  flagI);
-//
-//        if (result.isEmpty())
-//            return "ls: errore comando";
-//        return result;
-//    }
 
     private String handleMv(List<String> args) {
         if (args.size() != 2)
@@ -169,5 +151,4 @@ public class FSInterpreter implements IFSInterpreter {
             return "label.infoHelp";
         return "help: numero di argomenti errato - (uso: help)";
     }
-
 }

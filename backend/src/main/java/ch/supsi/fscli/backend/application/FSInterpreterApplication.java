@@ -1,20 +1,17 @@
 package ch.supsi.fscli.backend.application;
 
-import ch.supsi.fscli.backend.business.FSInterpreter;
 import ch.supsi.fscli.backend.business.IFSInterpreter;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 public class FSInterpreterApplication implements IFSInterpreterApplication {
 
-    private static FSInterpreterApplication myself;
+    private final IFSInterpreter interpreter;
 
-    private final IFSInterpreter interpreter = FSInterpreter.getInstance();
-
-    private FSInterpreterApplication() {}
-
-    public static FSInterpreterApplication getInstance() {
-        if (myself == null)
-            myself = new FSInterpreterApplication();
-        return myself;
+    @Inject
+    public FSInterpreterApplication(IFSInterpreter interpreter) {
+        this.interpreter = interpreter;
     }
 
     @Override

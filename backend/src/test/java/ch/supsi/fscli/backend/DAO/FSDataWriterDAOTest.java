@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FSDataWriterDAOTest {
 
-    private final IFSDataWriterDAO fsDataWriterDAO = FSDataWriterDAO.getInstance();
+    private final IFSDataWriterDAO fsDataWriterDAO = new FSDataWriterDAO();
 
     @Test
     void save() throws IOException {
