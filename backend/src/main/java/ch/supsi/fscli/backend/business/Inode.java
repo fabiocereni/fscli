@@ -1,8 +1,30 @@
 package ch.supsi.fscli.backend.business;
 
+
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+
+/*
+* Servono per chiarire a jackson il tipo preciso
+* durante il salvataggio e permettere poi un caricamento
+* corretto
+*/
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "inodeType"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DirectoryInodeBusiness.class, name = "directory"),
+        @JsonSubTypes.Type(value = FileInodeBusiness.class, name = "file")
+})
+
+
+
 public abstract class Inode {
-    private final long id;
-    private final InodeType type;
+    private long id;
+    private InodeType type;
     private int linkCount;
 
     protected Inode(long id, InodeType type) {
@@ -31,7 +53,17 @@ public abstract class Inode {
         linkCount--;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
+    public void setType(InodeType type) {
+        this.type = type;
+    }
+
+    public void setLinkCount(int linkCount) {
+        this.linkCount = linkCount;
+    }
 }
 
 

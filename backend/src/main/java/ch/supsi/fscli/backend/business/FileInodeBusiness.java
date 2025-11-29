@@ -25,4 +25,7 @@ public class FileInodeBusiness extends Inode {
     public void setLinkPath(String linkPath) {
         this.linkPath = linkPath;
     }
+
+
+
 }
