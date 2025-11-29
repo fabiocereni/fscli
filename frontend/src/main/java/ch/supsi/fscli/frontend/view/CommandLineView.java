@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -120,5 +121,9 @@ public class CommandLineView implements PropertyChangeListener {
             commandLine.setDisable(false);
             enter.setDisable(false);
         }
+    }
+
+    public Node getNode() {
+        return this.commandLine;
     }
 }

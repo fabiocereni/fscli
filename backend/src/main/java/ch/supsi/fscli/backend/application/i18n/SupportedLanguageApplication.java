@@ -1,25 +1,20 @@
 package ch.supsi.fscli.backend.application.i18n;
 
 import ch.supsi.fscli.backend.business.i18n.ISupportedLanguageBusiness;
-import ch.supsi.fscli.backend.business.i18n.SupportedLanguageBusiness;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.util.HashMap;
 import java.util.List;
 
+@Singleton
 public class SupportedLanguageApplication implements ISupportedLanguageApplication {
 
     private final ISupportedLanguageBusiness supportedLanguageBusiness;
 
-    private static SupportedLanguageApplication myself;
-
-    private SupportedLanguageApplication() {
-        supportedLanguageBusiness = SupportedLanguageBusiness.getInstance();
-    }
-
-    public static SupportedLanguageApplication getInstance() {
-        if(myself == null)
-            myself = new SupportedLanguageApplication();
-        return myself;
+    @Inject
+    public SupportedLanguageApplication(ISupportedLanguageBusiness supportedLanguageBusiness) {
+        this.supportedLanguageBusiness = supportedLanguageBusiness;
     }
 
     @Override
@@ -43,7 +38,6 @@ public class SupportedLanguageApplication implements ISupportedLanguageApplicati
     }
 
     public String getTranslation(String key) {
-        return "";
+        return ""; // TODO: implement when business-level translation is added
     }
-
 }

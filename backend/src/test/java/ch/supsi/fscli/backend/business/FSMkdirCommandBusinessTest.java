@@ -1,6 +1,9 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.mkdir.FSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mkdir.IFSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.modules.FileSystemModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,19 +11,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FSMkdirCommandBusinessTest {
 
+    private Injector injector;
+    private IFSMkdirCommandBusiness mkdirBusiness;
     private FileSystem fileSystem;
     private IFSStateBusiness ifsState;
+    private IFSCreationBusiness creation;
+
     private DirectoryInodeBusiness root;
-    private FSMkdirCommandBusiness mkdirBusiness;
 
     @BeforeEach
     void setup() {
-        // Reset full filesystem
-        FSCreationBusiness.getInstance().newfs();
 
-        fileSystem = FileSystem.getInstance();
-        ifsState = FSStateBusiness.getInstance();
-        mkdirBusiness = FSMkdirCommandBusiness.getInstance();
+        injector = Guice.createInjector(new FileSystemModule());
+
+        mkdirBusiness = injector.getInstance(IFSMkdirCommandBusiness.class);
+        fileSystem = injector.getInstance(FileSystem.class);
+        ifsState = injector.getInstance(IFSStateBusiness.class);
+        creation = injector.getInstance(IFSCreationBusiness.class);
+
+        // Ricrea il filesystem da zero (come faceva newfs())
+        creation.newfs();
 
         root = ifsState.getRoot();
         assertNotNull(root);
@@ -55,7 +65,7 @@ public class FSMkdirCommandBusinessTest {
     @Test
     void testCreateDirectoryAlreadyExists() {
         assertTrue(mkdirBusiness.mkdir("dup"));
-        assertFalse(mkdirBusiness.mkdir("dup"));  // duplicate name
+        assertFalse(mkdirBusiness.mkdir("dup"));
     }
 
     // ----------------------------------------------------------
@@ -106,7 +116,7 @@ public class FSMkdirCommandBusinessTest {
 
     @Test
     void testParentIsFile() {
-        root.addEntry("file", fileSystem.createFile()); // add file "file"
+        root.addEntry("file", fileSystem.createFile());
         assertFalse(mkdirBusiness.mkdir("/file/sub"));
     }
 
@@ -115,7 +125,7 @@ public class FSMkdirCommandBusinessTest {
     // ----------------------------------------------------------
     @Test
     void testCreateEmptyNameAtEnd() {
-        assertFalse(mkdirBusiness.mkdir("/abc/"));  // last token empty
+        assertFalse(mkdirBusiness.mkdir("/abc/"));
     }
 
     @Test

@@ -1,24 +1,18 @@
 package ch.supsi.fscli.backend.business.preference;
 
 import ch.supsi.fscli.backend.DAO.preference.IPreferencesDAO;
-import ch.supsi.fscli.backend.DAO.preference.PreferencesDAO;
-
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import java.util.Properties;
 
+@Singleton
 public class PreferencesBusiness implements IPreferencesBusiness {
 
     private final IPreferencesDAO preferenceDAO;
 
-    private static PreferencesBusiness myself;
-
-    private PreferencesBusiness() {
-        preferenceDAO = PreferencesDAO.getInstance();
-    }
-
-    public static PreferencesBusiness getInstance() {
-        if(myself == null)
-            myself = new PreferencesBusiness();
-        return myself;
+    @Inject
+    public PreferencesBusiness(IPreferencesDAO preferenceDAO) {
+        this.preferenceDAO = preferenceDAO;
     }
 
     @Override

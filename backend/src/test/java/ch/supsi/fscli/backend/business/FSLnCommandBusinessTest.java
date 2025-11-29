@@ -1,6 +1,12 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.ln.FSLnCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ln.IFSLnCommandBusiness;
+import ch.supsi.fscli.backend.exception.DirectoryNotFoundException;
+import ch.supsi.fscli.backend.exception.MyFileNotFoundException;
+import ch.supsi.fscli.backend.exception.NodeAlreadyExistsException;
+import ch.supsi.fscli.backend.modules.FileSystemModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,39 +14,41 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FSLnCommandBusinessTest {
 
-    private FSLnCommandBusiness ln;
-    private FSStateBusiness state;
+    private Injector injector;
+    private IFSLnCommandBusiness ln;
+
     private FileSystem fs;
+    private IFSStateBusiness state;
 
     private DirectoryInodeBusiness root;
     private FileInodeBusiness fileA;
 
     @BeforeEach
     void setUp() {
-        state = FSStateBusiness.getInstance();
-        fs = FileSystem.getInstance();
 
-        // ricrea root
-        root = new DirectoryInodeBusiness(9999);
+        injector = Guice.createInjector(new FileSystemModule());
+
+        ln = injector.getInstance(IFSLnCommandBusiness.class);
+        fs = injector.getInstance(FileSystem.class);
+        state = injector.getInstance(IFSStateBusiness.class);
+
+        root = fs.getRoot();
         state.setRoot(root);
         state.setCurrentWorkingDirectory(root);
 
-        ln = new FSLnCommandBusiness();
-
-        // crea un file f
-        fileA = fs.createFile();   // createFile() già fa incLinkCount()
+        fileA = fs.createFile();
         root.addEntry("fileA", fileA);
     }
 
     @Test
-    void testHardLinkSuccess() {
+    void testHardLinkSuccess() throws MyFileNotFoundException, DirectoryNotFoundException, NodeAlreadyExistsException {
         boolean ok = ln.ln("fileA", "linkA");
         assertTrue(ok);
 
         Inode linked = root.getEntry("linkA");
         assertNotNull(linked);
         assertEquals(fileA, linked);
-        assertEquals(2, linked.getLinkCount()); // 1 (createFile) + 1 (hardlink)
+        assertEquals(2, linked.getLinkCount());
     }
 
     @Test
@@ -67,6 +75,6 @@ public class FSLnCommandBusinessTest {
     @Test
     void testHardLinkAlreadyExists() {
         assertThrows(IllegalArgumentException.class,
-                () -> ln.ln("fileA", "fileA")); // esiste già
+                () -> ln.ln("fileA", "fileA"));
     }
 }

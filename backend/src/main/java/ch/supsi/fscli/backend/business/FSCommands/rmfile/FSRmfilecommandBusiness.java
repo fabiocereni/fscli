@@ -1,19 +1,23 @@
 package ch.supsi.fscli.backend.business.FSCommands.rmfile;
 
-import ch.supsi.fscli.backend.business.*;
+import ch.supsi.fscli.backend.business.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.FileSystem;
+import ch.supsi.fscli.backend.business.Inode;
+import ch.supsi.fscli.backend.business.InodeType;
+import ch.supsi.fscli.backend.business.PathSolver;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
-
+@Singleton
 public class FSRmfilecommandBusiness implements IFSRmfileCommandBusiness {
 
-    private static FSRmfilecommandBusiness myself;
-    private final FileSystem fileSystem = FileSystem.getInstance();
+    private final FileSystem fileSystem;
+    private final PathSolver pathSolver;
 
-    private FSRmfilecommandBusiness() {}
-
-    public static FSRmfilecommandBusiness getInstance() {
-        if (myself == null)
-            myself = new FSRmfilecommandBusiness();
-        return myself;
+    @Inject
+    public FSRmfilecommandBusiness(FileSystem fileSystem, PathSolver pathSolver) {
+        this.fileSystem = fileSystem;
+        this.pathSolver = pathSolver;
     }
 
     @Override
@@ -22,11 +26,11 @@ public class FSRmfilecommandBusiness implements IFSRmfileCommandBusiness {
         if (name == null || name.isBlank())
             return false;
 
-        DirectoryInodeBusiness parentDir = PathSolver.extractParentDirectory(name);
+        DirectoryInodeBusiness parentDir = pathSolver.extractParentDirectory(name);
         if (parentDir == null)
             return false;
 
-        String fileName = PathSolver.extractFileName(name);
+        String fileName = pathSolver.extractFileName(name);
         if (fileName.isBlank())
             return false;
 

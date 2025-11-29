@@ -1,23 +1,16 @@
 package ch.supsi.fscli.backend.DAO.preference;
 
+import com.google.inject.Singleton;
 import java.util.Properties;
 
+@Singleton
 public class PreferencesDAO implements IPreferencesDAO {
 
-    private static PreferencesDAO myself;
+    private final Properties properties;
 
-    private Properties properties;
-
-    private PreferencesDAO() {
-        properties = new Properties();
+    public PreferencesDAO() {
+        this.properties = new Properties();
     }
-
-    public static PreferencesDAO getInstance() {
-        if(myself == null)
-            myself = new PreferencesDAO();
-        return myself;
-    }
-
 
     @Override
     public String getProperty(String key) {

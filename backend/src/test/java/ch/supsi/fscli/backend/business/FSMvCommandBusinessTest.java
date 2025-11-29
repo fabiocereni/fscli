@@ -1,6 +1,9 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.mv.FSMvCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.mv.IFSMvCommandBusiness;
+import ch.supsi.fscli.backend.modules.FileSystemModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,22 +11,37 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FSMvCommandBusinessTest {
 
-    private FSMvCommandBusiness mvCommand;
+    private Injector injector;
+
+    private IFSMvCommandBusiness mvCommand;
     private FileSystem fileSystem;
-    private FSStateBusiness fsState;
+    private IFSStateBusiness fsState;
+    private IFSCreationBusiness creation;
+
     private DirectoryInodeBusiness root;
 
     @BeforeEach
     void setUp() {
-        mvCommand = FSMvCommandBusiness.getInstance();
-        fileSystem = FileSystem.getInstance();
-        fsState = FSStateBusiness.getInstance();
-        root = fileSystem.getRoot();
 
-        fsState.setRoot(root);
+        injector = Guice.createInjector(new FileSystemModule());
+
+        mvCommand   = injector.getInstance(IFSMvCommandBusiness.class);
+        fileSystem  = injector.getInstance(FileSystem.class);
+        fsState     = injector.getInstance(IFSStateBusiness.class);
+        creation    = injector.getInstance(IFSCreationBusiness.class);
+
+        // reset completo del filesystem
+        creation.newfs();
+
+        root = fsState.getRoot();
+        assertNotNull(root);
+
         fsState.setCurrentWorkingDirectory(root);
+
+        // pulizia iniziale (solo se necessario)
         root.getEntries().clear();
 
+        // aggiungiamo "." e ".." come nel vecchio test
         root.addEntry(".", root);
         root.addEntry("..", root);
     }
@@ -64,10 +82,10 @@ class FSMvCommandBusinessTest {
         boolean result = mvCommand.mv("/oldDir", "/newDir");
 
         assertTrue(result);
-        assertNull(root.getEntry("oldDir"), "non deve esistere oldDir");
-        assertNotNull(root.getEntry("newDir"), "deve esistere newDir");
-        assertEquals(dir, root.getEntry("newDir"), "newDir deve essere la directory che era oldDir");
-        assertEquals(oldParent, dir.getEntry(".."), "newDir deve avere come parent lo stesso di oldDir");
+        assertNull(root.getEntry("oldDir"));
+        assertNotNull(root.getEntry("newDir"));
+        assertEquals(dir, root.getEntry("newDir"));
+        assertEquals(oldParent, dir.getEntry(".."));
     }
 
     @Test
@@ -78,8 +96,8 @@ class FSMvCommandBusinessTest {
         boolean result = mvCommand.mv("doc.txt", "folder");
 
         assertTrue(result);
-        assertNull(root.getEntry("doc.txt"), "Non deve più essere nella root");
-        assertNotNull(folder.getEntry("doc.txt"), "Deve essere dentro folder");
+        assertNull(root.getEntry("doc.txt"));
+        assertNotNull(folder.getEntry("doc.txt"));
         assertEquals(file, folder.getEntry("doc.txt"));
     }
 
@@ -88,23 +106,18 @@ class FSMvCommandBusinessTest {
         DirectoryInodeBusiness dirA = createMockDir("dirA", root);
         DirectoryInodeBusiness dirB = createMockDir("dirB", root);
 
-        //sposto dirA dentro dirB
         boolean result = mvCommand.mv("dirA", "dirB");
 
         assertTrue(result);
 
-        // 1. dirA non è più in root
         assertNull(root.getEntry("dirA"));
 
-        // 2. dirA è dentro dirB
         Inode movedDir = dirB.getEntry("dirA");
         assertNotNull(movedDir);
 
-        // 3. VERIFICA CRITICA: il ".." di dirA deve ora puntare a dirB, non più a root
         DirectoryInodeBusiness castedMovedDir = (DirectoryInodeBusiness) movedDir;
-        assertEquals(dirB, castedMovedDir.getEntry(".."), "Il parent (..) deve essere aggiornato");
+        assertEquals(dirB, castedMovedDir.getEntry(".."));
     }
-
 
     @Test
     void testMvSourceNotFound() {
@@ -128,7 +141,7 @@ class FSMvCommandBusinessTest {
 
         boolean result = mvCommand.mv("parent", "parent");
 
-        assertFalse(result, "Non si può spostare una cartella dentro se stessa");
+        assertFalse(result);
     }
 
     @Test
@@ -138,8 +151,7 @@ class FSMvCommandBusinessTest {
 
         boolean result = mvCommand.mv("parent", "parent/child");
 
-        assertFalse(result, "Non si può spostare un genitore dentro un suo discendente (ciclo)");
-
+        assertFalse(result);
         assertNotNull(root.getEntry("parent"));
     }
 }

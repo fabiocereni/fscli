@@ -1,32 +1,38 @@
 package ch.supsi.fscli.backend.business;
 
-
-import ch.supsi.fscli.backend.business.FSCommands.mkdir.FSMkdirCommandBusiness;
-import ch.supsi.fscli.backend.business.FSCommands.rmfile.FSRmfilecommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmfile.IFSRmfileCommandBusiness;
+import ch.supsi.fscli.backend.modules.FileSystemModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FSRmfilecommandBusinessTest {
 
-    private FSRmfilecommandBusiness rmFileCommand;
+    private Injector injector;
+
+    private IFSRmfileCommandBusiness rmFileCommand;
     private FileSystem fileSystem;
-    private FSStateBusiness fsState;
+    private IFSStateBusiness fsState;
+
     private DirectoryInodeBusiness root;
 
     @BeforeEach
     void setUp() {
-        rmFileCommand = FSRmfilecommandBusiness.getInstance();
-        fileSystem = FileSystem.getInstance();
-        fsState = FSStateBusiness.getInstance();
 
-        root = fileSystem.getRoot();
-        fsState.setRoot(root);
+        injector = Guice.createInjector(new FileSystemModule());
+
+        rmFileCommand = injector.getInstance(IFSRmfileCommandBusiness.class);
+        fileSystem     = injector.getInstance(FileSystem.class);
+        fsState        = injector.getInstance(IFSStateBusiness.class);
+        IFSCreationBusiness creation = injector.getInstance(IFSCreationBusiness.class);
+
+        // reset filesystem
+        creation.newfs();
+
+        root = fsState.getRoot();
         fsState.setCurrentWorkingDirectory(root);
         fsState.setCurrentWorkingDirectoryPath("/");
     }
@@ -45,11 +51,11 @@ class FSRmfilecommandBusinessTest {
     void testRemoveExistingFileCurrentDirectory() {
         createFileInRoot("test.txt");
 
-        assertNotNull(root.getEntry("test.txt"), "File not created");
+        assertNotNull(root.getEntry("test.txt"));
 
         boolean result = rmFileCommand.rmfile("test.txt");
-        assertTrue(result, "File removed");
-        assertNull(root.getEntry("test.txt"), "File not removed");
+        assertTrue(result);
+        assertNull(root.getEntry("test.txt"));
     }
 
     @Test
@@ -61,32 +67,29 @@ class FSRmfilecommandBusinessTest {
         homeDir.addEntry("test1.txt", file);
 
         boolean result = rmFileCommand.rmfile("/home/test1.txt");
-        assertTrue(result, "File removed");
-        assertNull(homeDir.getEntry("test1.txt"), "File not removed");
+        assertTrue(result);
+        assertNull(homeDir.getEntry("test1.txt"));
     }
 
     @Test
     void testRmFile_DecrementsLinkCount() {
-        String fileName = "linkTest.txt";
         FileInodeBusiness file = fileSystem.createFile();
-        root.addEntry(fileName, file);
+        root.addEntry("linkTest.txt", file);
 
         assertEquals(1, file.getLinkCount());
-        rmFileCommand.rmfile(fileName);
+        rmFileCommand.rmfile("linkTest.txt");
         assertEquals(0, file.getLinkCount());
     }
 
     @Test
     void testRmFile_FileDoesNotExist() {
-        boolean result = rmFileCommand.rmfile("nonExistentFile.txt");
-        assertFalse(result);
+        assertFalse(rmFileCommand.rmfile("nonExistentFile.txt"));
     }
 
     @Test
     void testRmFileIfTryToRemoveDirectory() {
         createDirectoryInRoot("folder");
-        boolean result = rmFileCommand.rmfile("folder");
-        assertFalse(result);
+        assertFalse(rmFileCommand.rmfile("folder"));
         assertNotNull(root.getEntry("folder"));
     }
 
@@ -103,5 +106,4 @@ class FSRmfilecommandBusinessTest {
         assertFalse(rmFileCommand.rmfile("."));
         assertFalse(rmFileCommand.rmfile(".."));
     }
-
 }

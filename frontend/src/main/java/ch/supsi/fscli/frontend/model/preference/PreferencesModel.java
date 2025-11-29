@@ -24,9 +24,14 @@ public class PreferencesModel implements IPreferencesModel {
     public static final int DEFAULT_LINES_NUMBER = 25;
 
     // da iniettare manualmente
-    private IPreferencesApplication preferencesApplication = PreferencesApplication.getInstance();
+    private final IPreferencesApplication preferencesApplication;
 
     private String preferencesPath;
+
+    @Inject
+    public PreferencesModel(IPreferencesApplication preferencesApplication) {
+        this.preferencesApplication = preferencesApplication;
+    }
 
     // da vedere
     @Inject

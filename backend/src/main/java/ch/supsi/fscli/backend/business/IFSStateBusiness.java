@@ -1,5 +1,8 @@
 package ch.supsi.fscli.backend.business;
 
+import com.google.inject.ImplementedBy;
+
+@ImplementedBy(FSStateBusiness.class)
 public interface IFSStateBusiness {
     boolean changeSavedStateAndGet();
     void setRoot(DirectoryInodeBusiness root);

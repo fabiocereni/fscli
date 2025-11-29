@@ -1,20 +1,12 @@
 package ch.supsi.fscli.backend.DAO;
 
+import com.google.inject.Singleton;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+@Singleton
 public class FSDataWriterDAO implements IFSDataWriterDAO {
-
-    private static FSDataWriterDAO myself;
-
-    private FSDataWriterDAO(){}
-
-    public static FSDataWriterDAO getInstance() {
-        if (myself == null)
-            myself = new FSDataWriterDAO();
-        return myself;
-    }
 
     @Override
     public void save(Path path, String toPersist) {

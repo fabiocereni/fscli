@@ -1,38 +1,38 @@
 package ch.supsi.fscli.backend.business.FSCommands.touch;
 
-import ch.supsi.fscli.backend.business.*;
+import ch.supsi.fscli.backend.business.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.FileInodeBusiness;
+import ch.supsi.fscli.backend.business.FileSystem;
+import ch.supsi.fscli.backend.business.PathSolver;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+@Singleton
 public class FSTouchCommandBusiness implements IFSTouchCommandBusiness {
 
-    private static FSTouchCommandBusiness myself;
+    private final FileSystem fileSystem;
+    private final PathSolver pathSolver;
 
-    private final FileSystem fileSystem = FileSystem.getInstance();
-
-    private FSTouchCommandBusiness() {}
-
-    public static FSTouchCommandBusiness getInstance() {
-        if(myself == null)
-            myself = new FSTouchCommandBusiness();
-
-        return myself;
+    @Inject
+    public FSTouchCommandBusiness(FileSystem fileSystem, PathSolver pathSolver) {
+        this.fileSystem = fileSystem;
+        this.pathSolver = pathSolver;
     }
-
 
     @Override
     public boolean touch(String path) throws IllegalArgumentException {
 
-        if(path == null)
+        if (path == null)
             throw new IllegalArgumentException("touch: path not valid");
 
-
-        DirectoryInodeBusiness parentDirectory = PathSolver.extractParentDirectory(path);
+        DirectoryInodeBusiness parentDirectory = pathSolver.extractParentDirectory(path);
 
         if (parentDirectory == null)
             throw new IllegalArgumentException("touch: path not valid");
 
-        String newFileName = PathSolver.extractFileName(path);
+        String newFileName = pathSolver.extractFileName(path);
 
-        if (PathSolver.nameAlreadyExists(parentDirectory, newFileName))
+        if (pathSolver.nameAlreadyExists(parentDirectory, newFileName))
             throw new IllegalArgumentException("touch: file with same name already exists");
 
         FileInodeBusiness toCreate = fileSystem.createFile();

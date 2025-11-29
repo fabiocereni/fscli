@@ -1,6 +1,9 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.rmdir.FSRmdirCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.rmdir.IFSRmdirCommandBusiness;
+import ch.supsi.fscli.backend.modules.FileSystemModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,27 +11,33 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FSRmdirCommandBusinessTest {
 
-    private FSRmdirCommandBusiness rmdir;
-    private FSStateBusiness state;
+    private Injector injector;
+
+    private IFSRmdirCommandBusiness rmdir;
+    private IFSStateBusiness state;
     private FileSystem fs;
+    private IFSCreationBusiness creation;
 
     private DirectoryInodeBusiness root;
 
     @BeforeEach
     void setUp() {
-        rmdir = FSRmdirCommandBusiness.getInstance();
-        state = FSStateBusiness.getInstance();
-        fs = FileSystem.getInstance();
 
-        // Reset file system manually
-        root = new DirectoryInodeBusiness(1);
-        root.incLinkCount();
+        injector = Guice.createInjector(new FileSystemModule());
 
-        state.setRoot(root);
+        rmdir = injector.getInstance(IFSRmdirCommandBusiness.class);
+        state = injector.getInstance(IFSStateBusiness.class);
+        fs = injector.getInstance(FileSystem.class);
+        creation = injector.getInstance(IFSCreationBusiness.class);
+
+        // Reset completo del filesystem
+        creation.newfs();
+
+        root = state.getRoot();
+        assertNotNull(root);
+
         state.setCurrentWorkingDirectory(root);
         state.setCurrentWorkingDirectoryPath("/");
-
-        // root is empty at start
     }
 
     @Test
@@ -72,14 +81,13 @@ public class FSRmdirCommandBusinessTest {
         DirectoryInodeBusiness d = fs.createDirectory(root);
         root.addEntry("folder", d);
 
-        // Add file inside directory → non empty
         FileInodeBusiness file = fs.createFile();
         d.addEntry("inner.txt", file);
 
         boolean result = rmdir.rmdir("folder");
         assertFalse(result);
 
-        assertNotNull(root.getEntry("folder")); // still exists
+        assertNotNull(root.getEntry("folder"));
     }
 
     @Test
@@ -140,5 +148,4 @@ public class FSRmdirCommandBusinessTest {
         assertTrue(result);
         assertNull(home.getEntry("docs"));
     }
-
 }
