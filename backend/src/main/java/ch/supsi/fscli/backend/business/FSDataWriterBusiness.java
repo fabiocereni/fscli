@@ -12,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 
 public class FSDataWriterBusiness implements IFSDataWriterBusiness {
 
+    private String lastName = "";
+
+
     private final IFSDataWriterDAO fsDataWriterDao = FSDataWriterDAO.getInstance();
 
     private static FSDataWriterBusiness myself;
@@ -28,46 +31,36 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
     @Override
     public void save(Path path) {
 
-        FSStateBusiness stateToSerialize = FSStateBusiness.getInstance();
+        PersistedWrapper wrapperToSerialize = new PersistedWrapper();
+        wrapperToSerialize.setFileSystem(FileSystem.getInstance());
+        wrapperToSerialize.setStateBusiness(FSStateBusiness.getInstance());
 
-        if(Files.exists(path)) {
-            try {
-                Files.deleteIfExists(path);
-            } catch (IOException e) {
-                System.err.println("Error when deleting the file at: " + path);
-            }
+        this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(wrapperToSerialize));
 
-            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(stateToSerialize));
-        } else {
-            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(stateToSerialize));
-        }
 
     }
 
     @Override
     public void save() {
 
-        FSStateBusiness stateToSerialize = FSStateBusiness.getInstance();
+        PersistedWrapper wrapperToSerialize = new PersistedWrapper();
+        wrapperToSerialize.setFileSystem(FileSystem.getInstance());
+        wrapperToSerialize.setStateBusiness(FSStateBusiness.getInstance());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH");
-        String fileName = LocalDateTime.now().format(formatter) + ".json";
-        Path path = Paths.get(System.getProperty("user.home"), "FileSystem Simulator", "Saved", fileName);
+        // Se è la prima volta che salvo, genero un nome
+        if (lastName.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
+            lastName = LocalDateTime.now().format(formatter) + ".json";
+        }
 
-        if(Files.exists(path)) {
-            try {
-                Files.deleteIfExists(path);
-            } catch (IOException e) {
-                System.err.println("Error when deleting the file at: " + path);
-            }
-            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(stateToSerialize));
-        } else {
-            try {
-                Files.createDirectories(path.getParent());
-                this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(stateToSerialize));
-            } catch (IOException e) {
-                System.err.println("Default saving error");
-            }
+        Path path = Paths.get(System.getProperty("user.home"),"FileSystem Simulator","Saved",lastName);
 
+        try {
+            Files.createDirectories(path.getParent());
+            this.fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(wrapperToSerialize));
+        } catch (IOException e) {
+            System.err.println("Default saving error: " + e.getMessage());
         }
     }
+
 }

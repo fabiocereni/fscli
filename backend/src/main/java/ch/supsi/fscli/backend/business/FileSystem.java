@@ -4,21 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileSystem {
-    private final Map<Long, Inode> inodeTable = new HashMap<>();
+    private Map<Long, Inode> inodeTable = new HashMap<>();
     private long nextInodeId = 1L;
 
-    private final DirectoryInodeBusiness root;
+    private DirectoryInodeBusiness root;
 
     private static FileSystem myself;
 
     public static FileSystem getInstance() {
         if (myself == null)
-            myself = new FileSystem();
+            myself = new FileSystem(true);
 
         return myself;
     }
 
-    private FileSystem() {
+    protected FileSystem() {}
+
+    private FileSystem(boolean init) {
         // crea root con id allocato
         long id = allocateInodeId();
         this.root = new DirectoryInodeBusiness(id);
@@ -61,5 +63,25 @@ public class FileSystem {
 
     public Inode getInode(long id) {
         return inodeTable.get(id);
+    }
+
+    public Map<Long, Inode> getInodeTable() {
+        return inodeTable;
+    }
+
+    public void setInodeTable(Map<Long, Inode> inodeTable) {
+        this.inodeTable = inodeTable;
+    }
+
+    public long getNextInodeId() {
+        return nextInodeId;
+    }
+
+    public void setNextInodeId(long nextInodeId) {
+        this.nextInodeId = nextInodeId;
+    }
+
+    public void setRoot(DirectoryInodeBusiness root) {
+        this.root = root;
     }
 }

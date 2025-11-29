@@ -3,7 +3,8 @@ package ch.supsi.fscli.backend.business;
 import java.util.*;
 
 public class DirectoryInodeBusiness extends Inode {
-    private final Map<String, Inode> entries = new HashMap<>();
+    private Map<String, Inode> entries = new HashMap<>();
+
 
     public DirectoryInodeBusiness(long id) {
         super(id, InodeType.DIRECTORY);
@@ -38,4 +39,7 @@ public class DirectoryInodeBusiness extends Inode {
         return null;
     }
 
+    public void setEntries(Map<String, Inode> entries) {
+        this.entries = entries;
+    }
 }

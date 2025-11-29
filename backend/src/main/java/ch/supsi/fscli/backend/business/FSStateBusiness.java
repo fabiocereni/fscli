@@ -53,4 +53,12 @@ public class FSStateBusiness implements IFSStateBusiness {
     public void setCurrentWorkingDirectoryPath(String currentWorkingDirectoryPath) {
         this.currentWorkingDirectoryPath = currentWorkingDirectoryPath;
     }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
 }
