@@ -18,7 +18,7 @@ public class FSDataReaderDAO implements IFSDataReaderDAO {
 
     @Override
     public String readFromAFile(File file) throws IOException {
-        return String.valueOf(Files.readAllLines(file.toPath()));
+        return Files.readString(file.toPath());
     }
 
     @Override
