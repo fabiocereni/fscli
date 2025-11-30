@@ -21,6 +21,8 @@ public class MenuBarView {
     @Inject
     private IFSDataSaverController dataSaverController;
     @Inject
+    private IFSDataReaderController dataReaderController;
+    @Inject
     private QuitController quitController;
     @Inject
     private IAboutView aboutViewController;
@@ -67,6 +69,7 @@ public class MenuBarView {
 
         MenuItem openMenuItem = new MenuItem(supportedLanguageController.getTranslation("label.open"));
         openMenuItem.setId("openMenuItem");
+        openMenuItem.setOnAction(actionEvent -> dataReaderController.showReaderView());
 
         MenuItem saveMenuItem = new MenuItem(supportedLanguageController.getTranslation("label.save"));
         saveMenuItem.setId("saveMenuItem");

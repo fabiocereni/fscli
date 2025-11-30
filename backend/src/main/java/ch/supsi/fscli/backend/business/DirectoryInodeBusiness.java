@@ -1,12 +1,15 @@
 package ch.supsi.fscli.backend.business;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.*;
 
 public class DirectoryInodeBusiness extends Inode {
     private Map<String, Inode> entries = new HashMap<>();
 
-
-    public DirectoryInodeBusiness(long id) {
+    @JsonCreator
+    public DirectoryInodeBusiness(@JsonProperty("id") long id) {
         super(id, InodeType.DIRECTORY);
 
     }

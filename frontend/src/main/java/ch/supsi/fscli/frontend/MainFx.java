@@ -51,6 +51,7 @@ public class MainFx extends Application {
     private final OutputView outputView;
     private final LogView logView;
     private final IShow savingView;
+    private final IShow readerView;
     private final QuitView quitView;
     private final IShow aboutView;
     private final IShow helpView;
@@ -59,6 +60,7 @@ public class MainFx extends Application {
     private final Injector injector;
 
     private final EventHandler dataSaverController;
+    private final EventHandler dataReaderController;
     private final EventHandler aboutViewController;
     private final EventHandler helpController;
     private final IQuitController quitController;
@@ -94,6 +96,7 @@ public class MainFx extends Application {
         this.outputView = injector.getInstance(OutputView.class);
         this.logView = injector.getInstance(LogView.class);
         this.savingView = injector.getInstance(SaveAsView.class);
+        this.readerView = injector.getInstance(ReaderView.class);
         this.aboutView = injector.getInstance(AboutView.class);
         this.helpView = injector.getInstance(HelpView.class);
         this.quitView = injector.getInstance(QuitView.class);
@@ -103,6 +106,7 @@ public class MainFx extends Application {
 
 
         this.dataSaverController = injector.getInstance(FSDataSaverController.class);
+        this.dataReaderController = injector.getInstance(FSDataReaderController.class);
         this.quitController = injector.getInstance(QuitController.class);
         this.aboutViewController = injector.getInstance(AboutController.class);
         this.helpController = injector.getInstance(HelpController.class);

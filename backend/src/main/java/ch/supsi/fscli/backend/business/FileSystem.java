@@ -9,15 +9,20 @@ import java.util.Map;
 @Singleton
 public class FileSystem {
 
-    private final Map<Long, Inode> inodeTable = new HashMap<>();
+    private Map<Long, Inode> inodeTable = new HashMap<>();
     private long nextInodeId = 1L;
 
-    private final DirectoryInodeBusiness root;
+    private DirectoryInodeBusiness root;
 
     @Inject
     protected FileSystem(DirectoryInodeBusiness root) {
         this.root = root;
+        this.inodeTable = new HashMap<>();
         initializeRoot(root);
+    }
+
+    public FileSystem() {
+        this.inodeTable = new HashMap<>();
     }
 
     private void initializeRoot(DirectoryInodeBusiness root) {
