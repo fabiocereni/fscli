@@ -8,10 +8,12 @@ import java.util.*;
 public class DirectoryInodeBusiness extends Inode {
     private Map<String, Inode> entries = new HashMap<>();
 
-    @JsonCreator
-    public DirectoryInodeBusiness(@JsonProperty("id") long id) {
-        super(id, InodeType.DIRECTORY);
+    private DirectoryInodeBusiness() {
+        super();
+    }
 
+    public DirectoryInodeBusiness(long id) {
+        super(id, InodeType.DIRECTORY);
     }
 
     public Map<String, Inode> getEntries() {

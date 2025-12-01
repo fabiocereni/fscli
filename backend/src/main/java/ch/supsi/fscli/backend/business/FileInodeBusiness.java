@@ -8,11 +8,13 @@ public class FileInodeBusiness extends Inode {
     private boolean isSoftLink;
     private String linkPath;
 
-    @JsonCreator
-    public FileInodeBusiness(@JsonProperty("id") long id) {
-        super(id, InodeType.FILE);
+    private FileInodeBusiness() {
+        super();
     }
 
+    public FileInodeBusiness(long id) {
+        super(id, InodeType.FILE);
+    }
 
     public boolean isSoftLink() {
         return isSoftLink;
@@ -29,7 +31,5 @@ public class FileInodeBusiness extends Inode {
     public void setLinkPath(String linkPath) {
         this.linkPath = linkPath;
     }
-
-
 
 }
