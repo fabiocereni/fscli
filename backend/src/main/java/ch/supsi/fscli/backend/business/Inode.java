@@ -1,8 +1,10 @@
 package ch.supsi.fscli.backend.business;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 /*
@@ -19,13 +21,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = DirectoryInodeBusiness.class, name = "directory"),
         @JsonSubTypes.Type(value = FileInodeBusiness.class, name = "file")
 })
-
-
-
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.IntSequenceGenerator.class,
+        property = "@json_id")
 public abstract class Inode {
     private long id;
     private InodeType type;
     private int linkCount;
+
+    protected Inode() {
+    }
 
     protected Inode(long id, InodeType type) {
         this.id = id;
