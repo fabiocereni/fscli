@@ -23,6 +23,25 @@ public class LnCommand implements IFSCommand {
 
     @Override
     public String execute(List<String> args) {
-        return "";
+        try {
+            if (args.size() == 3 && args.get(0).equals("-s")) {
+                String target = args.get(1);
+                String linkName = args.get(2);
+
+                business.lns(target, linkName);
+                return null;
+            } else if (args.size() == 2) {
+                String target = args.get(0);
+                String linkName = args.get(1);
+
+                business.ln(target, linkName);
+                return null;
+            }
+            else {
+                return "ln: numero di argomenti errato - (uso: ln [-s] <target> <linkName>)";
+            }
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 }
