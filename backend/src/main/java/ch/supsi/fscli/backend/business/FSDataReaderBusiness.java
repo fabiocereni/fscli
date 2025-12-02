@@ -49,6 +49,8 @@ public class FSDataReaderBusiness implements IFSDataReaderBusiness {
 
             this.fsStateBusiness.setSaved(true);
 
+            System.out.println("FILESYSTEM LOADED FROM FILE: " + file.getAbsolutePath());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

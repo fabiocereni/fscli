@@ -41,7 +41,6 @@ public class WidgetDirector extends AbstractDirector implements PropertyChangeLi
 
         }
 
-
         if(evt instanceof InputEvent) {
             this.saveMenuItem.setDisable(false);
             this.saveAsMenuItem.setDisable(false);
