@@ -32,7 +32,7 @@ public class FSInterpreter implements IFSInterpreter {
     private final Map<String, Function<List<String>, String>> commands;
 
     @Inject
-    protected FSInterpreter(IFSCdCommandBusiness cdCommandBusiness,
+    public FSInterpreter(IFSCdCommandBusiness cdCommandBusiness,
                             IFSMkdirCommandBusiness mkdirCommandBusiness,
                             IFSPwdCommandBusiness pwdCommandBusiness,
                             IFSRmdirCommandBusiness rmdirCommandBusiness,

@@ -14,7 +14,7 @@ public class PathSolver {
     private final IFSStateBusiness ifsStateBusiness;
 
     @Inject
-    protected PathSolver(IFSStateBusiness ifsStateBusiness) {
+    public PathSolver(IFSStateBusiness ifsStateBusiness) {
 
         this.ifsStateBusiness = ifsStateBusiness;
     }

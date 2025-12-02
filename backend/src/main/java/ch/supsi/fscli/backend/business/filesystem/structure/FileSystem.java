@@ -15,7 +15,7 @@ public class FileSystem {
     private DirectoryInodeBusiness root;
 
     @Inject
-    protected FileSystem(DirectoryInodeBusiness root) {
+    public FileSystem(DirectoryInodeBusiness root) {
         this.root = root;
         this.inodeTable = new HashMap<>();
         initializeRoot(root);
