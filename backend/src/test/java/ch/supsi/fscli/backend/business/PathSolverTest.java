@@ -26,9 +26,9 @@ class PathSolverTest {
     @BeforeEach
     void setUp() {
 
-        pathSolver = injector.getInstance(PathSolver.class);
-
         injector = Guice.createInjector(new FileSystemModule());
+
+        pathSolver = injector.getInstance(PathSolver.class);
 
         state = injector.getInstance(IFSStateBusiness.class);
         fs    = injector.getInstance(FileSystem.class);
@@ -36,10 +36,8 @@ class PathSolverTest {
         // reset filesystem
         injector.getInstance(IFSCreationBusiness.class).newfs();
 
-        // nuova root
         root = state.getRoot();
 
-        // costruzione manuale albero
         home = new DirectoryInodeBusiness(200);
         user = new DirectoryInodeBusiness(300);
         DirectoryInodeBusiness docs = new DirectoryInodeBusiness(400);
