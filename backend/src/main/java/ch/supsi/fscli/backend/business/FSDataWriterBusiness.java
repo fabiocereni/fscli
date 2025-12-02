@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,6 +20,8 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
     private final FileSystem fileSystem;
     private final FSStateBusiness fsStateBusiness;
     private final IFSDataWriterDAO fsDataWriterDao;
+
+    private Path globalPath = FileSystems.getDefault().getPath(".");
 
     @Inject
     public FSDataWriterBusiness(FileSystem fileSystem,
@@ -35,8 +38,22 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
         wrapper.setFileSystem(fileSystem);
         wrapper.setStateBusiness(fsStateBusiness);
 
-        fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(wrapper));
+        if (!path.toString().toLowerCase().endsWith(".json")) {
+            path = Path.of(path + ".json");
+        }
+
+
+        lastName = path.getFileName().toString();
+        globalPath = path;
+
+        try {
+            Files.createDirectories(path.getParent());
+            fsDataWriterDao.save(path, JsonSerializerBusiness.serialize(wrapper));
+        } catch (IOException e) {
+            System.err.println("Save-as error: " + e.getMessage());
+        }
     }
+
 
     @Override
     public void save() {
@@ -44,17 +61,23 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
         wrapper.setFileSystem(fileSystem);
         wrapper.setStateBusiness(fsStateBusiness);
 
-        if (lastName.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
-            lastName = LocalDateTime.now().format(formatter) + ".json";
-        }
+        Path path;
 
-        Path path = Paths.get(
-                System.getProperty("user.home"),
-                "FileSystem Simulator",
-                "Saved",
-                lastName
-        );
+        if (!globalPath.equals(FileSystems.getDefault().getPath("."))) {
+            path = globalPath;
+        } else {
+            if (lastName.isEmpty()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
+                lastName = LocalDateTime.now().format(formatter) + ".json";
+            }
+
+            path = Paths.get(
+                    System.getProperty("user.home"),
+                    "FileSystem Simulator",
+                    "Saved",
+                    lastName
+            );
+        }
 
         try {
             Files.createDirectories(path.getParent());
