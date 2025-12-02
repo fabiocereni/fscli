@@ -1,61 +1,72 @@
-//package ch.supsi.fscli.backend.business.FSCommands.ls;
-//
-//import ch.supsi.fscli.backend.business.DirectoryInodeBusiness;
-//import ch.supsi.fscli.backend.business.IFSStateBusiness;
-//import ch.supsi.fscli.backend.business.Inode;
-//import ch.supsi.fscli.backend.business.InodeType;
-//import ch.supsi.fscli.backend.business.PathSolver;
-//import com.google.inject.Inject;
-//import com.google.inject.Singleton;
-//
-//import java.util.Optional;
-//import java.util.stream.Collectors;
-//
-//@Singleton
-//public class FSLsCommandBusiness implements IFSLsCommandBusiness {
-//
-//    private final IFSStateBusiness stateBusiness;
-//    private final PathSolver pathSolver;
-//
-//    @Inject
-//    public FSLsCommandBusiness(IFSStateBusiness stateBusiness, PathSolver pathSolver) {
-//        this.stateBusiness = stateBusiness;
-//        this.pathSolver = pathSolver;
-//    }
-//
-//    @Override
-//    public String ls(String object, boolean id) {
-//
-//        DirectoryInodeBusiness currentDir = stateBusiness.getCurrentWorkingDirectory();
-//
-//        java.util.function.Function<Inode, String> format = i ->
-//                id ? (i.getName() + " [" + i.getId() + "]") : i.getName();
-//
-//        // Caso: nessun argomento → lista directory corrente
-//        if (object == null || object.isBlank()) {
-//            return currentDir.getEntries().entrySet().stream()
-//                    .map(e -> id ? e.getKey() + " [" + e.getValue().getId() + "]"
-//                            : e.getKey())
-//                    .sorted()
-//                    .collect(Collectors.joining("\n"));
-//        }
-//
-//        // Risoluzione path
-//        Optional<Inode> targetOpt = pathSolver.resolvePath(object);
-//        if (targetOpt.isEmpty())
-//            return "Directory not found";
-//
-//        Inode target = targetOpt.get();
-//
-//        if (target.getType() != InodeType.DIRECTORY)
-//            return "Not a directory";
-//
-//        DirectoryInodeBusiness dir = (DirectoryInodeBusiness) target;
-//
-//        return dir.getEntries().entrySet().stream()
-//                .map(e -> id ? e.getKey() + " [" + e.getValue().getId() + "]"
-//                        : e.getKey())
-//                .sorted()
-//                .collect(Collectors.joining("\n"));
-//    }
-//}
+package ch.supsi.fscli.backend.business.FSCommands.ls;
+
+import ch.supsi.fscli.backend.business.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.IFSStateBusiness;
+import ch.supsi.fscli.backend.business.Inode;
+import ch.supsi.fscli.backend.business.InodeType;
+import ch.supsi.fscli.backend.business.PathSolver;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Singleton
+public class FSLsCommandBusiness implements IFSLsCommandBusiness {
+
+    private final IFSStateBusiness stateBusiness;
+    private final PathSolver pathSolver;
+
+    @Inject
+    public FSLsCommandBusiness(IFSStateBusiness stateBusiness, PathSolver pathSolver) {
+        this.stateBusiness = stateBusiness;
+        this.pathSolver = pathSolver;
+    }
+
+    @Override
+    public String ls(String path, boolean showInodeIds) {
+        DirectoryInodeBusiness targetDir;
+
+        // Caso 1: ls senza argomenti -> usa CWD
+        if (path == null || path.isBlank()) {
+            targetDir = stateBusiness.getCurrentWorkingDirectory();
+        } else {
+            // Caso 2: ls <path> -> risolvi il path
+            Optional<Inode> targetOpt = pathSolver.resolvePath(path);
+
+            if (targetOpt.isEmpty()) {
+                return "ls: cannot access '" + path + "': No such file or directory";
+            }
+
+            Inode targetNode = targetOpt.get();
+
+            // Se è un file, mostriamo solo il nome (comportamento standard ls)
+            // Oppure ritorniamo errore se vuoi simulare rigidamente una lista di directory
+            if (targetNode.getType() != InodeType.DIRECTORY) {
+                // Opzione A: Mostra info file
+                return formatEntry(pathSolver.extractFileName(path), targetNode, showInodeIds);
+                // Opzione B: Errore (come nel tuo codice commentato)
+                // return "ls: " + path + ": Not a directory";
+            }
+
+            targetDir = (DirectoryInodeBusiness) targetNode;
+        }
+
+        // Generazione Output
+        if (targetDir.getEntries().isEmpty()) {
+            return "";
+        }
+
+        return targetDir.getEntries().entrySet().stream()
+                .sorted((e1, e2) -> e1.getKey().compareToIgnoreCase(e2.getKey())) // Ordine alfabetico
+                .map(entry -> formatEntry(entry.getKey(), entry.getValue(), showInodeIds))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String formatEntry(String name, Inode inode, boolean showId) {
+        if (showId) {
+            return name + " [" + inode.getId() + "]";
+        }
+        return name;
+    }
+}

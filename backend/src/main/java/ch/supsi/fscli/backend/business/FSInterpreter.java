@@ -2,6 +2,7 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.FSCommands.cd.IFSCdCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.help.IFSHelpCommandBusiness;
+import ch.supsi.fscli.backend.business.FSCommands.ls.IFSLsCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.mkdir.IFSMkdirCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.mv.IFSMvCommandBusiness;
 import ch.supsi.fscli.backend.business.FSCommands.pwd.IFSPwdCommandBusiness;
@@ -11,6 +12,7 @@ import ch.supsi.fscli.backend.business.FSCommands.touch.IFSTouchCommandBusiness;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class FSInterpreter implements IFSInterpreter {
     private final IFSRmfileCommandBusiness rmfileCommandBusiness;
     private final IFSTouchCommandBusiness touchCommandBusiness;
     private final IFSMvCommandBusiness mvCommandBusiness;
-    private final IFSHelpCommandBusiness helpCommandBusiness;
+    private final IFSLsCommandBusiness lsCommandBusiness;
 
     private final Map<String, Function<List<String>, String>> commands;
 
@@ -38,7 +40,7 @@ public class FSInterpreter implements IFSInterpreter {
                             IFSRmfileCommandBusiness rmfileCommandBusiness,
                             IFSTouchCommandBusiness touchCommandBusiness,
                             IFSMvCommandBusiness mvCommandBusiness,
-                            IFSHelpCommandBusiness helpCommandBusiness) {
+                            IFSLsCommandBusiness lsCommandBusiness) {
 
         this.cdCommandBusiness = cdCommandBusiness;
         this.mkdirCommandBusiness = mkdirCommandBusiness;
@@ -47,7 +49,7 @@ public class FSInterpreter implements IFSInterpreter {
         this.rmfileCommandBusiness = rmfileCommandBusiness;
         this.touchCommandBusiness = touchCommandBusiness;
         this.mvCommandBusiness = mvCommandBusiness;
-        this.helpCommandBusiness = helpCommandBusiness;
+        this.lsCommandBusiness = lsCommandBusiness;
 
         this.commands = new HashMap<>();
         this.commands.put("cd", this::handleCd);
@@ -59,6 +61,8 @@ public class FSInterpreter implements IFSInterpreter {
         this.commands.put("clear", this::handleClear);
         this.commands.put("mv", this::handleMv);
         this.commands.put("help", this::handleHelp);
+        this.commands.put("ls", this::handleLs);
+
     }
 
     @Override
@@ -150,5 +154,31 @@ public class FSInterpreter implements IFSInterpreter {
         if (args.isEmpty())
             return "label.infoHelp";
         return "help: numero di argomenti errato - (uso: help)";
+    }
+
+    private String handleLs(List<String> args) {
+        // Parsing manuale per supportare "ls -i path", "ls path -i", o solo "ls -i"
+        boolean showInode = false;
+        String path = null;
+
+        List<String> cleanArgs = new ArrayList<>();
+
+        for (String arg : args) {
+            if (arg.equals("-i")) {
+                showInode = true;
+            } else {
+                cleanArgs.add(arg);
+            }
+        }
+
+        if (cleanArgs.size() > 1) {
+            return "ls: too many arguments";
+        }
+
+        if (!cleanArgs.isEmpty()) {
+            path = cleanArgs.get(0);
+        }
+
+        return lsCommandBusiness.ls(path, showInode);
     }
 }
