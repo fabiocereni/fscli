@@ -17,7 +17,7 @@ public class PreferencesModel implements IPreferencesModel {
     public static final String KEY_FONT_LOG_AREA = "font-log-area";
     public static final String KEY_LINES_NUMBER = "number-lines";
 
-    public static final String DEFAULT_LANGUAGE = "it_CH";
+    public static final String DEFAULT_LANGUAGE = "it_IT";
     public static final String DEFAULT_FONT_COMMANDLINE = "Consolas";
     public static final String DEFAULT_FONT_OUTPUT_AREA = "Arial";
     public static final String DEFAULT_FONT_LOG_AREA = "Comic Sans MS";
