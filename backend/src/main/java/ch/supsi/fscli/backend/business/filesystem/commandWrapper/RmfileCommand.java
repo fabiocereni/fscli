@@ -18,7 +18,7 @@ public class RmfileCommand implements IFSCommand {
 
     @Override
     public String getCommandName() {
-        return "rmfile";
+        return "rm";
     }
 
     @Override
