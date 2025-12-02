@@ -29,10 +29,10 @@ public abstract class Inode {
     private InodeType type;
     private int linkCount;
 
-    protected Inode() {
+    public Inode() {
     }
 
-    protected Inode(long id, InodeType type) {
+    public Inode(long id, InodeType type) {
         this.id = id;
         this.type = type;
         this.linkCount = 0;
