@@ -1,5 +1,6 @@
 package ch.supsi.fscli.frontend.controller;
 
+import ch.supsi.fscli.frontend.director.LogDirector;
 import ch.supsi.fscli.frontend.model.IFSDataReaderModel;
 import ch.supsi.fscli.frontend.model.IFSStateModel;
 import ch.supsi.fscli.frontend.view.IShow;
@@ -16,6 +17,9 @@ public class FSDataReaderController implements IFSDataReaderController {
     private IFSDataReaderModel fsDataReaderModel;
 
     @Inject
+    private LogDirector logDirector;
+
+    @Inject
     @ReaderViewQualifier
     private IShow readerView;
 
@@ -26,7 +30,9 @@ public class FSDataReaderController implements IFSDataReaderController {
 
     @Override
     public void reader(File file) {
-        if (file != null)
+        if (file != null) {
             this.fsDataReaderModel.reader(file);
+            logDirector.logLoadFS();
+        }
     }
 }
