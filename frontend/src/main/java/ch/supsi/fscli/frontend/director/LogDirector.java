@@ -11,8 +11,8 @@ public class LogDirector extends AbstractDirector {
         firePropertyChange(new LogEvent(this, "Please restart the application for changes to take full effect."));
     }
 
-    public void logSaveFS() {
-        firePropertyChange(new LogEvent(this, "FS saved successfully."));
+    public void logSaveFS(String path) {
+        firePropertyChange(new LogEvent(this, "FS saved successfully in " + path + "/FileSystem Simulator/saved"));
     }
 
     public void logLoadFS() {
