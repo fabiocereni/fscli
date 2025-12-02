@@ -7,19 +7,23 @@ import com.google.inject.Singleton;
 public class LogDirector extends AbstractDirector {
 
     public void logSavePreferences() {
-        firePropertyChange(new LogEvent(this, "Preferences saved successfully."));
-        firePropertyChange(new LogEvent(this, "Please restart the application for changes to take full effect."));
+        firePropertyChange(new LogEvent(this, "label.preferencesSave"));
+        firePropertyChange(new LogEvent(this, "label.preferencesSaveRestart"));
     }
 
-    public void logSaveFS(String path) {
-        firePropertyChange(new LogEvent(this, "FS saved successfully in " + path + "/FileSystem Simulator/saved"));
+    public void logSaveFS(String path, boolean append) {
+        String key = "label.saveFS";
+        if (append)
+            firePropertyChange(new LogEvent(this, key + "::" + path + "/FileSystem Simulator/saved"));
+        else
+            firePropertyChange(new LogEvent(this, key + "::" + path));
     }
 
     public void logLoadFS() {
-        firePropertyChange(new LogEvent(this, "FS loaded successfully."));
+        firePropertyChange(new LogEvent(this, "label.loadFS"));
     }
 
     public void logCreateFS() {
-        firePropertyChange(new LogEvent(this, "FS created successfully."));
+        firePropertyChange(new LogEvent(this, "label.createFS"));
     }
 }

@@ -41,4 +41,8 @@ public class SupportedLanguageController implements ISupportedLanguageController
         return supportedLanguageModel.getTranslation(key);
     }
 
+    public String getLanguageTagSelected() {
+        return supportedLanguageModel.getLanguageTagSelected();
+    }
+
 }
