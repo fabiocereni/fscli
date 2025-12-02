@@ -8,7 +8,10 @@ import ch.supsi.fscli.backend.business.PathSolver;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.StringTokenizer;
 
 @Singleton
 public class FSCdCommandBusiness implements IFSCdCommandBusiness {
@@ -24,8 +27,23 @@ public class FSCdCommandBusiness implements IFSCdCommandBusiness {
 
     @Override
     public boolean cd(String name) {
+        if (name == null || name.isBlank()) return false;
 
-        Optional<Inode> targetNodeOpt = pathSolver.resolvePath(name);
+        String currentPath = stateBusiness.getCurrentWorkingDirectoryPath();
+        String pathToCheck;
+
+        if (name.startsWith("/")) {
+            pathToCheck = name;
+        } else {
+            if (currentPath.equals("/")) {
+                pathToCheck = currentPath + name;
+            } else {
+                pathToCheck = currentPath + "/" + name;
+            }
+        }
+
+        Optional<Inode> targetNodeOpt = pathSolver.resolvePath(pathToCheck);
+
         if (targetNodeOpt.isEmpty())
             return false;
 
@@ -34,8 +52,45 @@ public class FSCdCommandBusiness implements IFSCdCommandBusiness {
             return false;
 
         stateBusiness.setCurrentWorkingDirectory((DirectoryInodeBusiness) targetNode);
-        stateBusiness.setCurrentWorkingDirectoryPath(name);
+
+        String cleanPath = normalizePath(pathToCheck);
+        stateBusiness.setCurrentWorkingDirectoryPath(cleanPath);
 
         return true;
+    }
+
+    /**
+     * Metodo privato per pulire la stringa del percorso.
+     * Serve per salvare nello stato "/home" invece di "/home/user/.."
+     */
+    private String normalizePath(String rawPath) {
+        StringTokenizer tokenizer = new StringTokenizer(rawPath, "/");
+        List<String> tokens = new ArrayList<>();
+
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken().trim();
+
+            if (token.isEmpty() || token.equals(".")) {
+                continue;
+            }
+
+            if (token.equals("..")) {
+                if (!tokens.isEmpty()) {
+                    tokens.remove(tokens.size() - 1);
+                }
+                continue;
+            }
+            tokens.add(token);
+        }
+
+        if (tokens.isEmpty()) {
+            return "/";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (String t : tokens) {
+            sb.append("/").append(t);
+        }
+        return sb.toString();
     }
 }
