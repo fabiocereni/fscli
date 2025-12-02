@@ -4,8 +4,10 @@ import ch.supsi.fscli.frontend.controller.ICommandLineController;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.director.FSCreationDirector;
+import ch.supsi.fscli.frontend.director.FSLoadDirectory;
 import ch.supsi.fscli.frontend.director.InputDirector;
 import ch.supsi.fscli.frontend.event.FilesystemCreatedEvent;
+import ch.supsi.fscli.frontend.event.LoadFSEvent;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -31,6 +33,8 @@ public class CommandLineView implements PropertyChangeListener {
     private ICommandLineController commandLineController;
     @Inject
     private FSCreationDirector fsCreationDirector;
+    @Inject
+    private FSLoadDirectory FSLoadDirectory;
     @Inject
     private InputDirector inputDirector;
 
@@ -92,6 +96,7 @@ public class CommandLineView implements PropertyChangeListener {
         this.commandLine.setOnAction(submitCommandHandler);
 
         this.fsCreationDirector.addPropertyChangeListener(this);
+        this.FSLoadDirectory.addPropertyChangeListener(this);
     }
 
     public void initCommandLineView(int commandLinePrefColumnCount) {
@@ -118,6 +123,11 @@ public class CommandLineView implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
 
         if(evt instanceof FilesystemCreatedEvent) {
+            commandLine.setDisable(false);
+            enter.setDisable(false);
+        }
+
+        if (evt instanceof LoadFSEvent) {
             commandLine.setDisable(false);
             enter.setDisable(false);
         }

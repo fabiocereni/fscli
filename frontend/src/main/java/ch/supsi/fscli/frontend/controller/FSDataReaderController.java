@@ -1,8 +1,8 @@
 package ch.supsi.fscli.frontend.controller;
 
+import ch.supsi.fscli.frontend.director.FSLoadDirectory;
 import ch.supsi.fscli.frontend.director.LogDirector;
 import ch.supsi.fscli.frontend.model.IFSDataReaderModel;
-import ch.supsi.fscli.frontend.model.IFSStateModel;
 import ch.supsi.fscli.frontend.view.IShow;
 import ch.supsi.fscli.frontend.view.ReaderViewQualifier;
 import jakarta.inject.Inject;
@@ -20,6 +20,9 @@ public class FSDataReaderController implements IFSDataReaderController {
     private LogDirector logDirector;
 
     @Inject
+    private FSLoadDirectory fsLoadDirectory;
+
+    @Inject
     @ReaderViewQualifier
     private IShow readerView;
 
@@ -33,6 +36,7 @@ public class FSDataReaderController implements IFSDataReaderController {
         if (file != null) {
             this.fsDataReaderModel.reader(file);
             logDirector.logLoadFS();
+            this.fsLoadDirectory.manageFileSystemLoading();
         }
     }
 }
