@@ -37,7 +37,7 @@ public class FSDataSaverController implements IFSDataSaverController {
         this.ifsDataWriterModel.save(path);
         // da decidere
         saveEventDirector.manageSaveAs();
-        logDirector.logSaveFS();
+        logDirector.logSaveFS(path.toString());
     }
 
     @Override
@@ -46,7 +46,7 @@ public class FSDataSaverController implements IFSDataSaverController {
         this.ifsDataWriterModel.save();
         // da decidere
         saveEventDirector.manageSave();
-        logDirector.logSaveFS();
+        logDirector.logSaveFS(System.getProperty("user.home"));
     }
 
     @Override
