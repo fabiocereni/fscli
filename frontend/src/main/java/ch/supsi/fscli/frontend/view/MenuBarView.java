@@ -3,10 +3,7 @@ package ch.supsi.fscli.frontend.view;
 import ch.supsi.fscli.frontend.controller.*;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
-import ch.supsi.fscli.frontend.director.FSCreationDirector;
-import ch.supsi.fscli.frontend.director.InputDirector;
-import ch.supsi.fscli.frontend.director.SaveEventDirector;
-import ch.supsi.fscli.frontend.director.WidgetDirector;
+import ch.supsi.fscli.frontend.director.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.scene.Node;
@@ -36,6 +33,8 @@ public class MenuBarView {
     @Inject
     private FSCreationDirector fsCreationDirector;
     @Inject
+    private FSLoadDirectory FSLoadDirectory;
+    @Inject
     private WidgetDirector widgetDirector;
     @Inject
     private SaveEventDirector saveEventDirector;
@@ -57,6 +56,7 @@ public class MenuBarView {
         this.helpMenu = new Menu(supportedLanguageController.getTranslation("label.help"));
         this.menuBar = new MenuBar();
         this.fsCreationDirector.addPropertyChangeListener(widgetDirector);
+        this.FSLoadDirectory.addPropertyChangeListener(widgetDirector);
         this.saveEventDirector.addPropertyChangeListener(widgetDirector);
         this.inputDirector.addPropertyChangeListener(widgetDirector);
     }
