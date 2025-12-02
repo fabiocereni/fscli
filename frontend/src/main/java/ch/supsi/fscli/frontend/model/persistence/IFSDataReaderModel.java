@@ -1,8 +1,6 @@
 package ch.supsi.fscli.frontend.model.persistence;
 
-
 import com.google.inject.ImplementedBy;
-
 import java.io.File;
 
 @ImplementedBy(FSDataReaderModel.class)

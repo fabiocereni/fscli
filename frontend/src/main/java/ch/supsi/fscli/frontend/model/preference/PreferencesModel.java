@@ -1,7 +1,6 @@
 package ch.supsi.fscli.frontend.model.preference;
 
 import ch.supsi.fscli.backend.application.preference.IPreferencesApplication;
-import ch.supsi.fscli.backend.application.preference.PreferencesApplication;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
