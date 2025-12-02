@@ -1,0 +1,148 @@
+package view;
+
+
+import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
+import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
+import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
+import com.sun.javafx.scene.control.ContextMenuContent;
+import com.sun.javafx.scene.control.MenuBarButton;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.testfx.matcher.control.TextInputControlMatchers;
+
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.base.NodeMatchers.*;
+
+public class MainFx00Test extends AbstractMainGUITest {
+
+//    private final SupportedLanguageController supportedLanguageController = new SupportedLanguageController();
+//    private final PreferencesController preferencesController = new PreferencesController();
+//
+//    @BeforeEach
+//    public void setUp() {
+//        supportedLanguageController.setSupportedLanguagesTags();
+//        supportedLanguageController.setMapLanguages();
+//        supportedLanguageController.setLanguageTagSelected(
+//                preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE)
+//        );
+//    }
+
+    @Test
+    public void walkThrough() {
+        testMainScene();
+        testFileMenu();
+        testEditMenu();
+        testHelpMenu();
+    }
+
+    private void testMainScene() {
+        step("main scene...", () -> {
+            verifyThat("#fileMenu", isVisible());
+            verifyThat("#editMenu", isVisible());
+            verifyThat("#helpMenu", isVisible());
+            verifyThat("#commandLineView", TextInputControlMatchers.hasText(""));
+            verifyThat("#enter", isVisible());
+            verifyThat("#enter", isDisabled());
+//            verifyThat("#outputView", TextInputControlMatchers.hasText(supportedLanguageController.getTranslation("label.textOutput")));
+            verifyThat("#outputView", TextInputControlMatchers.hasText("Questo è un esempio del testo in output...\n"));
+            verifyThat("#logView", TextInputControlMatchers.hasText("Lingua selezionata it_IT"));
+        });
+    }
+
+
+
+    private void testFileMenu() {
+        step("file menu...", () -> {
+            // file menu
+            sleep(SLEEP_INTERVAL);
+            Menu menu = lookup("#fileMenu").queryAs(MenuBarButton.class).menu;
+            assertTrue(menu.isVisible());
+            assertFalse(menu.isDisable());
+
+            // open the menu
+            sleep(SLEEP_INTERVAL);
+            clickOn("#fileMenu");
+
+
+            MenuItem newMenuItem = lookup("#newMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(newMenuItem.isVisible());
+            assertFalse(newMenuItem.isDisable());
+
+
+            MenuItem openMenuItem = lookup("#openMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(openMenuItem.isVisible());
+            assertFalse(openMenuItem.isDisable());
+
+
+            MenuItem saveMenuItem = lookup("#saveMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(saveMenuItem.isVisible());
+            assertTrue(saveMenuItem.isDisable());
+
+            MenuItem saveAsMenuItem = lookup("#saveAsMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(saveAsMenuItem.isVisible());
+            assertTrue(saveAsMenuItem.isDisable());
+
+            MenuItem exitMenuItem = lookup("#exitMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(exitMenuItem.isVisible());
+            assertFalse(exitMenuItem.isDisable());
+
+            // close the menu
+            sleep(SLEEP_INTERVAL);
+            clickOn("#fileMenu");
+        });
+    }
+
+    private void testEditMenu() {
+        step("edit menu...", () -> {
+            // edit menu
+            sleep(SLEEP_INTERVAL);
+            Menu menu = lookup("#editMenu").queryAs(MenuBarButton.class).menu;
+            assertTrue(menu.isVisible());
+            assertFalse(menu.isDisable());
+
+            // open the menu
+            sleep(SLEEP_INTERVAL);
+            clickOn("#editMenu");
+
+            MenuItem preferencesMenuItem = lookup("#preferencesMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(preferencesMenuItem.isVisible());
+            assertFalse(preferencesMenuItem.isDisable());
+
+
+            // close the menu
+            sleep(SLEEP_INTERVAL);
+            clickOn("#editMenu");
+        });
+    }
+
+    private void testHelpMenu() {
+        step("help menu...", () -> {
+            // help menu
+            sleep(SLEEP_INTERVAL);
+            Menu menu = lookup("#helpMenu").queryAs(MenuBarButton.class).menu;
+            assertTrue(menu.isVisible());
+            assertFalse(menu.isDisable());
+
+            // open the menu
+            sleep(SLEEP_INTERVAL);
+            clickOn("#helpMenu");
+
+            MenuItem helpMenuItem = lookup("#helpMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(helpMenuItem.isVisible());
+            assertFalse(helpMenuItem.isDisable());
+
+            MenuItem aboutMenuItem = lookup("#aboutMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(aboutMenuItem.isVisible());
+            assertFalse(aboutMenuItem.isDisable());
+
+            // close the menu
+            sleep(SLEEP_INTERVAL);
+            clickOn("#helpMenu");
+        });
+    }
+}
