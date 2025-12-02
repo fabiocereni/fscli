@@ -2,17 +2,19 @@ package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
-import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
-import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
-import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
+import ch.supsi.fscli.frontend.event.LogEvent;
+import ch.supsi.fscli.frontend.event.SaveEvent;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 @Singleton
-public class LogView {
+public class LogView implements PropertyChangeListener {
 
     @Inject
     private IPreferencesController preferencesController;
@@ -29,10 +31,17 @@ public class LogView {
 
         this.logView = new TextArea();
         this.logView.setId("logView");
-        this.logView.appendText( supportedLanguageController.getTranslation("label.textLog") + "\n");
         this.logView.setStyle("-fx-font-family: " + fontLog + ";");
     }
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt instanceof LogEvent logEvent) {
+            if (this.logView != null) {
+                this.logView.appendText(logEvent.getMessage() + "\n");
+            }
+        }
+    }
 
     public void initLogView(int logViewPrefRowCount) {
         this.logView.setPrefRowCount(logViewPrefRowCount);
@@ -42,4 +51,5 @@ public class LogView {
     public Node getNode() {
         return this.logView;
     }
+
 }

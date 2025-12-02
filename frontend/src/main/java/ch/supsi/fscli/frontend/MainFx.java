@@ -7,6 +7,7 @@ import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
+import ch.supsi.fscli.frontend.director.LogDirector;
 import ch.supsi.fscli.frontend.director.WidgetDirector;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import ch.supsi.fscli.frontend.modules.ControllerModule;
@@ -66,6 +67,7 @@ public class MainFx extends Application {
     private final IQuitController quitController;
 
     private final WidgetDirector widgetDirector;
+    private final LogDirector logDirector;
     private final ConfirmExitDirector confirmExitDirector;
 
     private final IFSCreationController fsStateDirector;
@@ -113,9 +115,11 @@ public class MainFx extends Application {
 
         this.fsStateDirector = injector.getInstance(FSCreationController.class);
         this.widgetDirector = injector.getInstance(WidgetDirector.class);
+        this.logDirector = injector.getInstance(LogDirector.class);
         this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
 
-        this.confirmExitDirector.addPropertyChangeListener(quitView);
+        this.confirmExitDirector.addPropertyChangeListener(this.quitView);
+        this.logDirector.addPropertyChangeListener(this.logView);
     }
 
     @Override

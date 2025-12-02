@@ -1,5 +1,6 @@
 package ch.supsi.fscli.frontend.controller;
 
+import ch.supsi.fscli.frontend.director.LogDirector;
 import ch.supsi.fscli.frontend.director.SaveEventDirector;
 import ch.supsi.fscli.frontend.model.IFSDataSaverModel;
 import ch.supsi.fscli.frontend.model.IFSStateModel;
@@ -20,6 +21,9 @@ public class FSDataSaverController implements IFSDataSaverController {
     private SaveEventDirector saveEventDirector;
 
     @Inject
+    private LogDirector logDirector;
+
+    @Inject
     private IFSStateModel ifsStateModel;
 
     @Inject
@@ -33,6 +37,7 @@ public class FSDataSaverController implements IFSDataSaverController {
         this.ifsDataWriterModel.save(path);
         // da decidere
         saveEventDirector.manageSaveAs();
+        logDirector.logSaveFS();
     }
 
     @Override
@@ -41,6 +46,7 @@ public class FSDataSaverController implements IFSDataSaverController {
         this.ifsDataWriterModel.save();
         // da decidere
         saveEventDirector.manageSave();
+        logDirector.logSaveFS();
     }
 
     @Override

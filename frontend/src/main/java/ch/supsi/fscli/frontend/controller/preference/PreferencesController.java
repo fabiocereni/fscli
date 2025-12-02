@@ -1,5 +1,6 @@
 package ch.supsi.fscli.frontend.controller.preference;
 
+import ch.supsi.fscli.frontend.director.LogDirector;
 import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
 import ch.supsi.fscli.frontend.view.IShow;
 import ch.supsi.fscli.frontend.view.PreferencesViewQualifier;
@@ -18,6 +19,9 @@ public class PreferencesController implements IPreferencesController {
     @Inject
     private IPreferencesModel preferencesModel;
 
+    @Inject
+    private LogDirector logDirector;
+
     @Override
     public void showPreferencesView() {
         preferencesView.showMyView();
@@ -25,6 +29,7 @@ public class PreferencesController implements IPreferencesController {
 
     public void savePreferences() {
         preferencesModel.savePreferences();
+        logDirector.logSavePreferences();
     }
 
     @Override

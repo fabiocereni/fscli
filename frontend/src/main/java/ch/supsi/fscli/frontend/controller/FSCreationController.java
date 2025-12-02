@@ -3,6 +3,7 @@ package ch.supsi.fscli.frontend.controller;
 
 import ch.supsi.fscli.backend.application.IFSCreationApplication;
 import ch.supsi.fscli.frontend.director.FSCreationDirector;
+import ch.supsi.fscli.frontend.director.LogDirector;
 import ch.supsi.fscli.frontend.model.IFSStateModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -16,6 +17,8 @@ public class FSCreationController implements IFSCreationController {
     @Inject
     private IFSStateModel ifsStateModel;
 
+    @Inject
+    private LogDirector logDirector;
 
     @Inject
     private IFSCreationApplication ifsCreationApplication;
@@ -26,5 +29,6 @@ public class FSCreationController implements IFSCreationController {
         this.ifsCreationApplication.createFileSystem();
         this.fsCreationDirector.manageFileSystemCreation();
         this.ifsStateModel.setCloseable(false);
+        logDirector.logCreateFS();
     }
 }
