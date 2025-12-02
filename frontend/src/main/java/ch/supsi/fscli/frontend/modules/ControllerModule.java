@@ -1,8 +1,13 @@
 package ch.supsi.fscli.frontend.modules;
 
 import ch.supsi.fscli.frontend.controller.*;
+import ch.supsi.fscli.frontend.controller.filesystem.CommandLineController;
+import ch.supsi.fscli.frontend.controller.filesystem.creation.FSCreationController;
+import ch.supsi.fscli.frontend.controller.filesystem.ICommandLineController;
+import ch.supsi.fscli.frontend.controller.filesystem.creation.IFSCreationController;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
+import ch.supsi.fscli.frontend.controller.menubar.*;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 import com.google.inject.AbstractModule;
@@ -18,7 +23,7 @@ public class ControllerModule extends AbstractModule {
         bind(ICommandLineController.class).to(CommandLineController.class).in(Singleton.class);
 
         // TODO da sistemare
-        bind(IAboutView.class).to(AboutController.class).in(Singleton.class);
+        bind(IAboutController.class).to(AboutController.class).in(Singleton.class);
 
 
         bind(IHelpController.class).to(HelpController.class).in(Singleton.class);

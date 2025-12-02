@@ -1,7 +1,7 @@
 package ch.supsi.fscli.frontend.director;
 
 import ch.supsi.fscli.frontend.event.LogEvent;
-import ch.supsi.fscli.frontend.model.IFSDataSaverModel;
+import ch.supsi.fscli.frontend.model.persistence.IFSDataSaverModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 

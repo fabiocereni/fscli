@@ -1,5 +1,7 @@
 package ch.supsi.fscli.backend.DAO;
 
+import ch.supsi.fscli.backend.DAO.persistence.FSDataReaderDAO;
+import ch.supsi.fscli.backend.DAO.persistence.IFSDataReaderDAO;
 import org.junit.jupiter.api.*;
 import java.io.*;
 import java.nio.file.*;

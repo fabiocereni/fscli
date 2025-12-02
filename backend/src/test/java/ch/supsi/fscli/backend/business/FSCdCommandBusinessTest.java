@@ -1,6 +1,11 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.cd.FSCdCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.FSCommands.cd.FSCdCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.state.FSStateBusiness;
+import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
+import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

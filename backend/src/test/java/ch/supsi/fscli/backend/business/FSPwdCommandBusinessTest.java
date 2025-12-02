@@ -1,6 +1,7 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.pwd.FSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.FSCommands.pwd.FSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

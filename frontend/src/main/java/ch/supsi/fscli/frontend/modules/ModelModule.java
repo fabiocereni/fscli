@@ -1,6 +1,10 @@
 package ch.supsi.fscli.frontend.modules;
 
 import ch.supsi.fscli.frontend.model.*;
+import ch.supsi.fscli.frontend.model.persistence.FSDataReaderModel;
+import ch.supsi.fscli.frontend.model.persistence.FSDataSaverModel;
+import ch.supsi.fscli.frontend.model.persistence.IFSDataReaderModel;
+import ch.supsi.fscli.frontend.model.persistence.IFSDataSaverModel;
 import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
 import ch.supsi.fscli.frontend.model.i18n.SupportedLanguageModel;
 import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;

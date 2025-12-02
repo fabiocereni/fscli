@@ -1,5 +1,9 @@
 package ch.supsi.fscli.backend.business;
 
+import ch.supsi.fscli.backend.business.persistence.IFSDataWriterBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.modules.FileSystemModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;

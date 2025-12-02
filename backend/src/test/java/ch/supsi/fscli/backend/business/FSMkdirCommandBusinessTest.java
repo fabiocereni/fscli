@@ -1,6 +1,10 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.mkdir.IFSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.FSCommands.mkdir.IFSMkdirCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
+import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.modules.FileSystemModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;

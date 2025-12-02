@@ -1,12 +1,18 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.DAO.FSDataReaderDAO;
-import ch.supsi.fscli.backend.DAO.FSDataWriterDAO;
+import ch.supsi.fscli.backend.DAO.persistence.FSDataReaderDAO;
+import ch.supsi.fscli.backend.DAO.persistence.FSDataWriterDAO;
+import ch.supsi.fscli.backend.business.filesystem.state.FSStateBusiness;
+import ch.supsi.fscli.backend.business.persistence.FSDataReaderBusiness;
+import ch.supsi.fscli.backend.business.persistence.FSDataWriterBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
+import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 

@@ -1,5 +1,7 @@
 package ch.supsi.fscli.backend.DAO;
 
+import ch.supsi.fscli.backend.DAO.persistence.FSDataWriterDAO;
+import ch.supsi.fscli.backend.DAO.persistence.IFSDataWriterDAO;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
