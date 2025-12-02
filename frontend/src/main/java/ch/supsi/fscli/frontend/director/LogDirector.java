@@ -1,22 +1,28 @@
 package ch.supsi.fscli.frontend.director;
 
 import ch.supsi.fscli.frontend.event.LogEvent;
+import ch.supsi.fscli.frontend.model.IFSDataSaverModel;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class LogDirector extends AbstractDirector {
+
+    private final IFSDataSaverModel model;
+
+    @Inject
+    public LogDirector(IFSDataSaverModel model) {
+        this.model = model;
+    }
 
     public void logSavePreferences() {
         firePropertyChange(new LogEvent(this, "label.preferencesSave"));
         firePropertyChange(new LogEvent(this, "label.preferencesSaveRestart"));
     }
 
-    public void logSaveFS(String path, boolean append) {
+    public void logSaveFS() {
         String key = "label.saveFS";
-        if (append)
-            firePropertyChange(new LogEvent(this, key + "::" + path + "/FileSystem Simulator/saved"));
-        else
-            firePropertyChange(new LogEvent(this, key + "::" + path));
+        firePropertyChange(new LogEvent(this, key + "::" + model.getPathToPrint()));
     }
 
     public void logLoadFS() {
