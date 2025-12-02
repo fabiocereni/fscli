@@ -1,0 +1,32 @@
+package ch.supsi.fscli.backend.business.filesystem.commandWrapper;
+
+import ch.supsi.fscli.backend.business.filesystem.FSCommands.mkdir.IFSMkdirCommandBusiness;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import java.util.List;
+
+@Singleton
+public class MkdirCommand implements IFSCommand {
+
+    private final IFSMkdirCommandBusiness business;
+
+    @Inject
+    public MkdirCommand(IFSMkdirCommandBusiness business) {
+        this.business = business;
+    }
+
+    @Override
+    public String getCommandName() {
+        return "mkdir";
+    }
+
+    @Override
+    public String execute(List<String> args) {
+        if (args.size() != 1) return "mkdir: numero di argomenti errato - (uso: mkdir <nome>)";
+        if (!business.mkdir(args.get(0))) {
+            return "mkdir: impossibile creare la directory (potrebbe esistere già).";
+        }
+        return null;
+    }
+}

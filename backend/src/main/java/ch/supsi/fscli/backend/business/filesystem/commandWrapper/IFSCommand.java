@@ -1,0 +1,10 @@
+package ch.supsi.fscli.backend.business.filesystem.commandWrapper;
+
+import java.util.List;
+
+public interface IFSCommand {
+    // restituisce il nome del comando
+    String getCommandName();
+    // esegue la logica del comando
+    String execute(List<String> args);
+}
