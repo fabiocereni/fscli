@@ -3,7 +3,7 @@ package ch.supsi.fscli.frontend.controller.preference;
 import ch.supsi.fscli.frontend.director.LogDirector;
 import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
 import ch.supsi.fscli.frontend.view.IShow;
-import ch.supsi.fscli.frontend.view.PreferencesViewQualifier;
+import ch.supsi.fscli.frontend.view.menubar.qualifier.PreferencesViewQualifier;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 

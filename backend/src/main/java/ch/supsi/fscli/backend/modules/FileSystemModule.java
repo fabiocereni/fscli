@@ -1,6 +1,6 @@
 package ch.supsi.fscli.backend.modules;
 
-import ch.supsi.fscli.backend.business.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;

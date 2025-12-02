@@ -1,6 +1,11 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.FSCommands.ln.IFSLnCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.FSCommands.ln.IFSLnCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
+import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import ch.supsi.fscli.backend.exception.DirectoryNotFoundException;
 import ch.supsi.fscli.backend.exception.MyFileNotFoundException;
 import ch.supsi.fscli.backend.exception.NodeAlreadyExistsException;

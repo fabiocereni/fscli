@@ -1,6 +1,6 @@
 package ch.supsi.fscli.frontend.view;
 
-import ch.supsi.fscli.frontend.controller.IQuitController;
+import ch.supsi.fscli.frontend.controller.menubar.IQuitController;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.event.ConfirmExitEvent;
 import com.google.inject.Inject;

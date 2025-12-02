@@ -1,9 +1,9 @@
 package ch.supsi.fscli.frontend.modules;
 
-import ch.supsi.fscli.backend.application.FSCreationApplication;
-import ch.supsi.fscli.backend.application.FSStateApplication;
-import ch.supsi.fscli.backend.application.IFSCreationApplication;
-import ch.supsi.fscli.backend.application.IFSStateApplication;
+import ch.supsi.fscli.backend.application.filesystem.creation.FSCreationApplication;
+import ch.supsi.fscli.backend.application.filesystem.state.FSStateApplication;
+import ch.supsi.fscli.backend.application.filesystem.creation.IFSCreationApplication;
+import ch.supsi.fscli.backend.application.filesystem.state.IFSStateApplication;
 import ch.supsi.fscli.frontend.director.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
