@@ -10,7 +10,6 @@ import javafx.scene.control.MenuItem;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.SQLOutput;
 
 @Singleton
 public class WidgetDirector extends AbstractDirector implements PropertyChangeListener {
