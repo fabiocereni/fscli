@@ -11,9 +11,7 @@ import java.util.*;
 @Singleton
 public class SupportedLanguageModel implements ISupportedLanguageModel {
 
-
     private String languageTagSelected;
-
 
     @Inject
     private final ISupportedLanguageApplication supportedLanguageApplication;
@@ -46,6 +44,11 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
     @Override
     public void setLanguageTagSelected(String languageTagSelected) {
         this.languageTagSelected = languageTagSelected;
+    }
+
+    @Override
+    public String getLanguageTagSelected() {
+        return languageTagSelected;
     }
 
     @Override
