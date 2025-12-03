@@ -4,5 +4,5 @@ import com.google.inject.ImplementedBy;
 
 @ImplementedBy(FSTouchCommandBusiness.class)
 public interface IFSTouchCommandBusiness {
-    boolean touch(String path) throws IllegalArgumentException;
+    String touch(String path) throws IllegalArgumentException;
 }
