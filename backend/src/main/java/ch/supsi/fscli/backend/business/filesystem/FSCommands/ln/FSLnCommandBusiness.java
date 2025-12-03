@@ -6,8 +6,6 @@ import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
-import ch.supsi.fscli.backend.exception.DirectoryNotFoundException;
-import ch.supsi.fscli.backend.exception.NodeAlreadyExistsException;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -53,21 +51,20 @@ public class FSLnCommandBusiness implements IFSLnCommandBusiness {
     }
 
     @Override
-    public boolean lns(String target, String linkName)
-            throws DirectoryNotFoundException, NodeAlreadyExistsException {
+    public String lns(String target, String linkName) {
 
         Optional<Inode> targetOpt = pathSolver.resolvePath(target);
         if (targetOpt.isEmpty())
-            throw new DirectoryNotFoundException("ln: softlink target does not exist");
+            return "label.wrongLnUse2";
 
         DirectoryInodeBusiness parent = pathSolver.extractParentDirectory(linkName);
         if (parent == null)
-            throw new DirectoryNotFoundException("ln: parent directory does not exist");
+            return "label.wrongLnUse3";
 
         String newName = pathSolver.extractFileName(linkName);
 
         if (pathSolver.nameAlreadyExists(parent, newName))
-            throw new NodeAlreadyExistsException("ln: file with same name already exists");
+            return "label.wrongLnUse4";
 
         FileInodeBusiness softLink = fileSystem.createFile();
         softLink.setSoftLink(true);
@@ -75,6 +72,6 @@ public class FSLnCommandBusiness implements IFSLnCommandBusiness {
 
         parent.addEntry(newName, softLink);
 
-        return true;
+        return "";
     }
 }
