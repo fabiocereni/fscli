@@ -35,7 +35,7 @@ public class LsCommand implements IFSCommand {
             }
         }
         if (cleanArgs.size() > 1) {
-            return "label.wrongLsUse";
+            return "label.wrongLsUse1";
         }
         if (!cleanArgs.isEmpty()) {
             path = cleanArgs.get(0);
