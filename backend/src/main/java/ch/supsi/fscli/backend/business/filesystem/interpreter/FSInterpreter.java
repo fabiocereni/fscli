@@ -41,7 +41,7 @@ public class FSInterpreter implements IFSInterpreter {
                 .collect(Collectors.toList());
         IFSCommand command = commands.get(commandName);
         if (command == null)
-            return "comando non trovato.";
+            return "label.commandNotFound";
         return command.execute(args);
     }
 }

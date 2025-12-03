@@ -24,9 +24,9 @@ public class MvCommand implements IFSCommand {
     @Override
     public String execute(List<String> args) {
         if (args.size() != 2)
-            return "mv: numero di argomenti errato - (uso: mv <nome_file> <percorso_destinazione>)";
+            return "label.wrongMvUse1";
         if (!business.mv(args.get(0), args.get(1))) {
-            return "mv: impossibile spostare il file o rinominarlo";
+            return "label.wrongMvUse2";
         }
         return null;
 

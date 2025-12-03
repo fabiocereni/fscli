@@ -25,6 +25,6 @@ public class HelpCommand implements IFSCommand {
     public String execute(List<String> args) {
         if (args.isEmpty())
             return "label.infoHelp";
-        return "help: numero di argomenti errato - (uso: help)";
+        return "label.wrongHelpUse";
     }
 }

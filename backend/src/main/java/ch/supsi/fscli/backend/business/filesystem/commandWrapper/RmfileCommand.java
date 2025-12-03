@@ -23,9 +23,9 @@ public class RmfileCommand implements IFSCommand {
 
     @Override
     public String execute(List<String> args) {
-        if (args.size() != 1) return "rmfile: numero di argomenti errato - (uso: rmfile <nome_file>)";
+        if (args.size() != 1) return "label.wrongRmFileUse1";
         if (!business.rmfile(args.get(0))) {
-            return "rmfile: impossibile rimuovere il file (non trovato o è una directory).";
+            return "label.wrongRmFileUse2";
         }
         return null;
     }
