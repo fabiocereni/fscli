@@ -38,7 +38,7 @@ public class LnCommand implements IFSCommand {
                 return null;
             }
             else {
-                return "label.wrongLnUse";
+                return "label.wrongLnUse1";
             }
         } catch (Exception e) {
             return e.getMessage();
