@@ -1,24 +1,18 @@
 package view;
 
 
-import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
-import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
-import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.sun.javafx.scene.control.ContextMenuContent;
 import com.sun.javafx.scene.control.MenuBarButton;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.matcher.control.TextInputControlMatchers;
-
-import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.*;
 
-public class MainFx00Test extends AbstractMainGUITest {
+public class GeneralLayoutTest extends AbstractMainGUITest {
 
 //    private final SupportedLanguageController supportedLanguageController = new SupportedLanguageController();
 //    private final PreferencesController preferencesController = new PreferencesController();
@@ -45,6 +39,8 @@ public class MainFx00Test extends AbstractMainGUITest {
             verifyThat("#fileMenu", isVisible());
             verifyThat("#editMenu", isVisible());
             verifyThat("#helpMenu", isVisible());
+            verifyThat("#commandLineView", isVisible());
+            verifyThat("#commandLineView", isDisabled());
             verifyThat("#commandLineView", TextInputControlMatchers.hasText(""));
             verifyThat("#enter", isVisible());
             verifyThat("#enter", isDisabled());

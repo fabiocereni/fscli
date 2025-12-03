@@ -50,9 +50,6 @@ public class MenuBarView {
     private Menu helpMenu;
 
     public void init () {
-
-
-
         this.fileMenu = new Menu(supportedLanguageController.getTranslation("label.file"));
         this.fileMenu.setId("fileMenu");
 
