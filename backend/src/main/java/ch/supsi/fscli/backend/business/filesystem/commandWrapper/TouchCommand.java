@@ -23,8 +23,9 @@ public class TouchCommand implements IFSCommand {
     public String execute(List<String> args) {
         if(args.size() != 1)
             return "label.wrongTouchUse1";
-        if(!business.touch(args.get(0)))
-            return "label.wrongTouchUse2";
+        String result  = business.touch(args.get(0));
+        if(!result.isEmpty())
+            return result;
         return null;
     }
 

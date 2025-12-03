@@ -35,7 +35,7 @@ public class FSLsCommandBusiness implements IFSLsCommandBusiness {
             Optional<Inode> targetOpt = pathSolver.resolvePath(path);
 
             if (targetOpt.isEmpty()) {
-                return "ls: cannot access '" + path + "': No such file or directory";
+                return "label.wrongLsUse2";
             }
 
             Inode targetNode = targetOpt.get();

@@ -20,24 +20,24 @@ public class FSTouchCommandBusiness implements IFSTouchCommandBusiness {
     }
 
     @Override
-    public boolean touch(String path) throws IllegalArgumentException {
+    public String touch(String path) throws IllegalArgumentException {
 
         if (path == null)
-            throw new IllegalArgumentException("touch: path not valid");
+            return  "label.wrongTouchUse3";
 
         DirectoryInodeBusiness parentDirectory = pathSolver.extractParentDirectory(path);
 
         if (parentDirectory == null)
-            throw new IllegalArgumentException("touch: path not valid");
+            return "label.wrongTouchUse3";
 
         String newFileName = pathSolver.extractFileName(path);
 
         if (pathSolver.nameAlreadyExists(parentDirectory, newFileName))
-            throw new IllegalArgumentException("touch: file with same name already exists");
+            return "label.wrongTouchUse4";
 
         FileInodeBusiness toCreate = fileSystem.createFile();
         parentDirectory.addEntry(newFileName, toCreate);
 
-        return true;
+        return "";
     }
 }
