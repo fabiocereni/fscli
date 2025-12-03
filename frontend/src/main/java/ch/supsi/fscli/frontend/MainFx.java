@@ -57,30 +57,35 @@ public class MainFx extends Application {
 
     private final String applicationTitle;
 
+    // VIEW
     private final MenuBarView menuBarView;
+    private final IShow savingView;
+    private final IShow readerView;
+    private final IShow aboutView;
+    private final IShow helpView;
+    private final QuitView quitView;
+    private final PreferencesView preferencesView;
     private final CommandLineView commandLineView;
     private final OutputView outputView;
     private final LogView logView;
-    private final IShow savingView;
-    private final IShow readerView;
-    private final QuitView quitView;
-    private final IShow aboutView;
-    private final IShow helpView;
-    private final PreferencesView preferencesView;
 
+    // INJECTOR
     private final Injector injector;
 
+    // EVENT HANDLER
     private final EventHandler dataSaverController;
     private final EventHandler dataReaderController;
     private final EventHandler aboutViewController;
     private final EventHandler helpController;
-    private final IQuitController quitController;
 
+    // DIRECTOR
     private final WidgetDirector widgetDirector;
     private final LogDirector logDirector;
     private final ConfirmExitDirector confirmExitDirector;
 
-    private final IFSCreationController fsStateDirector;
+    // CONTROLLER
+    private final IQuitController quitController;
+    private final IFSCreationController fsCreationController;
     private final ISupportedLanguageController supportedLanguageController;
     private final IPreferencesController preferencesController;
 
@@ -93,7 +98,6 @@ public class MainFx extends Application {
                                              new DirectorModule(), new ModelModule(),
                                              new FileSystemModule());
 
-
         this.preferencesController = injector.getInstance(PreferencesController.class);
         this.supportedLanguageController = injector.getInstance(SupportedLanguageController.class);
         this.preferencesModel = injector.getInstance(PreferencesModel.class);
@@ -101,35 +105,36 @@ public class MainFx extends Application {
         this.supportedLanguageController.setMapLanguages();
         this.supportedLanguageController.setLanguageTagSelected(preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE));
 
-        // declaration
-        this.preferencesView = injector.getInstance(PreferencesView.class);
+        // VIEW
         this.menuBarView = injector.getInstance(MenuBarView.class);
-        this.commandLineView = injector.getInstance(CommandLineView.class);
-        this.outputView = injector.getInstance(OutputView.class);
-        this.logView = injector.getInstance(LogView.class);
         this.savingView = injector.getInstance(SaveAsView.class);
         this.readerView = injector.getInstance(ReaderView.class);
         this.aboutView = injector.getInstance(AboutView.class);
         this.helpView = injector.getInstance(HelpView.class);
+        this.preferencesView = injector.getInstance(PreferencesView.class);
         this.quitView = injector.getInstance(QuitView.class);
 
+        this.commandLineView = injector.getInstance(CommandLineView.class);
+        this.outputView = injector.getInstance(OutputView.class);
+        this.logView = injector.getInstance(LogView.class);
 
-        commandLineView.setOutputView(outputView); // imposto l'output view sul command line view
-
-
+        // CONTROLLER
         this.dataSaverController = injector.getInstance(FSDataSaverController.class);
         this.dataReaderController = injector.getInstance(FSDataReaderController.class);
-        this.quitController = injector.getInstance(QuitController.class);
         this.aboutViewController = injector.getInstance(AboutController.class);
         this.helpController = injector.getInstance(HelpController.class);
+        this.quitController = injector.getInstance(QuitController.class);
+        this.fsCreationController = injector.getInstance(FSCreationController.class);
 
-        this.fsStateDirector = injector.getInstance(FSCreationController.class);
+        // DIRECTOR
         this.widgetDirector = injector.getInstance(WidgetDirector.class);
         this.logDirector = injector.getInstance(LogDirector.class);
         this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
 
         this.confirmExitDirector.addPropertyChangeListener(this.quitView);
         this.logDirector.addPropertyChangeListener(this.logView);
+
+        commandLineView.setOutputView(outputView);
     }
 
     @Override
@@ -139,7 +144,6 @@ public class MainFx extends Application {
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
         this.outputView.initOutputView(PREF_OUTPUT_VIEW_ROW_COUNT);
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
-        //this.aboutView.initialize(translationController);
 
         // horizontal box to hold the command line
         HBox commandLinePane = new HBox();
@@ -170,7 +174,6 @@ public class MainFx extends Application {
         centerPane.setFitToWidth(true);
         centerPane.setPadding(new Insets(PREF_INSETS_SIZE));
         centerPane.setContent(this.outputView.getNode());
-
 
 
         // scroll pane to hold log view
@@ -211,13 +214,8 @@ public class MainFx extends Application {
         primaryStage.show();
     }
 
-    @Override
-    public void stop() throws Exception {
-        // Posso gestire il salvataggio dei dati nel caso in cui l'app non sia chiusa correttamente.
-        System.out.println("Dati non salvati!!!");
-    }
-
     public static void main(String[] args) {
         Application.launch(args);
     }
+
 }
