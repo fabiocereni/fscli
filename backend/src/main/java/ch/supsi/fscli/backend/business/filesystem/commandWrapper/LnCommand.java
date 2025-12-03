@@ -38,7 +38,7 @@ public class LnCommand implements IFSCommand {
                 return null;
             }
             else {
-                return "ln: numero di argomenti errato - (uso: ln [-s] <target> <linkName>)";
+                return "label.wrongLnUse";
             }
         } catch (Exception e) {
             return e.getMessage();

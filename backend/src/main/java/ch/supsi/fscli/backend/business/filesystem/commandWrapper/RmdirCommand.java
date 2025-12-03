@@ -23,9 +23,9 @@ public class RmdirCommand implements IFSCommand {
 
     @Override
     public String execute(List<String> args) {
-        if (args.size() != 1) return "rm: numero di argomenti errato - (uso: rm <nome_file>)";
+        if (args.size() != 1) return "label.wrongRmUse1";
         if (!business.rmdir(args.get(0))) {
-            return "rm: impossibile rimuovere (non trovato o è una directory).";
+            return "label.wrongRmUse2";
         }
         return null;
     }

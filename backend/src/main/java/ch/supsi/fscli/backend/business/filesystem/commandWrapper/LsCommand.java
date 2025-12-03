@@ -35,7 +35,7 @@ public class LsCommand implements IFSCommand {
             }
         }
         if (cleanArgs.size() > 1) {
-            return "ls: too many arguments";
+            return "label.wrongLsUse";
         }
         if (!cleanArgs.isEmpty()) {
             path = cleanArgs.get(0);

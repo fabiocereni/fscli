@@ -20,9 +20,9 @@ public class CdCommand implements IFSCommand {
 
     @Override
     public String execute(List<String> args) {
-        if (args.size() != 1) return "cd: numero di argomenti errato - (uso: cd <percorso>)";
+        if (args.size() != 1) return "label.wrongCdUse1";
         if (!business.cd(args.get(0))) {
-            return "cd: percorso non trovato o non è una directory.";
+            return "label.wrongCdUse2";
         }
         return null;
     }
