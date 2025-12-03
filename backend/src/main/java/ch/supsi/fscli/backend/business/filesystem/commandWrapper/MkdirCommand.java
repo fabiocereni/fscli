@@ -23,9 +23,9 @@ public class MkdirCommand implements IFSCommand {
 
     @Override
     public String execute(List<String> args) {
-        if (args.size() != 1) return "mkdir: numero di argomenti errato - (uso: mkdir <nome>)";
+        if (args.size() != 1) return "label.wrongMkdirUse1";
         if (!business.mkdir(args.get(0))) {
-            return "mkdir: impossibile creare la directory (potrebbe esistere già).";
+            return "label.wrongMkdirUse2";
         }
         return null;
     }

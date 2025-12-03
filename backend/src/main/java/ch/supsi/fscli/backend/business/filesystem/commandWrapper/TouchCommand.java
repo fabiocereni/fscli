@@ -22,9 +22,9 @@ public class TouchCommand implements IFSCommand {
     @Override
     public String execute(List<String> args) {
         if(args.size() != 1)
-            return "touch: numero di argomenti errato - (uso: touch <nome_file>)";
+            return "label.wrongTouchUse1";
         if(!business.touch(args.get(0)))
-            return "touch: impossibile creare il file.";
+            return "label.wrongTouchUse2";
         return null;
     }
 
