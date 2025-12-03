@@ -20,7 +20,7 @@ public class ClearCommand implements IFSCommand {
     @Override
     public String execute(List<String> args) {
         if (!args.isEmpty()) {
-            return "clear: il comando non accetta argomenti.";
+            return "label.wrongClearUse";
         }
         return "clear";
     }
