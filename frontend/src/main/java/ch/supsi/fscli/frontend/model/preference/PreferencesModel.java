@@ -36,7 +36,7 @@ public class PreferencesModel implements IPreferencesModel {
     @Inject
     private void manageProperties() {
         String userHome = System.getProperty("user.home");
-        String folderApp = userHome + File.separator + "user-pref";
+        String folderApp = userHome + File.separator + "FileSystem Simulator";
         this.preferencesPath = folderApp + File.separator + "user.properties";
 
         new File(folderApp).mkdirs();
