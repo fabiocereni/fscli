@@ -2,7 +2,6 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.mkdir.IFSMkdirCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.modules.FileSystemModule;
@@ -18,7 +17,6 @@ public class FSMkdirCommandBusinessTest {
     private Injector injector;
     private IFSMkdirCommandBusiness mkdirBusiness;
     private FileSystem fileSystem;
-    private IFSStateBusiness ifsState;
     private IFSCreationBusiness creation;
 
     private DirectoryInodeBusiness root;
@@ -30,16 +28,15 @@ public class FSMkdirCommandBusinessTest {
 
         mkdirBusiness = injector.getInstance(IFSMkdirCommandBusiness.class);
         fileSystem = injector.getInstance(FileSystem.class);
-        ifsState = injector.getInstance(IFSStateBusiness.class);
         creation = injector.getInstance(IFSCreationBusiness.class);
 
         // Ricrea il filesystem da zero (come faceva newfs())
         creation.newfs();
 
-        root = ifsState.getRoot();
+        root = fileSystem.getRoot();
         assertNotNull(root);
 
-        ifsState.setCurrentWorkingDirectory(root);
+        fileSystem.setCurrentWorkingDirectory(root);
     }
 
     // ----------------------------------------------------------
@@ -79,7 +76,7 @@ public class FSMkdirCommandBusinessTest {
     void testRelativePathCreation() {
         mkdirBusiness.mkdir("a");
         DirectoryInodeBusiness a = (DirectoryInodeBusiness) root.getEntry("a");
-        ifsState.setCurrentWorkingDirectory(a);
+        fileSystem.setCurrentWorkingDirectory(a);
 
         assertTrue(mkdirBusiness.mkdir("b"));
         assertNotNull(a.getEntry("b"));

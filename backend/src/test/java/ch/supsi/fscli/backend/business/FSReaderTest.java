@@ -2,7 +2,6 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.DAO.persistence.FSDataReaderDAO;
 import ch.supsi.fscli.backend.DAO.persistence.FSDataWriterDAO;
-import ch.supsi.fscli.backend.business.filesystem.state.FSStateBusiness;
 import ch.supsi.fscli.backend.business.persistence.FSDataReaderBusiness;
 import ch.supsi.fscli.backend.business.persistence.FSDataWriterBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
@@ -21,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class FSReaderTest {
 
     private FileSystem fileSystem;
-    private FSStateBusiness fsState;
     private FSDataReaderBusiness readerBusiness;
     private FSDataWriterBusiness writerBusiness;
 
@@ -33,16 +31,15 @@ class FSReaderTest {
         // --- SETUP IDENTICO A PRIMA ---
         DirectoryInodeBusiness root = new DirectoryInodeBusiness(1L);
         fileSystem = new FileSystem(root);
-        fsState = new FSStateBusiness();
-        fsState.setRoot(root);
-        fsState.setCurrentWorkingDirectory(root);
-        fsState.setCurrentWorkingDirectoryPath("/");
+        fileSystem.setRoot(root);
+        fileSystem.setCurrentWorkingDirectory(root);
+        fileSystem.setCurrentWorkingDirectoryPath("/");
 
         FSDataReaderDAO readerDAO = new FSDataReaderDAO();
         FSDataWriterDAO writerDAO = new FSDataWriterDAO();
 
-        readerBusiness = new FSDataReaderBusiness(fileSystem, fsState, readerDAO);
-        writerBusiness = new FSDataWriterBusiness(fileSystem, fsState, writerDAO);
+        readerBusiness = new FSDataReaderBusiness(fileSystem, readerDAO);
+        writerBusiness = new FSDataWriterBusiness(fileSystem, writerDAO);
     }
 
     @Test
@@ -67,8 +64,8 @@ class FSReaderTest {
         summerDir.addEntry("img.jpg", imgFile);
 
         long originalId = photosDir.getId();
-        fsState.setCurrentWorkingDirectory(photosDir);
-        fsState.setCurrentWorkingDirectoryPath("/Photos");
+        fileSystem.setCurrentWorkingDirectory(photosDir);
+        fileSystem.setCurrentWorkingDirectoryPath("/Photos");
 
         // *** STAMPA PRIMA DEL SALVATAGGIO ***
         System.out.println("\n--- STRUTTURA ORIGINALE (In Memoria) ---");
@@ -90,23 +87,23 @@ class FSReaderTest {
 
         // 2. CORREZIONE: Svuota fisicamente la Root dai suoi figli!
         // Altrimenti FSState mantiene i riferimenti agli oggetti vecchi
-        fsState.getRoot().getEntries().clear();
+        fileSystem.getRoot().getEntries().clear();
 
         // 3. Ripristina i link base obbligatori per la root (. e ..)
         // (Come se fosse un filesystem appena formattato)
-        fsState.getRoot().addEntry(".", fsState.getRoot());
-        fsState.getRoot().addEntry("..", fsState.getRoot());
+        fileSystem.getRoot().addEntry(".", fileSystem.getRoot());
+        fileSystem.getRoot().addEntry("..", fileSystem.getRoot());
 
         // 4. Resetta la posizione dell'utente (CWD) alla root
-        fsState.setCurrentWorkingDirectory(fsState.getRoot());
-        fsState.setCurrentWorkingDirectoryPath("/");
+        fileSystem.setCurrentWorkingDirectory(fileSystem.getRoot());
+        fileSystem.setCurrentWorkingDirectoryPath("/");
 
         // Ora questo assert ha senso sia logicamente che visivamente
         assertNull(fileSystem.getInode(originalId));
 
         // *** STAMPA DOPO LA CANCELLAZIONE DELLA MEMORIA ***
         System.out.println("\n--- STRUTTURA CANCELLATA ---");
-        printFileSystemStructure(fsState.getRoot(), "");
+        printFileSystemStructure(fileSystem.getRoot(), "");
         System.out.println("-------------------------------------\n");
 
 
@@ -118,13 +115,13 @@ class FSReaderTest {
         // --- 5. VERIFICHE ---
         System.out.println("Step 5: Verifiche...");
 
-        DirectoryInodeBusiness loadedRoot = fsState.getRoot();
+        DirectoryInodeBusiness loadedRoot = fileSystem.getRoot();
         assertNotNull(loadedRoot);
         assertTrue(fileSystem.getInodeTable().containsKey(originalId));
 
         // *** STAMPA DOPO IL CARICAMENTO ***
         System.out.println("\n--- STRUTTURA CARICATA (Dal JSON) ---");
-        printFileSystemStructure(fsState.getRoot(), "");
+        printFileSystemStructure(fileSystem.getRoot(), "");
         System.out.println("-------------------------------------\n");
     }
 

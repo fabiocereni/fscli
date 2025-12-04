@@ -1,7 +1,7 @@
 package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.pwd.FSPwdCommandBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ class FSPwdCommandBusinessTest {
     // 1. Creiamo un MOCK dello stato (una versione finta)
     // Non usiamo quello vero, così non dobbiamo costruire alberi di directory
     @Mock
-    private IFSStateBusiness stateMock;
+    private FileSystem stateMock;
 
     // 2. Iniettiamo il mock dentro la classe da testare
     // Mockito userà il costruttore annotato con @Inject automaticamente

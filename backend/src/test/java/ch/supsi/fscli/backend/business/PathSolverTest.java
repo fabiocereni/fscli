@@ -1,7 +1,6 @@
 package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
@@ -21,7 +20,6 @@ class PathSolverTest {
 
     private Injector injector;
 
-    private IFSStateBusiness state;
     private FileSystem fs;
     private PathSolver pathSolver;
 
@@ -37,13 +35,12 @@ class PathSolverTest {
 
         pathSolver = injector.getInstance(PathSolver.class);
 
-        state = injector.getInstance(IFSStateBusiness.class);
         fs    = injector.getInstance(FileSystem.class);
 
         // reset filesystem
         injector.getInstance(IFSCreationBusiness.class).newfs();
 
-        root = state.getRoot();
+        root = fs.getRoot();
 
         home = new DirectoryInodeBusiness(200);
         user = new DirectoryInodeBusiness(300);
@@ -60,7 +57,7 @@ class PathSolverTest {
         user.addEntry("docs", docs);
         user.addEntry("photo.jpg", photo);
 
-        state.setCurrentWorkingDirectory(root);
+        fs.setCurrentWorkingDirectory(root);
     }
 
     // --- TEST RESOLVE PATH ---
@@ -88,7 +85,7 @@ class PathSolverTest {
 
     @Test
     void testResolveRelativePathFromSubDir() {
-        state.setCurrentWorkingDirectory(home);
+        fs.setCurrentWorkingDirectory(home);
 
         Optional<Inode> result = pathSolver.resolvePath("user/photo.jpg");
         assertTrue(result.isPresent());
@@ -151,7 +148,7 @@ class PathSolverTest {
 
     @Test
     void testExtractParentSimpleName() {
-        state.setCurrentWorkingDirectory(user);
+        fs.setCurrentWorkingDirectory(user);
 
         DirectoryInodeBusiness parent = pathSolver.extractParentDirectory("photo.jpg");
         assertEquals(user, parent);

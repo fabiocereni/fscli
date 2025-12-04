@@ -2,7 +2,6 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmfile.IFSRmfileCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
@@ -20,7 +19,6 @@ class FSRmfilecommandBusinessTest {
 
     private IFSRmfileCommandBusiness rmFileCommand;
     private FileSystem fileSystem;
-    private IFSStateBusiness fsState;
 
     private DirectoryInodeBusiness root;
 
@@ -31,15 +29,14 @@ class FSRmfilecommandBusinessTest {
 
         rmFileCommand = injector.getInstance(IFSRmfileCommandBusiness.class);
         fileSystem     = injector.getInstance(FileSystem.class);
-        fsState        = injector.getInstance(IFSStateBusiness.class);
         IFSCreationBusiness creation = injector.getInstance(IFSCreationBusiness.class);
 
         // reset filesystem
         creation.newfs();
 
-        root = fsState.getRoot();
-        fsState.setCurrentWorkingDirectory(root);
-        fsState.setCurrentWorkingDirectoryPath("/");
+        root = fileSystem.getRoot();
+        fileSystem.setCurrentWorkingDirectory(root);
+        fileSystem.setCurrentWorkingDirectoryPath("/");
     }
 
     void createFileInRoot(String fileName) {

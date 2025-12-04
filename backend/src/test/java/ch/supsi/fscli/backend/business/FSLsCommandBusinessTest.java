@@ -15,7 +15,6 @@ class FSLsCommandBusinessTest {
     private Injector injector;
 
     private FSLsCommandBusiness ls;
-    private IFSStateBusiness state;
     private FileSystem fs;
     private PathSolver solver;
 
@@ -29,13 +28,12 @@ class FSLsCommandBusinessTest {
         injector = Guice.createInjector(new FileSystemModule());
 
         ls     = injector.getInstance(FSLsCommandBusiness.class);
-        state  = injector.getInstance(IFSStateBusiness.class);
         fs     = injector.getInstance(FileSystem.class);
         solver = injector.getInstance(PathSolver.class);
 
         injector.getInstance(IFSCreationBusiness.class).newfs();
 
-        root = state.getRoot();
+        root = fs.getRoot();
 
         home = new DirectoryInodeBusiness(2);
         file = fs.createFile();
@@ -43,7 +41,7 @@ class FSLsCommandBusinessTest {
         root.addEntry("home", home);
         home.addEntry("file.txt", file);
 
-        state.setCurrentWorkingDirectory(root);
+        fs.setCurrentWorkingDirectory(root);
     }
 
     @Test
@@ -81,7 +79,7 @@ class FSLsCommandBusinessTest {
     @Test
     void testLsRelativePath() {
 
-        state.setCurrentWorkingDirectory(home);
+        fs.setCurrentWorkingDirectory(home);
 
         String output = ls.ls(".", false);
 

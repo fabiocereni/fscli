@@ -2,7 +2,6 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmdir.IFSRmdirCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
@@ -19,7 +18,6 @@ public class FSRmdirCommandBusinessTest {
     private Injector injector;
 
     private IFSRmdirCommandBusiness rmdir;
-    private IFSStateBusiness state;
     private FileSystem fs;
     private IFSCreationBusiness creation;
 
@@ -31,18 +29,17 @@ public class FSRmdirCommandBusinessTest {
         injector = Guice.createInjector(new FileSystemModule());
 
         rmdir = injector.getInstance(IFSRmdirCommandBusiness.class);
-        state = injector.getInstance(IFSStateBusiness.class);
         fs = injector.getInstance(FileSystem.class);
         creation = injector.getInstance(IFSCreationBusiness.class);
 
         // Reset completo del filesystem
         creation.newfs();
 
-        root = state.getRoot();
+        root = fs.getRoot();
         assertNotNull(root);
 
-        state.setCurrentWorkingDirectory(root);
-        state.setCurrentWorkingDirectoryPath("/");
+        fs.setCurrentWorkingDirectory(root);
+        fs.setCurrentWorkingDirectoryPath("/");
     }
 
     @Test
@@ -99,7 +96,7 @@ public class FSRmdirCommandBusinessTest {
     void testRemoveRootShouldFail() {
         boolean result = rmdir.rmdir("/");
         assertFalse(result);
-        assertEquals(root, state.getRoot());
+        assertEquals(root, fs.getRoot());
     }
 
     @Test
@@ -146,8 +143,8 @@ public class FSRmdirCommandBusinessTest {
         DirectoryInodeBusiness docs = fs.createDirectory(home);
         home.addEntry("docs", docs);
 
-        state.setCurrentWorkingDirectory(home);
-        state.setCurrentWorkingDirectoryPath("/home");
+        fs.setCurrentWorkingDirectory(home);
+        fs.setCurrentWorkingDirectoryPath("/home");
 
         boolean result = rmdir.rmdir("docs");
         assertTrue(result);

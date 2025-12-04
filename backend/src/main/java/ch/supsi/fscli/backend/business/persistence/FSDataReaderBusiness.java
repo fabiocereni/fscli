@@ -1,7 +1,6 @@
 package ch.supsi.fscli.backend.business.persistence;
 
 import ch.supsi.fscli.backend.DAO.persistence.IFSDataReaderDAO;
-import ch.supsi.fscli.backend.business.filesystem.state.FSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import jakarta.inject.Inject;
@@ -15,13 +14,11 @@ import java.util.Map;
 public class FSDataReaderBusiness implements IFSDataReaderBusiness {
 
     private final FileSystem fileSystem;
-    private final FSStateBusiness fsStateBusiness;
     private final IFSDataReaderDAO fsDataReaderDAO;
 
     @Inject
-    public FSDataReaderBusiness(FileSystem fileSystem, FSStateBusiness fsStateBusiness, IFSDataReaderDAO fsDataReaderDAO) {
+    public FSDataReaderBusiness(FileSystem fileSystem, IFSDataReaderDAO fsDataReaderDAO) {
         this.fileSystem = fileSystem;
-        this.fsStateBusiness = fsStateBusiness;
         this.fsDataReaderDAO = fsDataReaderDAO;
     }
 
@@ -38,7 +35,7 @@ public class FSDataReaderBusiness implements IFSDataReaderBusiness {
                 return;
 
             FileSystem loadedFS = loadedWrapper.getFileSystem();
-            FSStateBusiness loadedState = loadedWrapper.getStateBusiness();
+            FileSystem fileSystem1 = loadedWrapper.getFileSystem();
 
             this.fileSystem.setNextInodeId(loadedFS.getNextInodeId());
 
@@ -46,11 +43,9 @@ public class FSDataReaderBusiness implements IFSDataReaderBusiness {
             currentInodeTable.clear();
             currentInodeTable.putAll(loadedFS.getInodeTable());
 
-            this.fsStateBusiness.setRoot(loadedState.getRoot());
-            this.fsStateBusiness.setCurrentWorkingDirectory(loadedState.getCurrentWorkingDirectory());
-            this.fsStateBusiness.setCurrentWorkingDirectoryPath(loadedState.getCurrentWorkingDirectoryPath());
-
-            this.fsStateBusiness.setSaved(true);
+            this.fileSystem.setRoot(fileSystem1.getRoot());
+            this.fileSystem.setCurrentWorkingDirectory(fileSystem1.getCurrentWorkingDirectory());
+            this.fileSystem.setCurrentWorkingDirectoryPath(fileSystem1.getCurrentWorkingDirectoryPath());
 
             System.out.println("FILESYSTEM LOADED FROM FILE: " + file.getAbsolutePath());
 

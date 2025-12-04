@@ -1,7 +1,7 @@
 package ch.supsi.fscli.backend.business.filesystem.FSCommands.rmdir;
 
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
@@ -13,12 +13,12 @@ import java.util.Optional;
 @Singleton
 public class FSRmdirCommandBusiness implements IFSRmdirCommandBusiness {
 
-    private final IFSStateBusiness state;
+    private final FileSystem fileSystem;
     private final PathSolver pathSolver;
 
     @Inject
-    public FSRmdirCommandBusiness(IFSStateBusiness state, PathSolver pathSolver) {
-        this.state = state;
+    public FSRmdirCommandBusiness(FileSystem fileSystem, PathSolver pathSolver) {
+        this.fileSystem = fileSystem;
         this.pathSolver = pathSolver;
     }
 
@@ -36,8 +36,8 @@ public class FSRmdirCommandBusiness implements IFSRmdirCommandBusiness {
         if (node.getType() != InodeType.DIRECTORY) return false;
 
         DirectoryInodeBusiness targetDir = (DirectoryInodeBusiness) node;
-        if (targetDir == state.getRoot()) return false;
-        if (targetDir == state.getCurrentWorkingDirectory()) return false;
+        if (targetDir == fileSystem.getRoot()) return false;
+        if (targetDir == fileSystem.getCurrentWorkingDirectory()) return false;
         if (!targetDir.getEntries().isEmpty()) return false;
 
         DirectoryInodeBusiness parent = pathSolver.extractParentDirectory(path);

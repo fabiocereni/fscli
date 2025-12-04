@@ -1,7 +1,7 @@
 package ch.supsi.fscli.backend.business.filesystem.FSCommands.cd;
 
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
@@ -16,12 +16,12 @@ import java.util.StringTokenizer;
 @Singleton
 public class FSCdCommandBusiness implements IFSCdCommandBusiness {
 
-    private final IFSStateBusiness stateBusiness;
+    private final FileSystem fileSystem;
     private final PathSolver pathSolver;
 
     @Inject
-    public FSCdCommandBusiness(IFSStateBusiness stateBusiness, PathSolver pathSolver) {
-        this.stateBusiness = stateBusiness;
+    public FSCdCommandBusiness(FileSystem fileSystem, PathSolver pathSolver) {
+        this.fileSystem = fileSystem;
         this.pathSolver = pathSolver;
     }
 
@@ -29,7 +29,7 @@ public class FSCdCommandBusiness implements IFSCdCommandBusiness {
     public boolean cd(String name) {
         if (name == null || name.isBlank()) return false;
 
-        String currentPath = stateBusiness.getCurrentWorkingDirectoryPath();
+        String currentPath = fileSystem.getCurrentWorkingDirectoryPath();
         String pathToCheck;
 
         if (name.startsWith("/")) {
@@ -51,10 +51,10 @@ public class FSCdCommandBusiness implements IFSCdCommandBusiness {
         if (targetNode.getType() != InodeType.DIRECTORY)
             return false;
 
-        stateBusiness.setCurrentWorkingDirectory((DirectoryInodeBusiness) targetNode);
+        fileSystem.setCurrentWorkingDirectory((DirectoryInodeBusiness) targetNode);
 
         String cleanPath = normalizePath(pathToCheck);
-        stateBusiness.setCurrentWorkingDirectoryPath(cleanPath);
+        fileSystem.setCurrentWorkingDirectoryPath(cleanPath);
 
         return true;
     }

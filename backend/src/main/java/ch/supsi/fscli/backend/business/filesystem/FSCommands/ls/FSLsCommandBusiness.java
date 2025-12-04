@@ -1,7 +1,7 @@
 package ch.supsi.fscli.backend.business.filesystem.FSCommands.ls;
 
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 @Singleton
 public class FSLsCommandBusiness implements IFSLsCommandBusiness {
 
-    private final IFSStateBusiness stateBusiness;
+    private final FileSystem fileSystem;
     private final PathSolver pathSolver;
 
     @Inject
-    public FSLsCommandBusiness(IFSStateBusiness stateBusiness, PathSolver pathSolver) {
-        this.stateBusiness = stateBusiness;
+    public FSLsCommandBusiness(FileSystem fileSystem, PathSolver pathSolver) {
+        this.fileSystem = fileSystem;
         this.pathSolver = pathSolver;
     }
 
@@ -29,7 +29,7 @@ public class FSLsCommandBusiness implements IFSLsCommandBusiness {
 
         // Caso 1: ls senza argomenti -> usa CWD
         if (path == null || path.isBlank()) {
-            targetDir = stateBusiness.getCurrentWorkingDirectory();
+            targetDir = fileSystem.getCurrentWorkingDirectory();
         } else {
             // Caso 2: ls <path> -> risolvi il path
             Optional<Inode> targetOpt = pathSolver.resolvePath(path);

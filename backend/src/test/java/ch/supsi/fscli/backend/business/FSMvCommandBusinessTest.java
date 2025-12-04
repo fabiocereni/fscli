@@ -2,7 +2,6 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.mv.IFSMvCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
@@ -21,7 +20,6 @@ class FSMvCommandBusinessTest {
 
     private IFSMvCommandBusiness mvCommand;
     private FileSystem fileSystem;
-    private IFSStateBusiness fsState;
     private IFSCreationBusiness creation;
 
     private DirectoryInodeBusiness root;
@@ -33,16 +31,15 @@ class FSMvCommandBusinessTest {
 
         mvCommand   = injector.getInstance(IFSMvCommandBusiness.class);
         fileSystem  = injector.getInstance(FileSystem.class);
-        fsState     = injector.getInstance(IFSStateBusiness.class);
         creation    = injector.getInstance(IFSCreationBusiness.class);
 
         // reset completo del filesystem
         creation.newfs();
 
-        root = fsState.getRoot();
+        root = fileSystem.getRoot();
         assertNotNull(root);
 
-        fsState.setCurrentWorkingDirectory(root);
+        fileSystem.setCurrentWorkingDirectory(root);
 
         // pulizia iniziale (solo se necessario)
         root.getEntries().clear();
