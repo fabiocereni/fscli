@@ -7,6 +7,7 @@ import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import ch.supsi.fscli.frontend.view.IShow;
 import com.google.inject.Inject;
 import jakarta.inject.Singleton;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,6 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.prefs.Preferences;
 
 @Singleton
 public class PreferencesView implements IShow {
@@ -28,9 +31,6 @@ public class PreferencesView implements IShow {
     @Inject
     private ISupportedLanguageController supportedLanguageController;
 
-
-
-
     // view
     private Stage stage;
     private ComboBox<String> languageComboBox;
@@ -38,8 +38,14 @@ public class PreferencesView implements IShow {
     private ComboBox<String> fontOutputAreaComboBox;
     private ComboBox<String> fontLogAreaComboBox;
     private TextField linesField;
+    private Button saveButton;
 
-
+    // Stato iniziale per i confronti
+    private String initLanguage;
+    private String initFontCmd;
+    private String initFontOut;
+    private String initFontLog;
+    private String initLines;
 
     @Override
     public void showMyView() {
@@ -61,18 +67,36 @@ public class PreferencesView implements IShow {
         Label languageLabel = new Label(supportedLanguageController.getTranslation("label.language"));
         languageComboBox.getItems().addAll(supportedLanguageController.getSupportedLanguagesTags());
         languageComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
+        initLanguage = preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE);
 
         Label fontCommandLineLabel = new Label("Font command line:");
         fontCommandLineComboBox.getItems().addAll(Font.getFamilies());
         fontCommandLineComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_FONT_COMMANDLINE));
+        initFontCmd = preferencesModel.getProperty(PreferencesModel.KEY_FONT_COMMANDLINE);
 
         Label fontOutputAreaLabel = new Label("Font output area:");
         fontOutputAreaComboBox.getItems().addAll(Font.getFamilies());
         fontOutputAreaComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA));
+        initFontOut = preferencesModel.getProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA);
 
         Label fontLogAreaLabel = new Label("Font log area:");
         fontLogAreaComboBox.getItems().addAll(Font.getFamilies());
         fontLogAreaComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_FONT_LOG_AREA));
+        initFontLog = preferencesModel.getProperty(PreferencesModel.KEY_FONT_LOG_AREA);
+
+        Label linesLabel = new Label(supportedLanguageController.getTranslation("label.line"));
+        linesField = new TextField(preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER));
+        linesField.setPrefColumnCount(4);
+        linesField.setEditable(true);
+        initLines = preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER);
+
+        ChangeListener<Object> commonListener = (obs, oldVal, newVal) -> checkChanges();
+
+        languageComboBox.valueProperty().addListener(commonListener);
+        fontCommandLineComboBox.valueProperty().addListener(commonListener);
+        fontOutputAreaComboBox.valueProperty().addListener(commonListener);
+        fontLogAreaComboBox.valueProperty().addListener(commonListener);
+        linesField.textProperty().addListener(commonListener);
 
         root.add(languageLabel, 0, 0);
         root.add(languageComboBox, 1, 0);
@@ -83,11 +107,6 @@ public class PreferencesView implements IShow {
         root.add(fontLogAreaLabel, 0, 3);
         root.add(fontLogAreaComboBox, 1, 3);
 
-        Label linesLabel = new Label(supportedLanguageController.getTranslation("label.line"));
-        linesField = new TextField(preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER));
-        linesField.setPrefColumnCount(4);
-        linesField.setEditable(true);
-
         Button minusBtn = new Button("-");
         Button plusBtn = new Button("+");
         minusBtn.setOnAction(e -> changeValue(linesField, -1));
@@ -97,8 +116,9 @@ public class PreferencesView implements IShow {
         root.add(linesLabel, 0, 4);
         root.add(spinnerBox, 1, 4);
 
-        Button saveButton = new Button(supportedLanguageController.getTranslation("label.save"));
+        saveButton = new Button(supportedLanguageController.getTranslation("label.save"));
         root.add(saveButton, 1, 5);
+        saveButton.setDisable(true);
 
         saveButton.setOnAction(e -> {
             try {
@@ -146,5 +166,31 @@ public class PreferencesView implements IShow {
         Alert alert = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         alert.initOwner(owner);
         alert.showAndWait();
+    }
+
+    private void checkChanges() {
+        boolean changed = false;
+
+        // Confronta ogni campo con il suo valore iniziale
+        if (!isSame(languageComboBox.getValue(), initLanguage)) changed = true;
+        if (!isSame(fontCommandLineComboBox.getValue(), initFontCmd)) changed = true;
+        if (!isSame(fontOutputAreaComboBox.getValue(), initFontOut)) changed = true;
+        if (!isSame(fontLogAreaComboBox.getValue(), initFontLog)) changed = true;
+        if (!isSame(linesField.getText(), initLines)) changed = true;
+
+        // Abilita il tasto salva solo se c'è almeno una modifica
+        if (saveButton != null) {
+            saveButton.setDisable(!changed);
+        }
+
+        // Opzionale: Log di debug
+        // System.out.println("Stato modificato: " + changed);
+    }
+
+    // Helper per evitare NullPointerException
+    private boolean isSame(String val1, String val2) {
+        if (val1 == null && val2 == null) return true;
+        if (val1 == null || val2 == null) return false;
+        return val1.equals(val2);
     }
 }
