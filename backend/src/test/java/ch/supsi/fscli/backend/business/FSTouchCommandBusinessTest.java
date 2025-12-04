@@ -2,7 +2,6 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.touch.FSTouchCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
@@ -20,7 +19,6 @@ class FSTouchCommandBusinessTest {
     private Injector injector;
     private FSTouchCommandBusiness touch;
     private FileSystem fs;
-    private PathSolver pathSolver;
 
     private DirectoryInodeBusiness root;
     private DirectoryInodeBusiness sub;
@@ -32,14 +30,12 @@ class FSTouchCommandBusinessTest {
 
         touch = injector.getInstance(FSTouchCommandBusiness.class);
         fs = injector.getInstance(FileSystem.class);
-        pathSolver = injector.getInstance(PathSolver.class);
 
         // reset filesystem
         injector.getInstance(IFSCreationBusiness.class)
                 .newfs();
 
-        root = injector.getInstance(ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness.class)
-                .getRoot();
+        root = fs.getRoot();
 
         // build structure
         sub = new DirectoryInodeBusiness(200);

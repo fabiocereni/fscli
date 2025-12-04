@@ -1,6 +1,7 @@
 package ch.supsi.fscli.backend.business.filesystem.state;
 
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import com.google.inject.Inject;
@@ -11,12 +12,11 @@ import java.util.*;
 @Singleton
 public class PathSolver {
 
-    private final IFSStateBusiness ifsStateBusiness;
+    private final FileSystem fileSystem;
 
     @Inject
-    public PathSolver(IFSStateBusiness ifsStateBusiness) {
-
-        this.ifsStateBusiness = ifsStateBusiness;
+    public PathSolver(FileSystem fileSystem) {
+        this.fileSystem = fileSystem;
     }
 
     public Optional<Inode> resolvePath(String path) {
@@ -31,7 +31,7 @@ public class PathSolver {
 
         // caso root
         if (path.equals("/"))
-            return Optional.of(ifsStateBusiness.getRoot());
+            return Optional.of(fileSystem.getRoot());
 
         // 1) NORMALIZZAZIONE SOLO CON TOKENIZER
         List<String> tokens = new ArrayList<>();
@@ -59,8 +59,8 @@ public class PathSolver {
 
         // 2) NAVIGAZIONE SUGLI INODE
         Inode current = isAbsolute
-                ? ifsStateBusiness.getRoot()
-                : ifsStateBusiness.getCurrentWorkingDirectory();
+                ? fileSystem.getRoot()
+                : fileSystem.getCurrentWorkingDirectory();
 
         for (String part : tokens) {
 
@@ -95,10 +95,10 @@ public class PathSolver {
         int lastSlash = path.lastIndexOf("/");
 
         if (lastSlash < 0)
-            return ifsStateBusiness.getCurrentWorkingDirectory();
+            return fileSystem.getCurrentWorkingDirectory();
 
         if (lastSlash == 0)
-            return ifsStateBusiness.getRoot();
+            return fileSystem.getRoot();
 
         String parentPath = path.substring(0, lastSlash);
         Optional<Inode> parent = resolvePath(parentPath);

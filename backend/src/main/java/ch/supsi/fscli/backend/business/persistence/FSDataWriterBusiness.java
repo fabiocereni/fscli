@@ -1,7 +1,6 @@
 package ch.supsi.fscli.backend.business.persistence;
 
 import ch.supsi.fscli.backend.DAO.persistence.IFSDataWriterDAO;
-import ch.supsi.fscli.backend.business.filesystem.state.FSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -20,17 +19,14 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
     private String lastName = "";
 
     private final FileSystem fileSystem;
-    private final FSStateBusiness fsStateBusiness;
     private final IFSDataWriterDAO fsDataWriterDao;
 
     private Path globalPath = FileSystems.getDefault().getPath(".");
 
     @Inject
     public FSDataWriterBusiness(FileSystem fileSystem,
-                                FSStateBusiness fsStateBusiness,
                                 IFSDataWriterDAO fsDataWriterDao) {
         this.fileSystem = fileSystem;
-        this.fsStateBusiness = fsStateBusiness;
         this.fsDataWriterDao = fsDataWriterDao;
     }
 
@@ -38,7 +34,6 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
     public void save(Path path) {
         PersistedWrapper wrapper = new PersistedWrapper();
         wrapper.setFileSystem(fileSystem);
-        wrapper.setStateBusiness(fsStateBusiness);
 
         if (!path.toString().toLowerCase().endsWith(".json")) {
             path = Path.of(path + ".json");
@@ -61,7 +56,6 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
     public void save() {
         PersistedWrapper wrapper = new PersistedWrapper();
         wrapper.setFileSystem(fileSystem);
-        wrapper.setStateBusiness(fsStateBusiness);
 
         Path path;
 

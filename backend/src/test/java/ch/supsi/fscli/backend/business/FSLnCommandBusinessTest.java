@@ -3,7 +3,6 @@ package ch.supsi.fscli.backend.business;
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.ln.FSLnCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
 import ch.supsi.fscli.backend.modules.FileSystemModule;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
 import ch.supsi.fscli.backend.business.filesystem.structure.*;
 import com.google.inject.Guice;
@@ -18,7 +17,6 @@ class FSLnCommandBusinessTest {
     private Injector injector;
 
     private FSLnCommandBusiness lnCommand;
-    private IFSStateBusiness state;
     private FileSystem fs;
     private PathSolver pathSolver;
 
@@ -32,14 +30,13 @@ class FSLnCommandBusinessTest {
         injector = Guice.createInjector(new FileSystemModule());
 
         lnCommand = injector.getInstance(FSLnCommandBusiness.class);
-        state     = injector.getInstance(IFSStateBusiness.class);
         fs        = injector.getInstance(FileSystem.class);
         pathSolver = injector.getInstance(PathSolver.class);
 
         // reset filesystem
         injector.getInstance(IFSCreationBusiness.class).newfs();
 
-        root = state.getRoot();
+        root = fs.getRoot();
 
         // costruzione manuale albero
         home = new DirectoryInodeBusiness(200);
@@ -52,7 +49,7 @@ class FSLnCommandBusinessTest {
 
         user.addEntry("fileA.txt", fileA);
 
-        state.setCurrentWorkingDirectory(root);
+        fs.setCurrentWorkingDirectory(root);
     }
 
     // -----------------------------------------------------

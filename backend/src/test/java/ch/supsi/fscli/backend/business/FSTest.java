@@ -1,7 +1,5 @@
 package ch.supsi.fscli.backend.business;
 
-import ch.supsi.fscli.backend.business.filesystem.state.FSStateBusiness;
-import ch.supsi.fscli.backend.business.filesystem.state.IFSStateBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,6 @@ public class FSTest {
 
     // Dipendenze da iniettare/creare manualmente
     private FileSystem fileSystem;
-    private IFSStateBusiness ifsStateBusiness;
     private DirectoryInodeBusiness root;
 
     @BeforeEach
@@ -25,9 +22,8 @@ public class FSTest {
 
         fileSystem = new FileSystem(root); // Iniettiamo la root nel FS
 
-        ifsStateBusiness = new FSStateBusiness();
-        ifsStateBusiness.setRoot(root);
-        ifsStateBusiness.setCurrentWorkingDirectory(root);
+        fileSystem.setRoot(root);
+        fileSystem.setCurrentWorkingDirectory(root);
 
         // 2. Creazione entità per il test
         // createDirectory richiede il genitore come argomento
@@ -36,14 +32,14 @@ public class FSTest {
 
         // 3. Collegamento manuale alla CWD (Root)
         // FileSystem crea l'oggetto, ma dobbiamo aggiungerlo noi alla directory corrente
-        DirectoryInodeBusiness cwd = ifsStateBusiness.getCurrentWorkingDirectory();
+        DirectoryInodeBusiness cwd = fileSystem.getCurrentWorkingDirectory();
         cwd.addEntry("TestDir", directory);
         cwd.addEntry("TestFile", file);
     }
 
     @Test
     public void testDirectoryMethods() {
-        DirectoryInodeBusiness cwd = ifsStateBusiness.getCurrentWorkingDirectory();
+        DirectoryInodeBusiness cwd = fileSystem.getCurrentWorkingDirectory();
 
         // 1) Verifica ID (deve essere > 0)
         assertTrue(directory.getId() > 0, "L'ID della directory dovrebbe essere positivo");
@@ -60,7 +56,7 @@ public class FSTest {
 
     @Test
     public void testFileMethods() {
-        DirectoryInodeBusiness cwd = ifsStateBusiness.getCurrentWorkingDirectory();
+        DirectoryInodeBusiness cwd = fileSystem.getCurrentWorkingDirectory();
 
         // 1) Verifica ID
         assertTrue(file.getId() > 0, "L'ID del file dovrebbe essere positivo");

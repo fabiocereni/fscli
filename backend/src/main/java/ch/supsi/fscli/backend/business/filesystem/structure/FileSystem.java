@@ -12,6 +12,8 @@ public class FileSystem {
     private Map<Long, Inode> inodeTable = new HashMap<>();
     private long nextInodeId = 1L;
 
+    private DirectoryInodeBusiness currentWorkingDirectory;
+    private String currentWorkingDirectoryPath = "/";
     private DirectoryInodeBusiness root;
 
     @Inject
@@ -68,5 +70,25 @@ public class FileSystem {
 
     public void setNextInodeId(long nextInodeId) {
         this.nextInodeId = nextInodeId;
+    }
+
+    public DirectoryInodeBusiness getCurrentWorkingDirectory() {
+        return this.currentWorkingDirectory;
+    }
+
+    public void setCurrentWorkingDirectory(DirectoryInodeBusiness directory) {
+        this.currentWorkingDirectory = directory;
+    }
+
+    public void setRoot(DirectoryInodeBusiness root) {
+        this.root = root;
+    }
+
+    public String getCurrentWorkingDirectoryPath() {
+        return currentWorkingDirectoryPath;
+    }
+
+    public void setCurrentWorkingDirectoryPath(String currentWorkingDirectoryPath) {
+        this.currentWorkingDirectoryPath = currentWorkingDirectoryPath;
     }
 }
