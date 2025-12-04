@@ -55,13 +55,12 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
     private void testFileMenu() {
         step("file menu...", () -> {
             // file menu
-            sleep(SLEEP_INTERVAL);
             Menu menu = lookup("#fileMenu").queryAs(MenuBarButton.class).menu;
             assertTrue(menu.isVisible());
             assertFalse(menu.isDisable());
 
             // open the menu
-            sleep(SLEEP_INTERVAL);
+
             clickOn("#fileMenu");
 
 
@@ -87,22 +86,16 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             assertTrue(exitMenuItem.isVisible());
             assertFalse(exitMenuItem.isDisable());
 
-            // close the menu
-            sleep(SLEEP_INTERVAL);
             clickOn("#fileMenu");
         });
     }
 
     private void testEditMenu() {
         step("edit menu...", () -> {
-            // edit menu
-            sleep(SLEEP_INTERVAL);
             Menu menu = lookup("#editMenu").queryAs(MenuBarButton.class).menu;
             assertTrue(menu.isVisible());
             assertFalse(menu.isDisable());
 
-            // open the menu
-            sleep(SLEEP_INTERVAL);
             clickOn("#editMenu");
 
             MenuItem preferencesMenuItem = lookup("#preferencesMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
@@ -110,22 +103,18 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             assertFalse(preferencesMenuItem.isDisable());
 
 
-            // close the menu
-            sleep(SLEEP_INTERVAL);
+
             clickOn("#editMenu");
         });
     }
 
     private void testHelpMenu() {
         step("help menu...", () -> {
-            // help menu
-            sleep(SLEEP_INTERVAL);
+
             Menu menu = lookup("#helpMenu").queryAs(MenuBarButton.class).menu;
             assertTrue(menu.isVisible());
             assertFalse(menu.isDisable());
 
-            // open the menu
-            sleep(SLEEP_INTERVAL);
             clickOn("#helpMenu");
 
             MenuItem helpMenuItem = lookup("#helpMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
@@ -136,8 +125,6 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             assertTrue(aboutMenuItem.isVisible());
             assertFalse(aboutMenuItem.isDisable());
 
-            // close the menu
-            sleep(SLEEP_INTERVAL);
             clickOn("#helpMenu");
         });
     }
