@@ -1,6 +1,7 @@
 package view;
 
-import ch.supsi.fscli.frontend.controller.IFSDataReaderController;
+
+import ch.supsi.fscli.frontend.controller.persistence.IFSDataReaderController;
 
 import java.io.File;
 

@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class AboutController implements IAboutView, IAboutController {
+public class AboutController implements IAboutController {
 
     private final IShow aboutView;
 

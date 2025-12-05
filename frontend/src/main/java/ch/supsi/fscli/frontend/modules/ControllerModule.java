@@ -8,6 +8,7 @@ import ch.supsi.fscli.frontend.controller.filesystem.creation.IFSCreationControl
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.menubar.*;
+import ch.supsi.fscli.frontend.controller.menubar.IAboutController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
 import com.google.inject.AbstractModule;
@@ -22,7 +23,7 @@ public class ControllerModule extends AbstractModule {
 
         bind(ICommandLineController.class).to(CommandLineController.class).in(Singleton.class);
 
-        // TODO da sistemare
+//        // TODO da sistemare
         bind(IAboutController.class).to(AboutController.class).in(Singleton.class);
 
 
