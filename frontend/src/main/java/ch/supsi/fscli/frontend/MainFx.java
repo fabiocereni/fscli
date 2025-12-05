@@ -1,30 +1,15 @@
 package ch.supsi.fscli.frontend;
 
-import ch.supsi.fscli.backend.modules.FileSystemModule;
 import ch.supsi.fscli.frontend.controller.*;
-import ch.supsi.fscli.frontend.controller.persistence.FSDataReaderController;
-import ch.supsi.fscli.frontend.controller.persistence.FSDataSaverController;
-import ch.supsi.fscli.frontend.controller.filesystem.creation.FSCreationController;
-import ch.supsi.fscli.frontend.controller.filesystem.creation.IFSCreationController;
-import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
-import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
-import ch.supsi.fscli.frontend.controller.menubar.AboutController;
-import ch.supsi.fscli.frontend.controller.menubar.HelpController;
-import ch.supsi.fscli.frontend.controller.menubar.IQuitController;
-import ch.supsi.fscli.frontend.controller.menubar.QuitController;
-import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
-import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
+import ch.supsi.fscli.frontend.controller.menubar.*;
 import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
 import ch.supsi.fscli.frontend.director.LogDirector;
-import ch.supsi.fscli.frontend.director.WidgetDirector;
-import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
-import ch.supsi.fscli.frontend.modules.ControllerModule;
-import ch.supsi.fscli.frontend.modules.DirectorModule;
-import ch.supsi.fscli.frontend.modules.ModelModule;
-import ch.supsi.fscli.frontend.modules.ViewModule;
+import ch.supsi.fscli.frontend.modules.*;
 import ch.supsi.fscli.frontend.view.*;
+import ch.supsi.fscli.frontend.view.menubar.MenuBarView;
+import ch.supsi.fscli.frontend.view.menubar.buttonMenubar.*;
 import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.inject.Inject;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -49,95 +34,31 @@ public class MainFx extends Application {
 
     private String applicationTitle = "filesystem command interpreter simulator";
 
-    private Injector injector;
 
     // View
-    private MenuBarView menuBarView;
-    private CommandLineView commandLineView;
-    private OutputView outputView;
-    private LogView logView;
-    private IShow savingView;
-    private IShow readerView;
-    private QuitView quitView;
-    private IShow aboutView;
-    private IShow helpView;
-    private PreferencesView preferencesView;
+    @Inject private MenuBarView menuBarView;
+    @Inject private CommandLineView commandLineView;
+    @Inject private OutputView outputView;
+    @Inject private LogView logView;
+    @Inject private QuitView quitView;
 
-    // Controllers
-    private IFSDataSaverController dataSaverController;
-    private IFSDataReaderController dataReaderController;
-    private IAboutController aboutViewController;
-    private IHelpController helpController;
-    private IQuitController quitController;
+    @Inject private IQuitController quitController;
 
     // Directors
-    private WidgetDirector widgetDirector;
-    private LogDirector logDirector;
-    private ConfirmExitDirector confirmExitDirector;
-
-    // State
-    private IFSCreationController fsStateDirector;
-    private ISupportedLanguageController supportedLanguageController;
-    private IPreferencesController preferencesController;
-    private PreferencesModel preferencesModel;
+    @Inject private LogDirector logDirector;
+    @Inject private ConfirmExitDirector confirmExitDirector;
 
     private BorderPane rootPane;
 
 
-
     @Override
     public void init() {
-
-        this.injector = Guice.createInjector(
-                new ViewModule(),
-                new ControllerModule(),
-                new DirectorModule(),
-                new ModelModule(),
-                new FileSystemModule()
-        );
-
-        // Models & preferences
-        this.preferencesController = injector.getInstance(PreferencesController.class);
-        this.supportedLanguageController = injector.getInstance(SupportedLanguageController.class);
-        this.preferencesModel = injector.getInstance(PreferencesModel.class);
-
-        supportedLanguageController.setSupportedLanguagesTags();
-        supportedLanguageController.setMapLanguages();
-        supportedLanguageController.setLanguageTagSelected(
-                preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE)
-        );
-
-        // Views
-        this.preferencesView = injector.getInstance(PreferencesView.class);
-        this.menuBarView = injector.getInstance(MenuBarView.class);
-        this.commandLineView = injector.getInstance(CommandLineView.class);
-        this.outputView = injector.getInstance(OutputView.class);
-        this.logView = injector.getInstance(LogView.class);
-        this.savingView = injector.getInstance(SaveAsView.class);
-        this.readerView = injector.getInstance(ReaderView.class);
-        this.aboutView = injector.getInstance(AboutView.class);
-        this.helpView = injector.getInstance(HelpView.class);
-        this.quitView = injector.getInstance(QuitView.class);
+        Guice.createInjector(new MainModule()).injectMembers(this);
 
         commandLineView.setOutputView(outputView);
 
-        // Controllers
-        this.dataSaverController = injector.getInstance(FSDataSaverController.class);
-        this.dataReaderController = injector.getInstance(FSDataReaderController.class);
-        this.quitController = injector.getInstance(QuitController.class);
-        this.aboutViewController = injector.getInstance(AboutController.class);
-        this.helpController = injector.getInstance(HelpController.class);
-
-        // Directors
-        this.fsStateDirector = injector.getInstance(FSCreationController.class);
-        this.widgetDirector = injector.getInstance(WidgetDirector.class);
-        this.logDirector = injector.getInstance(LogDirector.class);
-        this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
-
         this.confirmExitDirector.addPropertyChangeListener(this.quitView);
         this.logDirector.addPropertyChangeListener(this.logView);
-
-
 
         buildMainView();
     }
@@ -196,10 +117,6 @@ public class MainFx extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
-
-
-
         Scene mainScene = new Scene(this.rootPane);
 
         primaryStage.setTitle(this.applicationTitle);

@@ -1,6 +1,7 @@
 package ch.supsi.fscli.frontend.controller.i18n;
 
 import ch.supsi.fscli.frontend.model.i18n.ISupportedLanguageModel;
+import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.google.inject.Inject;
 
 import java.util.HashMap;
@@ -12,9 +13,15 @@ public class SupportedLanguageController implements ISupportedLanguageController
     private ISupportedLanguageModel supportedLanguageModel;
 
     @Inject
+    private PreferencesModel preferencesModel;
+
+    @Inject
     @Override
     public void setSupportedLanguagesTags() {
         supportedLanguageModel.setSupportedLanguagesTags();
+        supportedLanguageModel.setMapLanguages();
+        setLanguageTagSelected(
+                preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
     }
 
     @Override
