@@ -55,7 +55,7 @@ public class OutputView implements PropertyChangeListener {
     }
 
     public void appendText(String text) {
-        outputView.setText(text);
+        outputView.appendText(text);
     }
 
     public String getText() {
