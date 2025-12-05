@@ -37,7 +37,7 @@ public class OutputView implements PropertyChangeListener {
         fontOutput = preferencesController.getProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA);
         this.outputView = new TextArea();
         this.outputView.setId("outputView");
-        this.outputView.appendText(supportedLanguageController.getTranslation("label.textOutput") + "\n");
+        this.outputView.setText(supportedLanguageController.getTranslation("label.textOutput") + "\n");
         this.outputView.setStyle("-fx-font-family: " + fontOutput + ";");
 
         this.fsCreationDirector.addPropertyChangeListener(this);
@@ -55,7 +55,7 @@ public class OutputView implements PropertyChangeListener {
     }
 
     public void appendText(String text) {
-        outputView.appendText(text);
+        outputView.setText(text);
     }
 
     public String getText() {

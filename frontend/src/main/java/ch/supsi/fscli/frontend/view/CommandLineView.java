@@ -58,6 +58,7 @@ public class CommandLineView implements PropertyChangeListener {
         this.commandLine = new TextField();
         this.commandLine.setStyle("-fx-font-family: " + fontCommandLine + ";");
         this.commandLine.setDisable(true);
+        this.commandLine.setId("commandLineView");
 
         this.enter = new Button(supportedLanguageController.getTranslation("label.enter"));
         this.enter.setId("enter");
