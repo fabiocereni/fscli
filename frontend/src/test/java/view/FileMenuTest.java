@@ -1,24 +1,10 @@
 package view;
 
-import ch.supsi.fscli.frontend.controller.IFSDataReaderController;
-import ch.supsi.fscli.frontend.modules.ControllerModule;
-import ch.supsi.fscli.frontend.modules.ViewModule;
-import ch.supsi.fscli.frontend.view.ReaderView;
-import com.google.inject.Guice;
+
 import com.sun.javafx.scene.control.ContextMenuContent;
-import com.sun.javafx.scene.control.MenuBarButton;
-import javafx.scene.Node;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.testfx.matcher.control.TextInputControlMatchers;
-
-import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
