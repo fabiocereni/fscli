@@ -8,6 +8,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.function.Supplier;
 
 @Singleton
 public class ReaderView implements IShow {
@@ -15,9 +16,15 @@ public class ReaderView implements IShow {
     @Inject
     private IFSDataReaderController dataReaderController;
 
+    private Supplier<FileChooser> chooserFactory = FileChooser::new;
+
+    public void setChooserFactory(Supplier<FileChooser> factory) {
+        this.chooserFactory = factory;
+    }
+
     @Override
     public void showMyView() {
-        FileChooser chooser = new FileChooser();
+        FileChooser chooser = chooserFactory.get();
         chooser.setTitle("Open Filesystem Backup");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
 
