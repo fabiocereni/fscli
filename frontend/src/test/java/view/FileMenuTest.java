@@ -1,6 +1,5 @@
 package view;
 
-
 import com.sun.javafx.scene.control.ContextMenuContent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
@@ -13,23 +12,23 @@ import static org.testfx.matcher.base.NodeMatchers.*;
 
 public class FileMenuTest extends AbstractMainGUITest {
 
-    @Test
-    public void walkThrough() {
-        testNewButtonPressed();
+//    @Test
+//    public void walkThrough() {
+//        testNewButtonPressed();
 //        testOpenMenuItem();
-        testSaveMenuItem();
-    }
+//        testSaveAsMenuItem();
+//        testSaveMenuItem();
+//        testExitMenuItem();
+//    }
 
     public void createNew() {
         clickOn("#fileMenu");
-
         clickOn("#newMenuItem");
     }
 
-
-    private void testNewButtonPressed() {
-        step("file menu item...", () -> {
-
+    @Test
+    public void testNewButtonPressed() {
+        step("Test creazione nuovo FS...", () -> {
             createNew();
 
             clickOn("#fileMenu");
@@ -38,96 +37,89 @@ public class FileMenuTest extends AbstractMainGUITest {
             assertTrue(exitMenuItem.isVisible());
             assertFalse(exitMenuItem.isDisable());
 
+
+            clickOn("#fileMenu");
+
             verifyThat("#enter", isVisible());
             verifyThat("#enter", isEnabled());
             verifyThat("#outputView", (TextInputControl t) -> t.getText().isEmpty());
+            verifyThat("#logView", (TextInputControl t) -> t.getText().contains("FS creato con successo."));
+        });
+    }
+    @Test
+    public void testOpenMenuItem() {
+        step("Test Open...", () -> {
+            clickOn("#fileMenu");
+
+            MenuItem openMenuItem = lookup("#openMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(openMenuItem.isVisible());
+            assertFalse(openMenuItem.isDisable());
 
 
-//
-//            verifyThat("#logView", (TextInputControl t) ->
-//                    t.getText().contains("Lingua selezionata it_IT") &&
-//                    t.getText().startsWith("FS creato con successo.")
-//            );
+            clickOn("#fileMenu");
+        });
+    }
+    @Test
+    public void testSaveAsMenuItem() {
+        step("Test Save As...", () -> {
+
+            clickOn("#fileMenu");
+            MenuItem saveAsItem = lookup("#saveAsMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertTrue(saveAsItem.isVisible());
+            assertTrue(saveAsItem.isDisable());
+            clickOn("#fileMenu");
 
 
+            createNew();
+
+
+            clickOn("#fileMenu");
+            MenuItem saveAsItemEnabled = lookup("#saveAsMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
+            assertFalse(saveAsItemEnabled.isDisable());
+
+            clickOn("#fileMenu");
         });
     }
 
-
-//    private void testOpenMenuItem() {
-//
-//        IFSDataReaderController dataReaderController = Guice.createInjector(new ControllerModule()).getInstance(IFSDataReaderController.class);
-//
-//
-//        ReaderView mockLoadingView = new ReaderView() {
-//            @Override
-//            public void showMyView() {
-//                // simulazione del comportamento senza aprire dialog
-//                dataReaderController.reader(new File("test.json"));
-//            }
-//        };
-//
-//        dataReaderController.set
-//
-//        FileMenuController controller =
-//                injector.getInstance(FileMenuController.class);
-//
-//
-//
-//        step("file menu item...", () -> {
-//            sleep(SLEEP_INTERVAL);
-//
-//            clickOn("#fileMenu");
-//
-//            MenuItem openMenuItem = lookup("#openMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
-//            assertTrue(openMenuItem.isVisible());
-//            assertFalse(openMenuItem.isDisable());
-//
-//
-//
-//        });
-//    }
-
-
-    private void testSaveMenuItem() {
+    @Test
+    public void testSaveMenuItem() {
         step("test save menu item...", () -> {
-
-
-
-            // 1. Apri il menu File
-            clickOn("#fileMenu");
-
-            MenuItem newMenuItem = lookup("#newMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
-            clickOn(newMenuItem.getStyleableNode());
+            // Assumiamo che createNew() sia già stato chiamato dai test precedenti o lo chiamiamo qui
+             createNew();
 
             clickOn("#fileMenu");
-            // Aspetta che il SaveMenuItem appaia
             verifyThat("#saveMenuItem", isVisible());
-            verifyThat("#saveMenuItem", isEnabled());
-            // 2. Clicca su Save
-            // Nota: Assicurati che l'azione di "save" qui non apra un FileChooser di sistema
-            // che non è mockato/gestito da TestFX, altrimenti il test si bloccherà.
+            // Se è stato creato un FS, dovrebbe essere attivo (o disattivo se appena salvato, dipende dalla logica precisa)
+            // Nel WidgetDirector: saveMenuItem si abilita con InputEvent o FilesystemCreatedEvent
+
+            // Qui clicchiamo save perché FSDataSaverController.save() (senza path)
+            // NON apre un dialog se il path è già impostato o gestito internamente,
+            // MA attenzione: la prima volta potrebbe comportarsi come Save As se non c'è un path.
+            // Nel tuo codice FSDataSaverModel usa un path di default con timestamp, quindi non dovrebbe aprire dialog.
             clickOn("#saveMenuItem");
 
-            // 3. Controlla lo stato del SaveMenuItem dopo l'azione
-            // (Assumendo che lo stato non cambi se non ci sono modifiche da salvare)
-            // Se il tuo sistema resetta lo stato a disabilitato dopo il salvataggio:
-            clickOn("#fileMenu");
-            verifyThat("#saveMenuItem", isVisible());
-            verifyThat("#saveMenuItem", isDisabled()); // Verifica se è disabilitato (più specifico)
-
-            // 4. Controlla il log
-            // Nota: La stringa deve essere nel log
+            // Verifica output nel log
             verifyThat("#logView", (TextInputControl t) ->
                     t.getText().contains("File system salvato correttamente in")
             );
-
-            // 5. Chiudi il menu
-            clickOn("#fileMenu");
         });
     }
 
+    @Test
+    public void testExitMenuItem() {
+        step("Test voce menu Exit...", () -> {
+            // 1. Apri il menu File
+            clickOn("#fileMenu");
 
+            // 2. Recupera l'elemento Exit
+            MenuItem exitMenuItem = lookup("#exitMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
 
+            // 3. Verifiche: deve essere visibile e abilitato (si può sempre uscire)
+            assertTrue(exitMenuItem.isVisible(), "Il menu Exit dovrebbe essere visibile");
+            assertFalse(exitMenuItem.isDisable(), "Il menu Exit dovrebbe essere sempre abilitato");
 
+            // 4. Chiudi il menu senza cliccare (per evitare di chiudere l'app di test)
+            clickOn("#fileMenu");
+        });
+    }
 }

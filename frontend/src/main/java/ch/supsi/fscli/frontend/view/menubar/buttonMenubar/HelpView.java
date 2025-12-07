@@ -19,6 +19,7 @@ public class HelpView implements IShow {
         String commands = supportedLanguageController.getTranslation("label.infoHelp");
 
         TextArea textArea = new TextArea(commands);
+        textArea.setId("helpTextArea");
         textArea.setEditable(false);
         textArea.setWrapText(true);
         textArea.setPrefSize(600, 400);

@@ -52,6 +52,7 @@ public class PreferencesView implements IShow {
         stage = new Stage();
 
         languageComboBox = new ComboBox<>();
+        languageComboBox.setId("languageComboBox");
         fontCommandLineComboBox = new ComboBox<>();
         fontOutputAreaComboBox = new ComboBox<>();
         fontLogAreaComboBox = new ComboBox<>();
@@ -86,6 +87,7 @@ public class PreferencesView implements IShow {
 
         Label linesLabel = new Label(supportedLanguageController.getTranslation("label.line"));
         linesField = new TextField(preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER));
+        linesField.setId("linesField");
         linesField.setPrefColumnCount(4);
         linesField.setEditable(true);
         initLines = preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER);
@@ -130,6 +132,7 @@ public class PreferencesView implements IShow {
             }
         });
 
+        saveButton.setId("saveButton");
         stage.setScene(new Scene(root, 450, 300));
         stage.showAndWait();
     }

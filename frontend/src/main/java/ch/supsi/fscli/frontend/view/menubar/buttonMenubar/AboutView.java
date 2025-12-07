@@ -22,6 +22,7 @@ public class AboutView implements IShow {
         Alert aboutDialog = new Alert(Alert.AlertType.INFORMATION);
         aboutDialog.setTitle(supportedLanguageController.getTranslation("label.titleAbout"));
         aboutDialog.setHeaderText(supportedLanguageController.getTranslation("label.headerTextAbout"));
+        aboutDialog.getDialogPane().setId("aboutDialogPane");
         aboutDialog.setContentText(buildInfoController.getVersion());
         aboutDialog.show();
     }
