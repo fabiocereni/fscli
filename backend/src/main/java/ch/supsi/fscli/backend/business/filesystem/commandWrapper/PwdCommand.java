@@ -20,9 +20,9 @@ public class PwdCommand implements IFSCommand {
     public String getCommandName() { return "pwd"; }
 
     @Override
-    public String execute(List<String> args) {
+    public CommandResult execute(List<String> args) {
         if (!args.isEmpty()) return null;
-        return business.pwd();
+        return new CommandResult( business.pwd(), false );
     }
 
 }

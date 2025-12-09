@@ -22,26 +22,20 @@ public class LnCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
-        try {
+    public CommandResult execute(List<String> args) {
             if (args.size() == 3 && args.get(0).equals("-s")) {
                 String target = args.get(1);
                 String linkName = args.get(2);
 
-                business.lns(target, linkName);
-                return null;
+                return new CommandResult(business.lns(target, linkName),  true);
             } else if (args.size() == 2) {
                 String target = args.get(0);
                 String linkName = args.get(1);
 
-                business.ln(target, linkName);
-                return null;
+                return new CommandResult(business.ln(target, linkName), true);
             }
             else {
-                return "label.wrongLnUse1";
+                return new CommandResult("label.wrongLnUse1", true);
             }
-        } catch (Exception e) {
-            return e.getMessage();
-        }
     }
 }

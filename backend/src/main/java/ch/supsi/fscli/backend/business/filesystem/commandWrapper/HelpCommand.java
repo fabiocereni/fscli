@@ -22,9 +22,9 @@ public class HelpCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
+    public CommandResult execute(List<String> args) {
         if (args.isEmpty())
-            return "label.infoHelp";
-        return "label.wrongHelpUse";
+            return new CommandResult("label.infoHelp", true);
+        return new CommandResult("label.wrongHelpUse", true);
     }
 }
