@@ -1,5 +1,6 @@
 package ch.supsi.fscli.backend.application.filesystem.interpreter;
 
+import ch.supsi.fscli.backend.business.filesystem.commandWrapper.CommandResult;
 import ch.supsi.fscli.backend.business.filesystem.interpreter.IFSInterpreter;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -20,7 +21,7 @@ public class FSInterpreterApplication implements IFSInterpreterApplication {
     }
 
     @Override
-    public String execute(String commandLine) {
+    public CommandResult execute(String commandLine) {
         return interpreter.execute(commandLine);
     }
 }

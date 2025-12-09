@@ -1,5 +1,6 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.backend.business.filesystem.commandWrapper.CommandResult;
 import ch.supsi.fscli.frontend.controller.filesystem.ICommandLineController;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
@@ -77,14 +78,20 @@ public class CommandLineView implements PropertyChangeListener {
                 outputView.clear();
 
             outputView.appendText(commandLineController.getCurrentPath() + "> " + command + "\n");
-            String output = commandLineController.executeCommand(command);
 
-            if ("clear".equals(output)) {
-                outputView.clear();
-            } else if ("label.infoHelp".equals(output)) {
-                outputView.appendText(supportedLanguageController.getTranslation(output));
-            } else if (output != null && !output.isBlank()) {
-                outputView.appendText((supportedLanguageController.getTranslation(output))==null?output+ "\n":supportedLanguageController.getTranslation(output) + "\n");
+            CommandResult output = commandLineController.executeCommand(command);
+
+            if(output != null) {
+                if ("clear".equals(output.getContent())) {
+                    outputView.clear();
+                } else if ("label.infoHelp".equals(output.getContent()) && output.isTranslatable()) {
+                    outputView.appendText(supportedLanguageController.getTranslation(output.getContent()));
+                } else if (output.getContent() != null && !output.getContent().isBlank()) {
+                    if (output.isTranslatable())
+                        outputView.appendText(supportedLanguageController.getTranslation(output.getContent()));
+                    else
+                        outputView.appendText(output.getContent());
+                }
             }
 
             // da decidere

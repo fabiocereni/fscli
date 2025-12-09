@@ -22,10 +22,10 @@ public class RmfileCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
-        if (args.size() != 1) return "label.wrongRmFileUse1";
+    public CommandResult execute(List<String> args) {
+        if (args.size() != 1) return new CommandResult("label.wrongRmFileUse1", true);
         if (!business.rmfile(args.get(0))) {
-            return "label.wrongRmFileUse2";
+            return new CommandResult( "label.wrongRmFileUse2", true);
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package ch.supsi.fscli.backend.business.filesystem.interpreter;
 
+import ch.supsi.fscli.backend.business.filesystem.commandWrapper.CommandResult;
 import ch.supsi.fscli.backend.business.filesystem.commandWrapper.IFSCommand;
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.pwd.IFSPwdCommandBusiness;
 import com.google.inject.Inject;
@@ -30,7 +31,7 @@ public class FSInterpreter implements IFSInterpreter {
     }
 
     @Override
-    public String execute(String commandLine) {
+    public CommandResult execute(String commandLine) {
         if (commandLine == null || commandLine.isBlank())
             return null;
         String[] tokens = commandLine.trim().split("\\s+");
@@ -41,7 +42,7 @@ public class FSInterpreter implements IFSInterpreter {
                 .collect(Collectors.toList());
         IFSCommand command = commands.get(commandName);
         if (command == null)
-            return "label.commandNotFound";
+            return new CommandResult( "label.commandNotFound", true);
         return command.execute(args);
     }
 }
