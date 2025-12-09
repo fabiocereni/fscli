@@ -23,7 +23,7 @@ public class LsCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
+    public CommandResult execute(List<String> args) {
         boolean showInode = false;
         String path = null;
         List<String> cleanArgs = new ArrayList<>();
@@ -35,7 +35,7 @@ public class LsCommand implements IFSCommand {
             }
         }
         if (cleanArgs.size() > 1) {
-            return "label.wrongLsUse1";
+            return new CommandResult( "label.wrongLsUse1", true);
         }
         if (!cleanArgs.isEmpty()) {
             path = cleanArgs.get(0);

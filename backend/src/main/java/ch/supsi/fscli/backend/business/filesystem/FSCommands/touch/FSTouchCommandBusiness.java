@@ -38,6 +38,6 @@ public class FSTouchCommandBusiness implements IFSTouchCommandBusiness {
         FileInodeBusiness toCreate = fileSystem.createFile();
         parentDirectory.addEntry(newFileName, toCreate);
 
-        return "";
+        return null;
     }
 }

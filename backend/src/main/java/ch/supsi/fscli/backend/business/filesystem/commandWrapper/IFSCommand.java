@@ -6,5 +6,5 @@ public interface IFSCommand {
     // restituisce il nome del comando
     String getCommandName();
     // esegue la logica del comando
-    String execute(List<String> args);
+    CommandResult execute(List<String> args);
 }

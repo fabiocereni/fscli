@@ -20,12 +20,12 @@ public class TouchCommand implements IFSCommand {
     public String getCommandName() { return "touch"; }
 
     @Override
-    public String execute(List<String> args) {
+    public CommandResult execute(List<String> args) {
         if(args.size() != 1)
-            return "label.wrongTouchUse1";
+            return new CommandResult("label.wrongTouchUse1", true);
         String result  = business.touch(args.get(0));
         if(!result.isEmpty())
-            return result;
+            return new CommandResult(result, true);
         return null;
     }
 

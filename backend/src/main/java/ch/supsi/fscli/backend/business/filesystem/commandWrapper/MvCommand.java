@@ -22,11 +22,11 @@ public class MvCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
+    public CommandResult execute(List<String> args) {
         if (args.size() != 2)
-            return "label.wrongMvUse1";
+            return new CommandResult("label.wrongMvUse1", true);
         if (!business.mv(args.get(0), args.get(1))) {
-            return "label.wrongMvUse2";
+            return new CommandResult( "label.wrongMvUse2", true);
         }
         return null;
 

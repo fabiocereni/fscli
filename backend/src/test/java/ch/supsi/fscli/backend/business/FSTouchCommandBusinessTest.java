@@ -46,7 +46,7 @@ class FSTouchCommandBusinessTest {
     void testTouchCreatesFileInRoot() {
         String result = touch.touch("newfile.txt");
 
-        assertEquals("", result);
+        assertEquals(null, result);
 
         FileInodeBusiness file = (FileInodeBusiness) root.getEntry("newfile.txt");
         assertNotNull(file);
@@ -55,7 +55,7 @@ class FSTouchCommandBusinessTest {
     @Test
     void testTouchCreatesFileInSubfolder() {
         String result = touch.touch("sub/photo.png");
-        assertEquals("", result);
+        assertEquals(null, result);
 
         FileInodeBusiness file = (FileInodeBusiness) sub.getEntry("photo.png");
         assertNotNull(file);

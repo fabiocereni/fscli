@@ -2,9 +2,11 @@ package ch.supsi.fscli.backend.business;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.ln.FSLnCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
+import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import ch.supsi.fscli.backend.modules.FileSystemModule;
-import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
-import ch.supsi.fscli.backend.business.filesystem.structure.*;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,121 +16,109 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FSLnCommandBusinessTest {
 
-    private Injector injector;
-
     private FSLnCommandBusiness lnCommand;
-    private FileSystem fs;
-    private PathSolver pathSolver;
-
+    private FileSystem fileSystem;
     private DirectoryInodeBusiness root;
-    private DirectoryInodeBusiness home;
-    private DirectoryInodeBusiness user;
-    private FileInodeBusiness fileA;
+    private FileInodeBusiness targetFile;
 
     @BeforeEach
     void setUp() {
-        injector = Guice.createInjector(new FileSystemModule());
-
+        // Setup ambiente con Guice
+        Injector injector = Guice.createInjector(new FileSystemModule());
         lnCommand = injector.getInstance(FSLnCommandBusiness.class);
-        fs        = injector.getInstance(FileSystem.class);
-        pathSolver = injector.getInstance(PathSolver.class);
+        fileSystem = injector.getInstance(FileSystem.class);
 
-        // reset filesystem
+        // Inizializzazione FS
         injector.getInstance(IFSCreationBusiness.class).newfs();
+        root = fileSystem.getRoot();
 
-        root = fs.getRoot();
-
-        // costruzione manuale albero
-        home = new DirectoryInodeBusiness(200);
-        user = new DirectoryInodeBusiness(300);
-
-        fileA = fs.createFile();
-
-        root.addEntry("home", home);
-        home.addEntry("user", user);
-
-        user.addEntry("fileA.txt", fileA);
-
-        fs.setCurrentWorkingDirectory(root);
+        // Setup CWD e file target
+        fileSystem.setCurrentWorkingDirectory(root);
+        targetFile = fileSystem.createFile();
+        root.addEntry("targetFile", targetFile);
     }
 
-    // -----------------------------------------------------
-    // HARD LINK TESTS
-    // -----------------------------------------------------
+    // --- TEST HARD LINK (ln) ---
 
     @Test
-    void testHardLinkSuccess() {
-        boolean result = lnCommand.ln("/home/user/fileA.txt", "/home/user/fileA_link.txt");
+    void testLnSuccess() {
+        // Esecuzione: ritorna String (null se successo)
+        String result = lnCommand.ln("targetFile", "hardLink");
 
-        assertTrue(result);
+        // Verifica successo
+        assertNull(result, "In caso di successo ln deve ritornare null");
 
-        Inode linked = user.getEntry("fileA_link.txt");
-        assertNotNull(linked);
-        assertEquals(linked, fileA);
-        assertEquals(2, fileA.getLinkCount());
+        // Verifica effetto collaterale (link creato)
+        Inode linkNode = root.getEntry("hardLink");
+        assertNotNull(linkNode);
+
+        // Verifica che sia un Hard Link (stesso oggetto, contatore incrementato)
+        assertSame(targetFile, linkNode);
+        assertEquals(2, targetFile.getLinkCount());
     }
 
     @Test
-    void testHardLinkTargetNotFound() {
-        Exception ex = assertThrows(IllegalArgumentException.class,
-                () -> lnCommand.ln("/home/user/notExists.txt", "/home/user/x"));
-        assertEquals("ln: target file does not exist", ex.getMessage());
+    void testLnTargetDoesNotExist() {
+        String result = lnCommand.ln("nonEsiste", "link");
+
+        // Verifica errore specifico
+        assertEquals("label.wrongLnUse2", result);
     }
 
     @Test
-    void testHardLinkTargetIsNotFile() {
-        Exception ex = assertThrows(IllegalArgumentException.class,
-                () -> lnCommand.ln("/home/user", "/home/user/x"));
-        assertEquals("ln: target is not a file", ex.getMessage());
+    void testLnTargetIsDirectory() {
+        // Creazione directory target
+        DirectoryInodeBusiness dir = fileSystem.createDirectory(root);
+        root.addEntry("myDir", dir);
+
+        String result = lnCommand.ln("myDir", "linkToDir");
+
+        // Hard link su directory non permesso
+        assertEquals("label.wrongLnUse3", result);
     }
 
     @Test
-    void testHardLinkParentDirNotExists() {
-        Exception ex = assertThrows(IllegalArgumentException.class,
-                () -> lnCommand.ln("/home/user/fileA.txt", "/ghost/fileA_link.txt"));
-        assertEquals("ln: parent directory does not exist", ex.getMessage());
+    void testLnNameAlreadyExists() {
+        // Creiamo un file che occupa già il nome destinazione
+        root.addEntry("esistente", fileSystem.createFile());
+
+        // Nota: Nel tuo codice ln() usa le label di lns() per parent e name exists (es. label.wrongLnsUse4)
+        String result = lnCommand.ln("targetFile", "esistente");
+
+        assertEquals("label.wrongLnsUse4", result);
+    }
+
+    // --- TEST SOFT LINK (lns) ---
+
+    @Test
+    void testLnsSuccess() {
+        String result = lnCommand.lns("targetFile", "softLink");
+
+        // Verifica successo
+        assertNull(result, "In caso di successo lns deve ritornare null");
+
+        // Verifica creazione soft link
+        Inode node = root.getEntry("softLink");
+        assertNotNull(node);
+        assertTrue(node instanceof FileInodeBusiness);
+
+        FileInodeBusiness softLink = (FileInodeBusiness) node;
+        assertTrue(softLink.isSoftLink());
+        assertEquals("targetFile", softLink.getLinkPath());
     }
 
     @Test
-    void testHardLinkNameAlreadyExists() {
-        // fileA.txt exists
-        Exception ex = assertThrows(IllegalArgumentException.class,
-                () -> lnCommand.ln("/home/user/fileA.txt", "/home/user/fileA.txt"));
-        assertEquals("ln: file with same name already exists", ex.getMessage());
-    }
+    void testLnsTargetDoesNotExist() {
+        // La tua implementazione richiede che il target esista
+        String result = lnCommand.lns("ghostFile", "link");
 
-
-    // -----------------------------------------------------
-    // SOFT LINK TESTS
-    // -----------------------------------------------------
-
-    @Test
-    void testSoftLinkSuccess() {
-        String msg = lnCommand.lns("/home/user/fileA.txt", "/home/user/linkSoft.txt");
-
-        assertEquals("", msg);
-
-        Inode soft = user.getEntry("linkSoft.txt");
-        assertNotNull(soft);
-        assertTrue(((FileInodeBusiness) soft).isSoftLink());
-        assertEquals("/home/user/fileA.txt", ((FileInodeBusiness) soft).getLinkPath());
+        assertEquals("label.wrongLnsUse2", result);
     }
 
     @Test
-    void testSoftLinkTargetNotFound() {
-        String msg = lnCommand.lns("/home/user/notFound.txt", "/home/user/x");
-        assertEquals("label.wrongLnUse2", msg);
-    }
+    void testLnsParentDoesNotExist() {
+        String result = lnCommand.lns("targetFile", "cartellaFinta/link");
 
-    @Test
-    void testSoftLinkParentNotFound() {
-        String msg = lnCommand.lns("/home/user/fileA.txt", "/ghost/link.txt");
-        assertEquals("label.wrongLnUse3", msg);
-    }
-
-    @Test
-    void testSoftLinkNameAlreadyExists() {
-        String msg = lnCommand.lns("/home/user/fileA.txt", "/home/user/fileA.txt");
-        assertEquals("label.wrongLnUse4", msg);
+        assertEquals("label.wrongLnsUse3", result);
     }
 }

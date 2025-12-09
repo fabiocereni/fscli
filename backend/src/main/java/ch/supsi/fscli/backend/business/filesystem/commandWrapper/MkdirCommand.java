@@ -22,10 +22,10 @@ public class MkdirCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
-        if (args.size() != 1) return "label.wrongMkdirUse1";
+    public CommandResult execute(List<String> args) {
+        if (args.size() != 1) return new CommandResult("label.wrongMkdirUse1", true);
         if (!business.mkdir(args.get(0))) {
-            return "label.wrongMkdirUse2";
+            return new CommandResult("label.wrongMkdirUse2",  true);
         }
         return null;
     }
