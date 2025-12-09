@@ -19,7 +19,6 @@ public class FileSystemModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(IFSCdCommandBusiness.class).to(FSCdCommandBusiness.class);
 
         Multibinder<IFSCommand> binder = Multibinder.newSetBinder(binder(), IFSCommand.class);
 
@@ -35,5 +34,4 @@ public class FileSystemModule extends AbstractModule {
         binder.addBinding().to(TouchCommand.class);
         binder.addBinding().to(ClearCommand.class);
     }
-
 }

@@ -2,7 +2,7 @@ package ch.supsi.fscli.frontend.controller.persistence;
 
 import ch.supsi.fscli.frontend.director.FSLoadDirectory;
 import ch.supsi.fscli.frontend.director.LogDirector;
-import ch.supsi.fscli.frontend.model.IFSStateModel;
+import ch.supsi.fscli.frontend.model.filesystem.IFSStateModel;
 import ch.supsi.fscli.frontend.model.persistence.IFSDataReaderModel;
 import ch.supsi.fscli.frontend.view.IShow;
 import ch.supsi.fscli.frontend.view.menubar.qualifier.ReaderViewQualifier;

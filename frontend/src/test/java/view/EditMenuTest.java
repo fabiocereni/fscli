@@ -14,6 +14,12 @@ public class EditMenuTest extends AbstractMainGUITest {
 
 
     @Test
+    void walkThrough() {
+        testPreferences();
+    }
+
+
+//    @Test
     public void testPreferences() {
         step("Apertura finestra preferenze...", () -> {
             clickOn("#editMenu");

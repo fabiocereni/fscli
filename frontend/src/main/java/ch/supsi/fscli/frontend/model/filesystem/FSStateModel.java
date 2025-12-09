@@ -1,4 +1,4 @@
-package ch.supsi.fscli.frontend.model;
+package ch.supsi.fscli.frontend.model.filesystem;
 
 import com.google.inject.Singleton;
 

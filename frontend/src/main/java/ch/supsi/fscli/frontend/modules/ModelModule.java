@@ -1,6 +1,9 @@
 package ch.supsi.fscli.frontend.modules;
 
-import ch.supsi.fscli.frontend.model.*;
+import ch.supsi.fscli.frontend.model.filesystem.CommandLineModel;
+import ch.supsi.fscli.frontend.model.filesystem.FSStateModel;
+import ch.supsi.fscli.frontend.model.filesystem.ICommandLineModel;
+import ch.supsi.fscli.frontend.model.filesystem.IFSStateModel;
 import ch.supsi.fscli.frontend.model.persistence.FSDataReaderModel;
 import ch.supsi.fscli.frontend.model.persistence.FSDataSaverModel;
 import ch.supsi.fscli.frontend.model.persistence.IFSDataReaderModel;
@@ -21,5 +24,6 @@ public class ModelModule extends AbstractModule {
         bind(IFSDataSaverModel.class).to(FSDataSaverModel.class).in(Singleton.class);
         bind(IFSDataReaderModel.class).to(FSDataReaderModel.class).in(Singleton.class);
         bind(ISupportedLanguageModel.class).to(SupportedLanguageModel.class).in(Singleton.class);
+        bind(ICommandLineModel.class).to(CommandLineModel.class).in(Singleton.class);
     }
 }

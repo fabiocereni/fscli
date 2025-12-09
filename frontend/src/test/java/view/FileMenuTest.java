@@ -12,21 +12,21 @@ import static org.testfx.matcher.base.NodeMatchers.*;
 
 public class FileMenuTest extends AbstractMainGUITest {
 
-//    @Test
-//    public void walkThrough() {
-//        testNewButtonPressed();
-//        testOpenMenuItem();
-//        testSaveAsMenuItem();
-//        testSaveMenuItem();
-//        testExitMenuItem();
-//    }
+    @Test
+    public void walkThrough() {
+        testNewButtonPressed();
+        testOpenMenuItem();
+        testSaveAsMenuItem();
+        testSaveMenuItem();
+        testExitMenuItem();
+    }
 
     public void createNew() {
         clickOn("#fileMenu");
         clickOn("#newMenuItem");
     }
 
-    @Test
+
     public void testNewButtonPressed() {
         step("Test creazione nuovo FS...", () -> {
             createNew();
@@ -46,7 +46,7 @@ public class FileMenuTest extends AbstractMainGUITest {
             verifyThat("#logView", (TextInputControl t) -> t.getText().contains("FS creato con successo."));
         });
     }
-    @Test
+
     public void testOpenMenuItem() {
         step("Test Open...", () -> {
             clickOn("#fileMenu");
@@ -59,7 +59,7 @@ public class FileMenuTest extends AbstractMainGUITest {
             clickOn("#fileMenu");
         });
     }
-    @Test
+
     public void testSaveAsMenuItem() {
         step("Test Save As...", () -> {
 
@@ -81,44 +81,30 @@ public class FileMenuTest extends AbstractMainGUITest {
         });
     }
 
-    @Test
     public void testSaveMenuItem() {
         step("test save menu item...", () -> {
-            // Assumiamo che createNew() sia già stato chiamato dai test precedenti o lo chiamiamo qui
              createNew();
 
             clickOn("#fileMenu");
             verifyThat("#saveMenuItem", isVisible());
-            // Se è stato creato un FS, dovrebbe essere attivo (o disattivo se appena salvato, dipende dalla logica precisa)
-            // Nel WidgetDirector: saveMenuItem si abilita con InputEvent o FilesystemCreatedEvent
 
-            // Qui clicchiamo save perché FSDataSaverController.save() (senza path)
-            // NON apre un dialog se il path è già impostato o gestito internamente,
-            // MA attenzione: la prima volta potrebbe comportarsi come Save As se non c'è un path.
-            // Nel tuo codice FSDataSaverModel usa un path di default con timestamp, quindi non dovrebbe aprire dialog.
-            clickOn("#saveMenuItem");
 
-            // Verifica output nel log
             verifyThat("#logView", (TextInputControl t) ->
                     t.getText().contains("File system salvato correttamente in")
             );
         });
     }
 
-    @Test
     public void testExitMenuItem() {
         step("Test voce menu Exit...", () -> {
-            // 1. Apri il menu File
             clickOn("#fileMenu");
 
-            // 2. Recupera l'elemento Exit
             MenuItem exitMenuItem = lookup("#exitMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
 
-            // 3. Verifiche: deve essere visibile e abilitato (si può sempre uscire)
             assertTrue(exitMenuItem.isVisible(), "Il menu Exit dovrebbe essere visibile");
             assertFalse(exitMenuItem.isDisable(), "Il menu Exit dovrebbe essere sempre abilitato");
 
-            // 4. Chiudi il menu senza cliccare (per evitare di chiudere l'app di test)
+
             clickOn("#fileMenu");
         });
     }

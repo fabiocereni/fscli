@@ -14,27 +14,17 @@ import static org.testfx.matcher.base.NodeMatchers.*;
 
 public class GeneralLayoutTest extends AbstractMainGUITest {
 
-//    private final SupportedLanguageController supportedLanguageController = new SupportedLanguageController();
-//    private final PreferencesController preferencesController = new PreferencesController();
-//
-//    @BeforeEach
-//    public void setUp() {
-//        supportedLanguageController.setSupportedLanguagesTags();
-//        supportedLanguageController.setMapLanguages();
-//        supportedLanguageController.setLanguageTagSelected(
-//                preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE)
-//        );
-//    }
 
     @Test
-    public void walkThrough() {
+    void walkThrough() {
         testMainScene();
         testFileMenu();
         testEditMenu();
         testHelpMenu();
     }
 
-    private void testMainScene() {
+//    @Test
+    public void testMainScene() {
         step("main scene...", () -> {
             verifyThat("#fileMenu", isVisible());
             verifyThat("#editMenu", isVisible());
@@ -51,8 +41,8 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
     }
 
 
-
-    private void testFileMenu() {
+//    @Test
+    public void testFileMenu() {
         step("file menu...", () -> {
             // file menu
             Menu menu = lookup("#fileMenu").queryAs(MenuBarButton.class).menu;
@@ -90,7 +80,8 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
         });
     }
 
-    private void testEditMenu() {
+//    @Test
+    public void testEditMenu() {
         step("edit menu...", () -> {
             Menu menu = lookup("#editMenu").queryAs(MenuBarButton.class).menu;
             assertTrue(menu.isVisible());
@@ -108,7 +99,8 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
         });
     }
 
-    private void testHelpMenu() {
+//    @Test
+    public void testHelpMenu() {
         step("help menu...", () -> {
 
             Menu menu = lookup("#helpMenu").queryAs(MenuBarButton.class).menu;

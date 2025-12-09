@@ -3,7 +3,7 @@ package ch.supsi.fscli.frontend.controller.persistence;
 import ch.supsi.fscli.frontend.director.LogDirector;
 import ch.supsi.fscli.frontend.director.SaveEventDirector;
 import ch.supsi.fscli.frontend.model.persistence.IFSDataSaverModel;
-import ch.supsi.fscli.frontend.model.IFSStateModel;
+import ch.supsi.fscli.frontend.model.filesystem.IFSStateModel;
 import ch.supsi.fscli.frontend.view.IShow;
 import ch.supsi.fscli.frontend.view.menubar.qualifier.SavingViewQualifier;
 import com.google.inject.Inject;

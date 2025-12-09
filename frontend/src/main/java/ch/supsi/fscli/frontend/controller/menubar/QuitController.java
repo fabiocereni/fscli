@@ -2,7 +2,7 @@ package ch.supsi.fscli.frontend.controller.menubar;
 
 import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
 
-import ch.supsi.fscli.frontend.model.IFSStateModel;
+import ch.supsi.fscli.frontend.model.filesystem.IFSStateModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import javafx.stage.Stage;

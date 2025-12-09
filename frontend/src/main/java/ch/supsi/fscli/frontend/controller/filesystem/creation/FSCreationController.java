@@ -4,7 +4,7 @@ package ch.supsi.fscli.frontend.controller.filesystem.creation;
 import ch.supsi.fscli.backend.application.filesystem.creation.IFSCreationApplication;
 import ch.supsi.fscli.frontend.director.FSCreationDirector;
 import ch.supsi.fscli.frontend.director.LogDirector;
-import ch.supsi.fscli.frontend.model.IFSStateModel;
+import ch.supsi.fscli.frontend.model.filesystem.IFSStateModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
