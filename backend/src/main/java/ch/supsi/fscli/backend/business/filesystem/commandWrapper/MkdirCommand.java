@@ -4,12 +4,15 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.mkdir.IFSMkdirComma
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class MkdirCommand implements IFSCommand {
 
     private final IFSMkdirCommandBusiness business;
+
+    private List<String> args = new ArrayList<>();
 
     @Inject
     public MkdirCommand(IFSMkdirCommandBusiness business) {
@@ -22,11 +25,22 @@ public class MkdirCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
-        if (args.size() != 1) return "label.wrongMkdirUse1";
-        if (!business.mkdir(args.get(0))) {
-            return "label.wrongMkdirUse2";
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    @Override
+    public String execute() {
+        if (args.isEmpty()) return "label.wrongMkdirUse1";
+
+        boolean errorsOccurred = false;
+        for (String directoryName : args) {
+            boolean success = business.mkdir(directoryName);
+            if (!success) errorsOccurred = true;
         }
+
+        if (errorsOccurred) return "label.wrongMkdirUse2";
         return null;
     }
+
 }

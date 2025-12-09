@@ -4,12 +4,15 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.mv.IFSMvCommandBusi
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class MvCommand implements IFSCommand {
 
     private final IFSMvCommandBusiness business;
+
+    private List<String> args = new ArrayList<>();
 
     @Inject
     public MvCommand(IFSMvCommandBusiness business) {
@@ -22,13 +25,21 @@ public class MvCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    @Override
+    public String execute() {
         if (args.size() != 2)
             return "label.wrongMvUse1";
-        if (!business.mv(args.get(0), args.get(1))) {
+
+        String source = this.args.get(0);
+        String destination = this.args.get(1);
+
+        if (!business.mv(source, destination)) {
             return "label.wrongMvUse2";
         }
         return null;
-
     }
 }

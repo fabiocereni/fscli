@@ -4,12 +4,15 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.touch.IFSTouchComma
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class TouchCommand implements IFSCommand {
 
     private final IFSTouchCommandBusiness business;
+
+    private List<String> args = new ArrayList<>();
 
     @Inject
     public TouchCommand(IFSTouchCommandBusiness business) {
@@ -20,13 +23,24 @@ public class TouchCommand implements IFSCommand {
     public String getCommandName() { return "touch"; }
 
     @Override
-    public String execute(List<String> args) {
-        if(args.size() != 1)
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    @Override
+    public String execute() {
+        if(args.isEmpty())
             return "label.wrongTouchUse1";
-        String result  = business.touch(args.get(0));
-        if(!result.isEmpty())
-            return result;
-        return null;
+
+        String lastError = null;
+
+        for (String fileName : args) {
+            String result = business.touch(fileName);
+            if(!result.isEmpty())
+                lastError = result;
+        }
+
+        return lastError;
     }
 
 }
