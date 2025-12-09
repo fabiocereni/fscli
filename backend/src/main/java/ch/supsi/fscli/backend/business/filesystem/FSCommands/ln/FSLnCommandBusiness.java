@@ -24,30 +24,30 @@ public class FSLnCommandBusiness implements IFSLnCommandBusiness {
     }
 
     @Override
-    public boolean ln(String target, String linkName) {
+    public String ln(String target, String linkName) {
 
         Optional<Inode> targetOpt = pathSolver.resolvePath(target);
         if (targetOpt.isEmpty())
-            throw new IllegalArgumentException("ln: target file does not exist");
+            return "label.wrongLnUse2";
 
         Inode targetNode = targetOpt.get();
         if (targetNode.getType() != InodeType.FILE)
-            throw new IllegalArgumentException("ln: target is not a file");
+            return "label.wrongLnUse3";
 
         DirectoryInodeBusiness parent = pathSolver.extractParentDirectory(linkName);
         if (parent == null)
-            throw new IllegalArgumentException("ln: parent directory does not exist");
+            return "label.wrongLnsUse3";
 
         String newName = pathSolver.extractFileName(linkName);
 
         if (pathSolver.nameAlreadyExists(parent, newName))
-            throw new IllegalArgumentException("ln: file with same name already exists");
+            return "label.wrongLnsUse4";
 
         parent.addEntry(newName, targetNode);
 
         targetNode.incLinkCount();
 
-        return true;
+        return null;
     }
 
     @Override
@@ -55,16 +55,16 @@ public class FSLnCommandBusiness implements IFSLnCommandBusiness {
 
         Optional<Inode> targetOpt = pathSolver.resolvePath(target);
         if (targetOpt.isEmpty())
-            return "label.wrongLnUse2";
+            return "label.wrongLnsUse2";
 
         DirectoryInodeBusiness parent = pathSolver.extractParentDirectory(linkName);
         if (parent == null)
-            return "label.wrongLnUse3";
+            return "label.wrongLnsUse3";
 
         String newName = pathSolver.extractFileName(linkName);
 
         if (pathSolver.nameAlreadyExists(parent, newName))
-            return "label.wrongLnUse4";
+            return "label.wrongLnsUse4";
 
         FileInodeBusiness softLink = fileSystem.createFile();
         softLink.setSoftLink(true);
@@ -72,6 +72,6 @@ public class FSLnCommandBusiness implements IFSLnCommandBusiness {
 
         parent.addEntry(newName, softLink);
 
-        return "";
+        return null;
     }
 }

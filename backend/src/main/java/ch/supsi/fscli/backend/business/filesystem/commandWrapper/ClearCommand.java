@@ -18,10 +18,10 @@ public class ClearCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
+    public CommandResult execute(List<String> args) {
         if (!args.isEmpty()) {
-            return "label.wrongClearUse";
+            return new CommandResult("label.wrongClearUse", true);
         }
-        return "clear";
+        return new CommandResult("clear", false);
     }
 }

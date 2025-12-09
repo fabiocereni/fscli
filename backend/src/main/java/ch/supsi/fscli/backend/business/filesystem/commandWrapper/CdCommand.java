@@ -19,10 +19,10 @@ public class CdCommand implements IFSCommand {
     public String getCommandName() { return "cd"; }
 
     @Override
-    public String execute(List<String> args) {
-        if (args.size() != 1) return "label.wrongCdUse1";
+    public CommandResult execute(List<String> args) {
+        if (args.size() != 1) return new CommandResult("label.wrongCdUse1", true);
         if (!business.cd(args.get(0))) {
-            return "label.wrongCdUse2";
+            return new CommandResult("label.wrongCdUse2", true);
         }
         return null;
     }

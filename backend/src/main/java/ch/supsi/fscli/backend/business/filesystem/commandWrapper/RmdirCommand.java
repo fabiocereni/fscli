@@ -22,10 +22,10 @@ public class RmdirCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
-        if (args.size() != 1) return "label.wrongRmUse1";
+    public CommandResult execute(List<String> args) {
+        if (args.size() != 1) return new CommandResult("label.wrongRmUse1", true);
         if (!business.rmdir(args.get(0))) {
-            return "label.wrongRmUse2";
+            return new CommandResult("label.wrongRmUse2", true);
         }
         return null;
     }
