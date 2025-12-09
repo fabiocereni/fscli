@@ -33,15 +33,22 @@ public class FSInterpreter implements IFSInterpreter {
     public String execute(String commandLine) {
         if (commandLine == null || commandLine.isBlank())
             return null;
-        String[] tokens = commandLine.trim().split("\\s+");
-        String commandName = tokens[0].toLowerCase();
 
-        List<String> args = Arrays.stream(tokens)
-                .skip(1)
-                .collect(Collectors.toList());
+        StringTokenizer tokenizer = new StringTokenizer(commandLine);
+        if (!tokenizer.hasMoreTokens()) return null;
+
+        String commandName = tokenizer.nextToken().toLowerCase();
+        List<String> args = new ArrayList<>();
+        while (tokenizer.hasMoreTokens()) {
+            args.add(tokenizer.nextToken());
+        }
+
         IFSCommand command = commands.get(commandName);
+
         if (command == null)
             return "label.commandNotFound";
-        return command.execute(args);
+
+        command.setArgs(args);
+        return command.execute();
     }
 }

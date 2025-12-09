@@ -4,12 +4,15 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmfile.IFSRmfileCom
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class RmfileCommand implements IFSCommand {
 
     private final IFSRmfileCommandBusiness business;
+
+    private List<String> args = new ArrayList<>();
 
     @Inject
     public RmfileCommand(IFSRmfileCommandBusiness business) {
@@ -22,9 +25,17 @@ public class RmfileCommand implements IFSCommand {
     }
 
     @Override
-    public String execute(List<String> args) {
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    @Override
+    public String execute() {
         if (args.size() != 1) return "label.wrongRmFileUse1";
-        if (!business.rmfile(args.get(0))) {
+
+        String fileName = args.get(0);
+
+        if (!business.rmfile(fileName)) {
             return "label.wrongRmFileUse2";
         }
         return null;

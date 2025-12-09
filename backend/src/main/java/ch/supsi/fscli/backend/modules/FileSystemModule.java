@@ -19,7 +19,6 @@ public class FileSystemModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(IFSCdCommandBusiness.class).to(FSCdCommandBusiness.class);
 
         Multibinder<IFSCommand> binder = Multibinder.newSetBinder(binder(), IFSCommand.class);
 
