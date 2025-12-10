@@ -1,22 +1,23 @@
 package ch.supsi.fscli.backend.business.filesystem.interpreter;
 
 import ch.supsi.fscli.backend.business.filesystem.commandWrapper.*;
-import ch.supsi.fscli.backend.business.filesystem.FSCommands.pwd.IFSPwdCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 
 @Singleton
 public class FSInterpreter implements IFSInterpreter {
 
     private final Map<String, IFSCommand> commands = new HashMap<>();
-    private final IFSPwdCommandBusiness pwdCommandBusiness;
+    private final FileSystem fileSystem;
 
 
     @Inject
-    public FSInterpreter(IFSPwdCommandBusiness pwdCommandBusiness,
+    public FSInterpreter(FileSystem fileSystem,
                          CdCommand cd,
                          HelpCommand help,
                          LnCommand ln,
@@ -28,8 +29,7 @@ public class FSInterpreter implements IFSInterpreter {
                          RmfileCommand rmfile,
                          TouchCommand touch,
                          ClearCommand clear) {
-        this.pwdCommandBusiness = pwdCommandBusiness;
-
+        this.fileSystem = fileSystem;
         addCommand(cd);
         addCommand(help);
         addCommand(ln);
@@ -47,10 +47,9 @@ public class FSInterpreter implements IFSInterpreter {
         this.commands.put(command.getCommandName().toLowerCase(), command);
     }
 
-
     @Override
     public String getCurrentpath() {
-        return pwdCommandBusiness.pwd();
+        return commands.get("pwd").execute();
     }
 
     @Override
@@ -72,7 +71,50 @@ public class FSInterpreter implements IFSInterpreter {
         if (command == null)
             return "label.commandNotFound";
 
-        command.setArgs(args);
+        List<String> expandedArgs = expandArgs(args);
+        command.setArgs(expandedArgs);
         return command.execute();
+    }
+
+    private List<String> expandArgs(List<String> args) {
+        List<String> result = new ArrayList<>();
+
+        // Otteniamo i nomi dei file nella cartella corrente per fare i confronti
+        Set<String> filesInDir = fileSystem.getCurrentWorkingDirectory().getEntries().keySet();
+
+        for (String arg : args) {
+            if (arg.contains("*")) {
+                // Convertiamo il pattern "glob" (es. *.txt) in Regex Java (es. ^.*\.txt$)
+                // 1. Escape del punto (.) che in regex significa "qualsiasi carattere"
+                // 2. Sostituzione dell'asterisco (*) con ".*" (qualsiasi sequenza di caratteri)
+                String regex = "^" + arg.replace(".", "\\.").replace("*", ".*") + "$";
+                Pattern pattern = Pattern.compile(regex);
+
+                List<String> matches = new ArrayList<>();
+                for (String fileName : filesInDir) {
+                    // Escludiamo i riferimenti speciali . e ..
+                    if (fileName.equals(".") || fileName.equals("..")) continue;
+
+                    // Se il nome del file corrisponde alla regex, lo aggiungiamo
+                    if (pattern.matcher(fileName).matches()) {
+                        matches.add(fileName);
+                    }
+                }
+
+                // Se abbiamo trovato corrispondenze, le aggiungiamo (ordinate)
+                if (!matches.isEmpty()) {
+                    Collections.sort(matches);
+                    result.addAll(matches);
+                } else {
+                    // Se non ci sono match (es. *.pdf e non ho pdf),
+                    // le shell di solito lasciano l'argomento letterale "*.pdf"
+                    result.add(arg);
+                }
+            } else {
+                // Nessun asterisco, aggiungiamo l'argomento così com'è
+                result.add(arg);
+            }
+        }
+        return result;
     }
 }
