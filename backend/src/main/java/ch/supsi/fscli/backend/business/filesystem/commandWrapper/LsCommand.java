@@ -6,12 +6,12 @@ import com.google.inject.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Singleton
 public class LsCommand implements IFSCommand {
 
     private final IFSLsCommandBusiness business;
-
     private List<String> args = new ArrayList<>();
 
     @Inject
@@ -32,33 +32,75 @@ public class LsCommand implements IFSCommand {
     @Override
     public String execute() {
         boolean showInode = false;
-        String path = null;
+        List<String> targets = new ArrayList<>();
 
-        // Lista temporanea per gli argomenti che non sono opzioni (flag)
-        List<String> cleanArgs = new ArrayList<>();
-
-        // Se args è null (nessun argomento), la lista cleanArgs resta vuota e path resta null -> OK (LS sulla directory corrente)
+        // 1. Parsing: Separiamo opzioni (-i) dai percorsi
         if (this.args != null) {
             for (String arg : this.args) {
                 if (arg.equals("-i")) {
                     showInode = true;
                 } else {
-                    cleanArgs.add(arg);
+                    targets.add(arg);
                 }
             }
         }
 
-        // Controllo validità argomenti (LS accetta al massimo 1 path)
-        if (cleanArgs.size() > 1) {
-            return "label.wrongLsUse1";
+        // Caso A: Nessun target specificato -> ls sulla cartella corrente (.)
+        if (targets.isEmpty()) {
+            String content = business.ls(null, showInode);
+            // Se c'è un errore (es. label.error), lo ritorniamo diretto, altrimenti formattiamo
+            if (isErrorMessage(content)) return content;
+            return formatHierarchy(".", content);
         }
 
-        // Se c'è un path specificato, lo prendiamo
-        if (!cleanArgs.isEmpty()) {
-            path = cleanArgs.get(0);
+        // Caso B: Uno o più target (es. ls folder1 folder2)
+        StringBuilder finalOutput = new StringBuilder();
+
+        for (int i = 0; i < targets.size(); i++) {
+            String path = targets.get(i);
+            String content = business.ls(path, showInode);
+
+            if (isErrorMessage(content)) {
+                finalOutput.append(content);
+            } else {
+                // Applichiamo lo stile gerarchico
+                finalOutput.append(formatHierarchy(path, content));
+            }
+
+            // Aggiungiamo "a capo" tra un blocco e l'altro (ma non alla fine)
+            if (i < targets.size() - 1) {
+                finalOutput.append("\n");
+            }
         }
 
-        // Chiamata alla logica di business
-        return business.ls(path, showInode);
+        return finalOutput.toString();
+    }
+
+    /**
+     * Helper per formattare l'output nello stile:
+     * NomeCartella
+     * !- Contenuto1
+     * !- Contenuto2
+     */
+    private String formatHierarchy(String parentName, String content) {
+        if (content.isEmpty()) {
+            return parentName; // Cartella vuota, stampa solo il nome
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(parentName).append("\n");
+
+        // Prende ogni riga dell'output originale e ci mette davanti "!- "
+        String indentedContent = content.lines()
+                .map(line -> "!- " + line)
+                .collect(Collectors.joining("\n"));
+
+        sb.append(indentedContent);
+        return sb.toString();
+    }
+
+    // Piccolo controllo per evitare di formattare i messaggi di errore come gerarchie
+    private boolean isErrorMessage(String content) {
+        return content.startsWith("label.") || content.contains("cannot access");
     }
 }
