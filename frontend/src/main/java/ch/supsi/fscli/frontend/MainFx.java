@@ -1,6 +1,5 @@
 package ch.supsi.fscli.frontend;
 
-import ch.supsi.fscli.backend.modules.FileSystemModule;
 import ch.supsi.fscli.frontend.controller.*;
 import ch.supsi.fscli.frontend.controller.persistence.FSDataReaderController;
 import ch.supsi.fscli.frontend.controller.persistence.FSDataSaverController;
@@ -95,8 +94,7 @@ public class MainFx extends Application {
         this.applicationTitle = "filesystem command interpreter simulator";
 
         this.injector = Guice.createInjector(new ViewModule(), new ControllerModule(),
-                                             new DirectorModule(), new ModelModule(),
-                                             new FileSystemModule());
+                                             new DirectorModule(), new ModelModule());
 
         this.preferencesController = injector.getInstance(PreferencesController.class);
         this.supportedLanguageController = injector.getInstance(SupportedLanguageController.class);
