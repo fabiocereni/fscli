@@ -4,12 +4,15 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmdir.IFSRmdirComma
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class RmdirCommand implements IFSCommand {
 
     private final IFSRmdirCommandBusiness business;
+
+    private List<String> args = new ArrayList<>();
 
     @Inject
     public RmdirCommand(IFSRmdirCommandBusiness business) {
@@ -22,9 +25,17 @@ public class RmdirCommand implements IFSCommand {
     }
 
     @Override
-    public CommandResult execute(List<String> args) {
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    @Override
+    public CommandResult execute() {
         if (args.size() != 1) return new CommandResult("label.wrongRmUse1", true);
-        if (!business.rmdir(args.get(0))) {
+
+        String directoryName = args.get(0);
+
+        if (!business.rmdir(directoryName)) {
             return new CommandResult("label.wrongRmUse2", true);
         }
         return null;

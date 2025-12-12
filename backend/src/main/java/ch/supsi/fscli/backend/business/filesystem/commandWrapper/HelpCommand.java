@@ -4,12 +4,15 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.help.IFSHelpCommand
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class HelpCommand implements IFSCommand {
 
     private final IFSHelpCommandBusiness business;
+
+    private List<String> args = new ArrayList<>();
 
     @Inject
     public HelpCommand(IFSHelpCommandBusiness business) {
@@ -22,9 +25,16 @@ public class HelpCommand implements IFSCommand {
     }
 
     @Override
-    public CommandResult execute(List<String> args) {
-        if (args.isEmpty())
-            return new CommandResult("label.infoHelp", true);
-        return new CommandResult("label.wrongHelpUse", true);
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
+
+    @Override
+    public CommandResult execute() {
+        if (!args.isEmpty()) {
+            return new CommandResult("label.wrongHelpUse", true);
+        }
+        business.help(); // sistemare
+        return new CommandResult("label.infoHelp", true);
     }
 }

@@ -78,8 +78,10 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
         HashMap<String, HashMap<String, String>> listMapLanguages = new HashMap<>();
 
         for (String tag : languagesTag) {
-            // Convert tags like en_US into a proper Locale to resolve the right bundle
+            // scegliere quale tenere
             Locale currentLocale = Locale.forLanguageTag(tag.replace('_', '-'));
+//            Locale currentLocale = new Locale(tag);
+            System.out.println("CURRENT LOCALE: "+currentLocale);
 
             ResourceBundle bundle = ResourceBundle.getBundle(translationPropertiesLabel, currentLocale);
             HashMap<String, String> mapLanguage = new HashMap<>();

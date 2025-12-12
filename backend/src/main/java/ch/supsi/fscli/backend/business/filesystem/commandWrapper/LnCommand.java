@@ -4,12 +4,15 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.ln.IFSLnCommandBusi
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
 public class LnCommand implements IFSCommand {
 
     private final IFSLnCommandBusiness business;
+
+    private List<String> args = new ArrayList<>();
 
     @Inject
     public LnCommand(IFSLnCommandBusiness business) {
@@ -22,20 +25,33 @@ public class LnCommand implements IFSCommand {
     }
 
     @Override
-    public CommandResult execute(List<String> args) {
-            if (args.size() == 3 && args.get(0).equals("-s")) {
-                String target = args.get(1);
-                String linkName = args.get(2);
+    public void setArgs(List<String> args) {
+        this.args = args;
+    }
 
-                return new CommandResult(business.lns(target, linkName),  true);
-            } else if (args.size() == 2) {
-                String target = args.get(0);
-                String linkName = args.get(1);
+    @Override
+    public CommandResult execute() {
+        if (this.args == null) {
+            return new CommandResult("label.wrongLnUse1", true);
+        }
 
-                return new CommandResult(business.ln(target, linkName), true);
-            }
-            else {
-                return new CommandResult("label.wrongLnUse1", true);
-            }
+        //Soft Link (ln -s <target> <linkName>) -> 3 argomenti
+        if (this.args.size() == 3 && this.args.get(0).equals("-s")) {
+            String target = this.args.get(1);
+            String linkName = this.args.get(2);
+
+            return new CommandResult(business.lns(target, linkName), true);
+        }
+        //Hard Link (ln <target> <linkName>) -> 2 argomenti
+        else if (this.args.size() == 2) {
+            String target = this.args.get(0);
+            String linkName = this.args.get(1);
+
+            return new CommandResult(business.ln(target, linkName), true);
+        }
+        //Numero di argomenti errato
+        else {
+            return new CommandResult("label.wrongLnUse1", true);
+        }
     }
 }
