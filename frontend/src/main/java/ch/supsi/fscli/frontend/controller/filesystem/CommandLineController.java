@@ -15,10 +15,6 @@ public class CommandLineController implements ICommandLineController {
         this.interpreterApplication = interpreterApplication;
     }
 
-    @Override
-    public String getCurrentPath() {
-        return interpreterApplication.getCurrentpath();
-    }
 
     @Override
     public CommandResult executeCommand(String commandLine) {

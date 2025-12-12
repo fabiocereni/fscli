@@ -54,16 +54,11 @@ public class MenuBarView {
     private Menu editMenu;
     private Menu helpMenu;
 
+    @Inject
     public void init () {
         this.fileMenu = new Menu(supportedLanguageController.getTranslation("label.file"));
-        this.fileMenu.setId("fileMenu");
-
         this.editMenu = new Menu(supportedLanguageController.getTranslation("label.edit"));
-        this.editMenu.setId("editMenu");
-
         this.helpMenu = new Menu(supportedLanguageController.getTranslation("label.help"));
-        this.helpMenu.setId("helpMenu");
-
         this.menuBar = new MenuBar();
         this.fsCreationDirector.addPropertyChangeListener(widgetDirector);
         this.FSLoadDirectory.addPropertyChangeListener(widgetDirector);
@@ -97,7 +92,7 @@ public class MenuBarView {
 
         this.widgetDirector.setColleagues(saveMenuItem, saveAsMenuItem);
 
-
+        this.fileMenu.setId("fileMenu");
         this.fileMenu.getItems().add(newMenuItem);
         this.fileMenu.getItems().add(new SeparatorMenuItem());
         this.fileMenu.getItems().add(openMenuItem);
@@ -111,7 +106,7 @@ public class MenuBarView {
         preferencesMenuItem.setId("preferencesMenuItem");
         preferencesMenuItem.setOnAction(actionEvent -> preferencesController.showPreferencesView());
 
-
+        this.editMenu.setId("editMenu");
         this.editMenu.getItems().add(preferencesMenuItem);
 
         // HELP MENU
@@ -129,7 +124,6 @@ public class MenuBarView {
 
         // MENU BAR
         this.menuBar.getMenus().addAll(fileMenu, editMenu, helpMenu);
-
     }
 
     public Node getNode() {

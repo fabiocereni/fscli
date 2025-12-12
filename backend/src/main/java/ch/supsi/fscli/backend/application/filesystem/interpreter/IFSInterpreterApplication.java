@@ -5,8 +5,5 @@ import com.google.inject.ImplementedBy;
 
 @ImplementedBy(FSInterpreterApplication.class)
 public interface IFSInterpreterApplication {
-
-    String getCurrentpath();
     CommandResult execute(String commandLine);
-
 }

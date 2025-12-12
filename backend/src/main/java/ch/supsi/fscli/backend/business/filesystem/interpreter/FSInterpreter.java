@@ -49,11 +49,6 @@ public class FSInterpreter implements IFSInterpreter {
     }
 
     @Override
-    public String getCurrentpath() {
-        return commands.get("pwd").execute();
-    }
-
-    @Override
     public CommandResult execute(String commandLine) {
         if (commandLine == null || commandLine.isBlank())
             return null;

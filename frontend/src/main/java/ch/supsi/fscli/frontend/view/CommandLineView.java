@@ -77,7 +77,7 @@ public class CommandLineView implements PropertyChangeListener {
             if (outputView.getText().equals(supportedLanguageController.getTranslation("label.textOutput") + "\n"))
                 outputView.clear();
 
-            outputView.appendText(commandLineController.getCurrentPath() + "> " + command + "\n");
+            outputView.appendText(commandLineController.executeCommand("pwd").getContent() + "> " + command + "\n");
 
             CommandResult output = commandLineController.executeCommand(command);
 
