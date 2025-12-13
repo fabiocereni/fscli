@@ -136,8 +136,8 @@ public class MainFx extends Application {
     public void start(Stage primaryStage) {
         // init
         this.menuBarView.initMenuBarView();
+        this.outputView.initOutputView(Integer.parseInt(preferencesController.getProperty(PreferencesModel.KEY_LINES_NUMBER)));
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
-        this.outputView.initOutputView(PREF_OUTPUT_VIEW_ROW_COUNT);
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
 
         // horizontal box to hold the command line
