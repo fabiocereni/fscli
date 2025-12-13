@@ -32,7 +32,6 @@ public class PreferencesModel implements IPreferencesModel {
         this.preferencesApplication = preferencesApplication;
     }
 
-    // da vedere
     @Inject
     private void manageProperties() {
         String userHome = System.getProperty("user.home");

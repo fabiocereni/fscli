@@ -16,7 +16,6 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
     @Inject
     private final ISupportedLanguageApplication supportedLanguageApplication;
 
-
     private static final String supportedLanguagePropertiesPath = "/supported-languages.properties";
     private static final String translationPropertiesLabel = "i18n.labels";
 
@@ -24,7 +23,6 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
     public SupportedLanguageModel(ISupportedLanguageApplication supportedLanguageApplication) {
         this.supportedLanguageApplication = supportedLanguageApplication;
     }
-
 
     @Override
     public void setSupportedLanguagesTags() {
@@ -42,6 +40,11 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
     }
 
     @Override
+    public HashMap<String, String> getMapLanguages() {
+        return supportedLanguageApplication.getMapLanguages(languageTagSelected);
+    }
+
+    @Override
     public void setLanguageTagSelected(String languageTagSelected) {
         this.languageTagSelected = languageTagSelected;
     }
@@ -49,11 +52,6 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
     @Override
     public String getLanguageTagSelected() {
         return languageTagSelected;
-    }
-
-    @Override
-    public HashMap<String, String> getMapLanguages() {
-        return supportedLanguageApplication.getMapLanguages(languageTagSelected);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
             // scegliere quale tenere
             Locale currentLocale = Locale.forLanguageTag(tag.replace('_', '-'));
 //            Locale currentLocale = new Locale(tag);
-            System.out.println("CURRENT LOCALE: "+currentLocale);
+            System.out.println("CURRENT LOCALE: " + currentLocale);
 
             ResourceBundle bundle = ResourceBundle.getBundle(translationPropertiesLabel, currentLocale);
             HashMap<String, String> mapLanguage = new HashMap<>();

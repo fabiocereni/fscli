@@ -11,6 +11,6 @@ public interface ISupportedLanguageModel {
     void setMapLanguages();
     HashMap<String, String> getMapLanguages();
     void setLanguageTagSelected(String languageTagSelected);
-    String getTranslation(String key);
     String getLanguageTagSelected();
+    String getTranslation(String key);
 }

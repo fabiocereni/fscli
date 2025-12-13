@@ -11,35 +11,8 @@ import java.util.Properties;
 
 @Singleton
 public class FSDataReaderDAO implements IFSDataReaderDAO {
-
-    private static final String MAIN_DIR = "filesystem_simulator";
-    private static final String SUB_DIR = "user_preferences";
-    private static final String PREFERENCES_FILE = "preferences.properties";
-
     @Override
     public String readFromAFile(File file) throws IOException {
         return Files.readString(file.toPath());
-    }
-
-    @Override
-    public Properties getPreferences() {
-        Properties properties = new Properties();
-        Path preferencesPath = getPreferencesPath();
-
-        if (Files.exists(preferencesPath)) {
-            try (InputStream in = Files.newInputStream(preferencesPath)) {
-                properties.load(in);
-            } catch (IOException e) {
-                System.err.println("Error reading preferences: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-
-        return properties;
-    }
-
-    private Path getPreferencesPath() {
-        String userHome = System.getProperty("user.home");
-        return Paths.get(userHome, MAIN_DIR, SUB_DIR, PREFERENCES_FILE);
     }
 }

@@ -5,9 +5,7 @@ import java.util.Properties;
 
 @ImplementedBy(PreferencesBusiness.class)
 public interface IPreferencesBusiness {
-
     String getProperty(String key);
     void setProperty(String key, String value);
     Properties getProperties();
-
 }

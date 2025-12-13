@@ -4,12 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ISupportedLanguageController {
-
     void setSupportedLanguagesTags();
     List<String> getSupportedLanguagesTags();
     void setMapLanguages();
     HashMap<String, String> getMapLanguages();
     void setLanguageTagSelected(String languageTagSelected);
-    String getTranslation(String key);
     String getLanguageTagSelected();
+    String getTranslation(String key);
 }

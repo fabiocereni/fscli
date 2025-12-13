@@ -7,7 +7,6 @@ import java.nio.file.Path;
 
 @Singleton
 public class FSDataWriterDAO implements IFSDataWriterDAO {
-
     @Override
     public void save(Path path, String toPersist) {
         try {

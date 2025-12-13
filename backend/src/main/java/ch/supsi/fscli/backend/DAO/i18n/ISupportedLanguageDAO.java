@@ -6,7 +6,6 @@ import java.util.List;
 
 @ImplementedBy(SupportedLanguageDAO.class)
 public interface ISupportedLanguageDAO {
-
     void setSupportedLanguagesTags(List<String> supportedLanguagesTags);
     List<String> getSupportedLanguagesTags();
     void setMapLanguages(HashMap<String, HashMap<String, String>> mapLanguages);

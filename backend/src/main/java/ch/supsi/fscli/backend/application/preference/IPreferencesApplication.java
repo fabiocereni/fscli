@@ -5,7 +5,6 @@ import java.util.Properties;
 
 @ImplementedBy(PreferencesApplication.class)
 public interface IPreferencesApplication {
-
     String getProperty(String key);
     void setProperty(String key, String value);
     Properties getProperties();

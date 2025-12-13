@@ -39,7 +39,6 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
             path = Path.of(path + ".json");
         }
 
-
         lastName = path.getFileName().toString();
         globalPath = path;
 
@@ -66,7 +65,6 @@ public class FSDataWriterBusiness implements IFSDataWriterBusiness {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
                 lastName = LocalDateTime.now().format(formatter) + ".json";
             }
-
             path = Paths.get(
                     System.getProperty("user.home"),
                     "FileSystem Simulator",

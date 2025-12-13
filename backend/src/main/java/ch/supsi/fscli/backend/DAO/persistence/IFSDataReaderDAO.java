@@ -8,5 +8,4 @@ import java.util.Properties;
 @ImplementedBy(FSDataReaderDAO.class)
 public interface IFSDataReaderDAO {
     String readFromAFile(File file) throws IOException;
-    Properties getPreferences();
 }

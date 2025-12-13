@@ -99,9 +99,6 @@ public class MainFx extends Application {
         this.preferencesController = injector.getInstance(PreferencesController.class);
         this.supportedLanguageController = injector.getInstance(SupportedLanguageController.class);
         this.preferencesModel = injector.getInstance(PreferencesModel.class);
-        this.supportedLanguageController.setSupportedLanguagesTags();
-        this.supportedLanguageController.setMapLanguages();
-        this.supportedLanguageController.setLanguageTagSelected(preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE));
 
         // VIEW
         this.menuBarView = injector.getInstance(MenuBarView.class);

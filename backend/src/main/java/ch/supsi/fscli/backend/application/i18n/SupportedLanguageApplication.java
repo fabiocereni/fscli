@@ -39,5 +39,5 @@ public class SupportedLanguageApplication implements ISupportedLanguageApplicati
 
     public String getTranslation(String key) {
         return ""; // TODO: implement when business-level translation is added
-    }
+    } // chiedere
 }

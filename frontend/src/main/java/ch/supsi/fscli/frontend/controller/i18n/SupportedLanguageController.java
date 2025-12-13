@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 
+// non mettiamo singleton?
 public class SupportedLanguageController implements ISupportedLanguageController {
 
     @Inject
@@ -20,17 +21,7 @@ public class SupportedLanguageController implements ISupportedLanguageController
     public void setSupportedLanguagesTags() {
         supportedLanguageModel.setSupportedLanguagesTags();
         supportedLanguageModel.setMapLanguages();
-        setLanguageTagSelected(
-                preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
-    }
-
-    @Override
-    public void setMapLanguages() {
-        supportedLanguageModel.setMapLanguages();
-    }
-
-    public void setLanguageTagSelected(String languageTagSelected) {
-        supportedLanguageModel.setLanguageTagSelected(languageTagSelected);
+        setLanguageTagSelected(preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
     }
 
     @Override
@@ -39,17 +30,25 @@ public class SupportedLanguageController implements ISupportedLanguageController
     }
 
     @Override
+    public void setMapLanguages() {
+        supportedLanguageModel.setMapLanguages();
+    }
+
+    @Override
     public HashMap<String, String> getMapLanguages() {
         return supportedLanguageModel.getMapLanguages();
     }
 
-    @Override
-    public String getTranslation(String key) {
-        return supportedLanguageModel.getTranslation(key);
+    public void setLanguageTagSelected(String languageTagSelected) {
+        supportedLanguageModel.setLanguageTagSelected(languageTagSelected);
     }
 
     public String getLanguageTagSelected() {
         return supportedLanguageModel.getLanguageTagSelected();
     }
 
+    @Override
+    public String getTranslation(String key) {
+        return supportedLanguageModel.getTranslation(key);
+    }
 }

@@ -40,5 +40,5 @@ public class SupportedLanguageBusiness implements ISupportedLanguageBusiness {
     @Override
     public String getTranslation(String key) {
         return key;
-    }
+    }   // chiedere
 }

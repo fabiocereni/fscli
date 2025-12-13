@@ -13,7 +13,6 @@ public class JsonSerializerBusiness {
 
     private JsonSerializerBusiness() {}
 
-
     public static String serialize(PersistedWrapper toSerialize) {
         try {
             return mapper.writeValueAsString(toSerialize);

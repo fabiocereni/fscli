@@ -5,7 +5,6 @@ import ch.supsi.fscli.backend.business.filesystem.creation.IFSCreationBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
-import ch.supsi.fscli.backend.modules.FileSystemModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.jupiter.api.BeforeEach;

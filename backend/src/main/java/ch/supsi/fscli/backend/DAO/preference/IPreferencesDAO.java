@@ -5,7 +5,6 @@ import java.util.Properties;
 
 @ImplementedBy(PreferencesDAO.class)
 public interface IPreferencesDAO {
-
     String getProperty(String key);
     void setProperty(String key, String value);
     Properties getProperties();
