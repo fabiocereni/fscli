@@ -54,6 +54,7 @@ public class MenuBarView {
     private Menu editMenu;
     private Menu helpMenu;
 
+    @Inject
     public void init () {
         this.fileMenu = new Menu(supportedLanguageController.getTranslation("label.file"));
         this.fileMenu.setId("fileMenu");
@@ -71,6 +72,7 @@ public class MenuBarView {
         this.inputDirector.addPropertyChangeListener(widgetDirector);
     }
 
+    @Inject
     public void initMenuBarView() {
         // FILE MENU
         MenuItem newMenuItem = new MenuItem(supportedLanguageController.getTranslation("label.new"));

@@ -12,6 +12,7 @@ import ch.supsi.fscli.frontend.event.LoadFSEvent;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -110,6 +111,8 @@ public class CommandLineView implements PropertyChangeListener {
     public void initCommandLineView(int commandLinePrefColumnCount) {
         this.commandLine.setPrefColumnCount(commandLinePrefColumnCount);
     }
+
+
 
     public Label getCommandLineLabel() {
         return commandLineLabel;

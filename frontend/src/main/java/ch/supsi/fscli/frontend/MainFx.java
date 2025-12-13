@@ -32,7 +32,7 @@ public class MainFx extends Application {
     private static final int PREF_OUTPUT_VIEW_ROW_COUNT = 25;
     private static final int PREF_LOG_VIEW_ROW_COUNT = 5;
 
-    private String applicationTitle = "filesystem command interpreter simulator";
+    private static String applicationTitle = "filesystem command interpreter simulator";
 
 
     // View
@@ -66,9 +66,6 @@ public class MainFx extends Application {
 
 
     private void buildMainView() {
-
-        this.menuBarView.init();
-        this.menuBarView.initMenuBarView();
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
         this.outputView.initOutputView(PREF_OUTPUT_VIEW_ROW_COUNT);
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
@@ -119,7 +116,7 @@ public class MainFx extends Application {
     public void start(Stage primaryStage) {
         Scene mainScene = new Scene(this.rootPane);
 
-        primaryStage.setTitle(this.applicationTitle);
+        primaryStage.setTitle(applicationTitle);
         primaryStage.setResizable(true);
         primaryStage.setScene(mainScene);
 

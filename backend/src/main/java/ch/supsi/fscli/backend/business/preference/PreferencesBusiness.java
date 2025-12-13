@@ -8,12 +8,9 @@ import java.util.Properties;
 @Singleton
 public class PreferencesBusiness implements IPreferencesBusiness {
 
-    private final IPreferencesDAO preferenceDAO;
-
     @Inject
-    public PreferencesBusiness(IPreferencesDAO preferenceDAO) {
-        this.preferenceDAO = preferenceDAO;
-    }
+    private IPreferencesDAO preferenceDAO;
+
 
     @Override
     public String getProperty(String key) {

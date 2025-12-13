@@ -19,7 +19,7 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
     }
 
     @Override
-    public Boolean mkdir(String path) {
+    public boolean mkdir(String path) {
 
         if (path == null || path.isBlank())
             return false;

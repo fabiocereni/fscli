@@ -14,11 +14,11 @@ public class FSInterpreter implements IFSInterpreter {
 
     private final Map<String, IFSCommand> commands;
 
-    private final IFSPwdCommandBusiness pwdCommandBusiness;
+    @Inject
+    private IFSPwdCommandBusiness pwdCommandBusiness;
 
     @Inject
-    public FSInterpreter(Set<IFSCommand> commands, IFSPwdCommandBusiness pwdCommandBusiness) {
-        this.pwdCommandBusiness = pwdCommandBusiness;
+    public FSInterpreter(Set<IFSCommand> commands) {
         this.commands = new HashMap<>();
         for (IFSCommand command : commands) {
             this.commands.put(command.getCommandName().toLowerCase(), command);

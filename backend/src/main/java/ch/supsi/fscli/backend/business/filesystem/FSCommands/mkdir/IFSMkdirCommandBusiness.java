@@ -4,5 +4,5 @@ import com.google.inject.ImplementedBy;
 
 @ImplementedBy(FSMkdirCommandBusiness.class)
 public interface IFSMkdirCommandBusiness{
-    Boolean mkdir(String name);
+    boolean mkdir(String name);
 }
