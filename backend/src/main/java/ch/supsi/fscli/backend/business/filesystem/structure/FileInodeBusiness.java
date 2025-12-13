@@ -1,7 +1,6 @@
 package ch.supsi.fscli.backend.business.filesystem.structure;
 
 public class FileInodeBusiness extends Inode {
-
     private boolean isSoftLink;
     private String linkPath;
 
@@ -18,7 +17,7 @@ public class FileInodeBusiness extends Inode {
     }
 
     public void setSoftLink(boolean softLink) {
-        isSoftLink = softLink;
+        this.isSoftLink = softLink;
     }
 
     public String getLinkPath() {
@@ -28,5 +27,4 @@ public class FileInodeBusiness extends Inode {
     public void setLinkPath(String linkPath) {
         this.linkPath = linkPath;
     }
-
 }

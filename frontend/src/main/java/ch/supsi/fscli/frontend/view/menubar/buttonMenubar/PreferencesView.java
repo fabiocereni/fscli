@@ -21,7 +21,6 @@ import java.util.prefs.Preferences;
 
 @Singleton
 public class PreferencesView implements IShow {
-
     @Inject
     private IPreferencesModel preferencesModel;
 
@@ -131,7 +130,6 @@ public class PreferencesView implements IShow {
                 showError(stage, "Enter a number between 5 and 100.");
             }
         });
-
         saveButton.setId("saveButton");
         stage.setScene(new Scene(root, 450, 300));
         stage.showAndWait();
@@ -149,7 +147,6 @@ public class PreferencesView implements IShow {
         preferencesController.setProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA, fontOutputArea);
         preferencesController.setProperty(PreferencesModel.KEY_FONT_LOG_AREA, fontLogArea);
         preferencesController.setProperty(PreferencesModel.KEY_LINES_NUMBER, String.valueOf(nLines));
-
 
         preferencesController.savePreferences();
         stage.close();
@@ -174,23 +171,17 @@ public class PreferencesView implements IShow {
     private void checkChanges() {
         boolean changed = false;
 
-        // Confronta ogni campo con il suo valore iniziale
         if (!isSame(languageComboBox.getValue(), initLanguage)) changed = true;
         if (!isSame(fontCommandLineComboBox.getValue(), initFontCmd)) changed = true;
         if (!isSame(fontOutputAreaComboBox.getValue(), initFontOut)) changed = true;
         if (!isSame(fontLogAreaComboBox.getValue(), initFontLog)) changed = true;
         if (!isSame(linesField.getText(), initLines)) changed = true;
 
-        // Abilita il tasto salva solo se c'è almeno una modifica
         if (saveButton != null) {
             saveButton.setDisable(!changed);
         }
-
-        // Opzionale: Log di debug
-        // System.out.println("Stato modificato: " + changed);
     }
 
-    // Helper per evitare NullPointerException
     private boolean isSame(String val1, String val2) {
         if (val1 == null && val2 == null) return true;
         if (val1 == null || val2 == null) return false;

@@ -30,12 +30,10 @@ public class FSDataSaverController implements IFSDataSaverController {
     @SavingViewQualifier
     private IShow savingView;
 
-
     @Override
     public void save(Path path) {
         this.ifsStateModel.setCloseable(true);
         this.ifsDataWriterModel.save(path);
-        // da decidere
         saveEventDirector.manageSaveAs();
         logDirector.logSaveFS();
     }
@@ -44,7 +42,6 @@ public class FSDataSaverController implements IFSDataSaverController {
     public void save() {
         this.ifsStateModel.setCloseable(true);
         this.ifsDataWriterModel.save();
-        // da decidere
         saveEventDirector.manageSave();
         logDirector.logSaveFS();
     }

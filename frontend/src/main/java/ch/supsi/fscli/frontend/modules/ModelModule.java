@@ -1,5 +1,7 @@
 package ch.supsi.fscli.frontend.modules;
 
+import ch.supsi.fscli.backend.application.filesystem.creation.FSCreationApplication;
+import ch.supsi.fscli.backend.application.filesystem.creation.IFSCreationApplication;
 import ch.supsi.fscli.frontend.model.*;
 import ch.supsi.fscli.frontend.model.persistence.FSDataReaderModel;
 import ch.supsi.fscli.frontend.model.persistence.FSDataSaverModel;
@@ -16,6 +18,9 @@ public class ModelModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        // sistemare
+        bind(IFSCreationApplication.class).to(FSCreationApplication.class).in(Singleton.class);
+
         bind(IFSStateModel.class).to(FSStateModel.class).in(Singleton.class);
         bind(IPreferencesModel.class).to(PreferencesModel.class).in(Singleton.class);
         bind(IFSDataSaverModel.class).to(FSDataSaverModel.class).in(Singleton.class);

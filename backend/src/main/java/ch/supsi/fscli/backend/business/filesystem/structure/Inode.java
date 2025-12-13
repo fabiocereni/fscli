@@ -1,11 +1,9 @@
 package ch.supsi.fscli.backend.business.filesystem.structure;
 
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 
 /*
 * Servono per chiarire a jackson il tipo preciso

@@ -8,7 +8,6 @@ import java.util.Properties;
 
 @Singleton
 public class BuildInfoController {
-
     private final Properties properties = new Properties();
 
     @Inject
@@ -31,5 +30,4 @@ public class BuildInfoController {
     public String getVersion() {
         return properties.getProperty("app.version", "unknown");
     }
-
 }

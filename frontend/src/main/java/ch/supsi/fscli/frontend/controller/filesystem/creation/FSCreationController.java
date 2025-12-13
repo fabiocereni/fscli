@@ -10,19 +10,17 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class FSCreationController implements IFSCreationController {
-
     @Inject
     private FSCreationDirector fsCreationDirector;
-
-    @Inject
-    private IFSStateModel ifsStateModel;
 
     @Inject
     private LogDirector logDirector;
 
     @Inject
-    private IFSCreationApplication ifsCreationApplication;
+    private IFSStateModel ifsStateModel;
 
+    @Inject
+    private IFSCreationApplication ifsCreationApplication;
 
     @Override
     public void createFileSystem() {

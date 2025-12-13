@@ -17,6 +17,10 @@ public class DirectoryInodeBusiness extends Inode {
         return entries;
     }
 
+    public void setEntries(Map<String, Inode> entries) {
+        this.entries = entries;
+    }
+
     public void addEntry(String name, Inode inode) {
         entries.put(name, inode);
     }
@@ -29,19 +33,13 @@ public class DirectoryInodeBusiness extends Inode {
         return entries.get(name);
     }
 
+    /**
+     * Sostituire nei comandi il metodo:
+     * - fileSystem.getCurrentWorkingDirectory().getEntries().keySet() con
+     * - fileSystem.getCurrentWorkingDirectory().listNames()
+     * @return
+     */
     public Set<String> listNames() {
         return entries.keySet();
-    }
-
-    public String getNameOf(Inode inode) {
-        for (var entry : entries.entrySet()) {
-            if (entry.getValue() == inode)
-                return entry.getKey();
-        }
-        return null;
-    }
-
-    public void setEntries(Map<String, Inode> entries) {
-        this.entries = entries;
     }
 }

@@ -7,7 +7,6 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class LogDirector extends AbstractDirector {
-
     private final IFSDataSaverModel model;
 
     @Inject

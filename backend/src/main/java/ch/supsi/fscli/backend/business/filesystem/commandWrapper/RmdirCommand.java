@@ -31,13 +31,16 @@ public class RmdirCommand implements IFSCommand {
 
     @Override
     public CommandResult execute() {
-        if (args.size() != 1) return new CommandResult("label.wrongRmUse1", true);
+        if (args.isEmpty()) return new CommandResult("label.wrongRmUse1", true);
 
-        String directoryName = args.get(0);
+        boolean errorOccurred = false;
 
-        if (!business.rmdir(directoryName)) {
-            return new CommandResult("label.wrongRmUse2", true);
+        for (String directoryName : args) {
+            boolean success = business.rmdir(directoryName);
+            if (!success) errorOccurred = true;
         }
+
+        if (errorOccurred) return new CommandResult("label.wrongRmUse2", true);
         return null;
     }
 }

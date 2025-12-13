@@ -9,7 +9,6 @@ import java.util.List;
 
 @Singleton
 public class MkdirCommand implements IFSCommand {
-
     private final IFSMkdirCommandBusiness business;
 
     private List<String> args = new ArrayList<>();
@@ -42,5 +41,4 @@ public class MkdirCommand implements IFSCommand {
         if (errorsOccurred) return new CommandResult("label.wrongMkdirUse2",  true);
         return null;
     }
-
 }

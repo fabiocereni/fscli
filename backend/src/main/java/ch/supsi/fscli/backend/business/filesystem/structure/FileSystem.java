@@ -16,14 +16,10 @@ public class FileSystem {
     private String currentWorkingDirectoryPath = "/";
     private DirectoryInodeBusiness root;
 
-
     @Inject
     public FileSystem() {
-        // Creiamo la root manualmente qui invece che nel modulo
-        DirectoryInodeBusiness root = new DirectoryInodeBusiness(1L);
-
-        this.root = root;
         this.inodeTable = new HashMap<>();
+        this.root = new DirectoryInodeBusiness(1L);
         initializeRoot(root);
         this.currentWorkingDirectory = root;
         this.currentWorkingDirectoryPath = "/";
@@ -38,9 +34,7 @@ public class FileSystem {
         inodeTable.put(root.getId(), root);
     }
 
-
-
-    public DirectoryInodeBusiness createDirectory(DirectoryInodeBusiness parent) {
+    public DirectoryInodeBusiness createDirectory() {
         long id = allocateInodeId();
         DirectoryInodeBusiness dir = new DirectoryInodeBusiness(id);
         inodeTable.put(id, dir);
@@ -61,13 +55,13 @@ public class FileSystem {
     }
 
     public DirectoryInodeBusiness getRoot() { return root; }
+    public void setRoot(DirectoryInodeBusiness root) { this.root = root; }
     public Inode getInode(long id) { return inodeTable.get(id); }
     public Map<Long, Inode> getInodeTable() { return inodeTable; }
     public long getNextInodeId() { return nextInodeId; }
     public void setNextInodeId(long nextInodeId) { this.nextInodeId = nextInodeId; }
     public DirectoryInodeBusiness getCurrentWorkingDirectory() { return this.currentWorkingDirectory; }
     public void setCurrentWorkingDirectory(DirectoryInodeBusiness directory) { this.currentWorkingDirectory = directory; }
-    public void setRoot(DirectoryInodeBusiness root) { this.root = root; }
     public String getCurrentWorkingDirectoryPath() { return currentWorkingDirectoryPath; }
     public void setCurrentWorkingDirectoryPath(String currentWorkingDirectoryPath) { this.currentWorkingDirectoryPath = currentWorkingDirectoryPath; }
 }

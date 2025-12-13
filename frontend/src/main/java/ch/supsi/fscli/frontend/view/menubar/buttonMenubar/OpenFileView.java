@@ -11,8 +11,7 @@ import java.io.File;
 import java.util.function.Supplier;
 
 @Singleton
-public class ReaderView implements IShow {
-
+public class OpenFileView implements IShow {
     @Inject
     private IFSDataReaderController dataReaderController;
 
@@ -32,10 +31,8 @@ public class ReaderView implements IShow {
         chooser.setInitialDirectory(new File(userHome));
 
         File file = chooser.showOpenDialog(new Stage());
-
         if (file != null) {
             this.dataReaderController.reader(file);
         }
     }
-
 }

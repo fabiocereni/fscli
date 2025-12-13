@@ -15,7 +15,6 @@ public class CommandLineController implements ICommandLineController {
         this.interpreterApplication = interpreterApplication;
     }
 
-
     @Override
     public CommandResult executeCommand(String commandLine) {
         return interpreterApplication.execute(commandLine);

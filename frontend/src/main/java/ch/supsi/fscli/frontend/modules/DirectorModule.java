@@ -9,9 +9,8 @@ import com.google.inject.Singleton;
 public class DirectorModule extends AbstractModule {
 
     protected void configure() {
-        bind(IFSCreationApplication.class).to(FSCreationApplication.class).in(Singleton.class);
-
         bind(FSCreationDirector.class).in(Singleton.class);
+
         bind(WidgetDirector.class).in(Singleton.class);
         bind(ConfirmExitDirector.class).in(Singleton.class);
         bind(SaveEventDirector.class).in(Singleton.class);

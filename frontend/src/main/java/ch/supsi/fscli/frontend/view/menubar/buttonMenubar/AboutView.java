@@ -9,13 +9,11 @@ import javafx.scene.control.Alert;
 
 @Singleton
 public class AboutView implements IShow {
-
     @Inject
     private ISupportedLanguageController supportedLanguageController;
 
     @Inject
     private BuildInfoController buildInfoController;
-
 
     @Override
     public void showMyView() {

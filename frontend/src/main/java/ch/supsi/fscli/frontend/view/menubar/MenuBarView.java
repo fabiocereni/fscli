@@ -38,7 +38,7 @@ public class MenuBarView {
     @Inject
     private FSCreationDirector fsCreationDirector;
     @Inject
-    private FSLoadDirectory FSLoadDirectory;
+    private FSLoadDirector FSLoadDirector;
     @Inject
     private WidgetDirector widgetDirector;
     @Inject
@@ -61,7 +61,7 @@ public class MenuBarView {
         this.helpMenu = new Menu(supportedLanguageController.getTranslation("label.help"));
         this.menuBar = new MenuBar();
         this.fsCreationDirector.addPropertyChangeListener(widgetDirector);
-        this.FSLoadDirectory.addPropertyChangeListener(widgetDirector);
+        this.FSLoadDirector.addPropertyChangeListener(widgetDirector);
         this.saveEventDirector.addPropertyChangeListener(widgetDirector);
         this.inputDirector.addPropertyChangeListener(widgetDirector);
     }

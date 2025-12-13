@@ -26,7 +26,6 @@ public class CdCommand implements IFSCommand {
     @Override
     public CommandResult execute() {
         if (this.args.isEmpty()) {
-            //torna alla directory root/home
             if (!business.cd("/")) {
                 return new CommandResult("label.wrongCdUse2", true);
             }
@@ -42,7 +41,6 @@ public class CdCommand implements IFSCommand {
         if (!business.cd(path)) {
             return new CommandResult("label.wrongCdUse2", true);
         }
-
         return null;
     }
 }

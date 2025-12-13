@@ -10,16 +10,13 @@ import ch.supsi.fscli.frontend.MainFx;
 
 @Singleton
 public class QuitController implements IQuitController {
-
     @Inject
     private IFSStateModel fsStateModel;
     @Inject
     private ConfirmExitDirector confirmExitDirector;
 
-
     @Override
     public boolean manageQuit() {
-
         if(fsStateModel.isCloseable()) {
             MainFx.getStageToClose().stream().toList().forEach(Stage::close);
             return true;
@@ -33,5 +30,4 @@ public class QuitController implements IQuitController {
     public void confirmQuit() {
         MainFx.getStageToClose().stream().toList().forEach(Stage::close);
     }
-
 }

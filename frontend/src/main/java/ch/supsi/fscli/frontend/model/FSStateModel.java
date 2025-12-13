@@ -4,7 +4,6 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class FSStateModel implements IFSStateModel {
-
     private boolean closeable = true;
 
     @Override

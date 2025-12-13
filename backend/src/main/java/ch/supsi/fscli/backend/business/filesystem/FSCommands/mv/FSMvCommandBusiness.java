@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Singleton
 public class FSMvCommandBusiness implements IFSMvCommandBusiness {
-
     private final PathSolver pathSolver;
 
     @Inject
@@ -20,7 +19,6 @@ public class FSMvCommandBusiness implements IFSMvCommandBusiness {
 
     @Override
     public boolean mv(String source, String destination) {
-
         if (source == null || destination == null || source.isBlank() || destination.isBlank())
             return false;
 
@@ -35,12 +33,10 @@ public class FSMvCommandBusiness implements IFSMvCommandBusiness {
 
         DirectoryInodeBusiness destinationParentDir;
         String destinationName;
-
         Optional<Inode> destinationNodeOpt = pathSolver.resolvePath(destination);
 
         // mv file -> existing directory
-        if (destinationNodeOpt.isPresent()
-                && destinationNodeOpt.get() instanceof DirectoryInodeBusiness directoryDestination) {
+        if (destinationNodeOpt.isPresent() && destinationNodeOpt.get() instanceof DirectoryInodeBusiness directoryDestination) {
             destinationParentDir = directoryDestination;
             destinationName = sourceName;
         } else {
@@ -55,7 +51,6 @@ public class FSMvCommandBusiness implements IFSMvCommandBusiness {
         if (pathSolver.nameAlreadyExists(destinationParentDir, destinationName))
             return false;
 
-        // prevent moving a directory inside itself or its subtree
         if (sourceNode instanceof DirectoryInodeBusiness sourceDir) {
             if (sourceDir == destinationParentDir || isDescendant(sourceDir, destinationParentDir)) {
                 return false;
@@ -75,26 +70,21 @@ public class FSMvCommandBusiness implements IFSMvCommandBusiness {
     }
 
     private boolean isDescendant(DirectoryInodeBusiness sourceDir, DirectoryInodeBusiness destParent) {
-
         DirectoryInodeBusiness current = destParent;
-
         while (current != null) {
             if (current == sourceDir) {
                 return true;
             }
-
             Inode parentInode = current.getEntry("..");
             if (parentInode == current) {
                 break;
             }
-
             if (parentInode instanceof DirectoryInodeBusiness parentDir) {
                 current = parentDir;
             } else {
                 break;
             }
         }
-
         return false;
     }
 }

@@ -14,10 +14,8 @@ import java.util.Optional;
 
 @Singleton
 public class QuitView extends AbstractView {
-
     @Inject
     private IQuitController quitController;
-
     @Inject
     private ISupportedLanguageController supportedLanguageController;
 
@@ -37,9 +35,7 @@ public class QuitView extends AbstractView {
         );
 
         alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-
         Optional<ButtonType> result = alert.showAndWait();
-
         return result.isPresent() && result.get() == buttonTypeYes;
     }
 
@@ -47,10 +43,8 @@ public class QuitView extends AbstractView {
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt instanceof ConfirmExitEvent) {
             System.out.println("exit aborted picked-up");
-
             if(this.showConfirmation())
                 this.quitController.confirmQuit();
-
         }
     }
 }

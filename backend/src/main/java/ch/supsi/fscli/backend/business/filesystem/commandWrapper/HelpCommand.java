@@ -1,6 +1,5 @@
 package ch.supsi.fscli.backend.business.filesystem.commandWrapper;
 
-import ch.supsi.fscli.backend.business.filesystem.FSCommands.help.IFSHelpCommandBusiness;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -10,14 +9,10 @@ import java.util.List;
 @Singleton
 public class HelpCommand implements IFSCommand {
 
-    private final IFSHelpCommandBusiness business;
-
     private List<String> args = new ArrayList<>();
 
     @Inject
-    public HelpCommand(IFSHelpCommandBusiness business) {
-        this.business = business;
-    }
+    public HelpCommand() { }
 
     @Override
     public String getCommandName() {
@@ -34,7 +29,6 @@ public class HelpCommand implements IFSCommand {
         if (!args.isEmpty()) {
             return new CommandResult("label.wrongHelpUse", true);
         }
-        business.help(); // sistemare
         return new CommandResult("label.infoHelp", true);
     }
 }

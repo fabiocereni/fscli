@@ -9,10 +9,8 @@ import javafx.scene.control.TextArea;
 
 @Singleton
 public class HelpView implements IShow {
-
     @Inject
     private ISupportedLanguageController supportedLanguageController;
-
 
     @Override
     public void showMyView() {
@@ -31,6 +29,5 @@ public class HelpView implements IShow {
         alert.setResizable(true);
 
         alert.showAndWait();
-
     }
 }

@@ -103,12 +103,11 @@ public class MainFx extends Application {
         // VIEW
         this.menuBarView = injector.getInstance(MenuBarView.class);
         this.savingView = injector.getInstance(SaveAsView.class);
-        this.readerView = injector.getInstance(ReaderView.class);
+        this.readerView = injector.getInstance(OpenFileView.class);
         this.aboutView = injector.getInstance(AboutView.class);
         this.helpView = injector.getInstance(HelpView.class);
         this.preferencesView = injector.getInstance(PreferencesView.class);
         this.quitView = injector.getInstance(QuitView.class);
-
         this.commandLineView = injector.getInstance(CommandLineView.class);
         this.outputView = injector.getInstance(OutputView.class);
         this.logView = injector.getInstance(LogView.class);
@@ -125,7 +124,6 @@ public class MainFx extends Application {
         this.widgetDirector = injector.getInstance(WidgetDirector.class);
         this.logDirector = injector.getInstance(LogDirector.class);
         this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
-
         this.confirmExitDirector.addPropertyChangeListener(this.quitView);
         this.logDirector.addPropertyChangeListener(this.logView);
 
@@ -169,7 +167,6 @@ public class MainFx extends Application {
         centerPane.setFitToWidth(true);
         centerPane.setPadding(new Insets(PREF_INSETS_SIZE));
         centerPane.setContent(this.outputView.getNode());
-
 
         // scroll pane to hold log view
         ScrollPane bottomPane = new ScrollPane();

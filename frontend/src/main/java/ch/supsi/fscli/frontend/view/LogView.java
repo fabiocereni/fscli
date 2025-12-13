@@ -15,7 +15,6 @@ import java.beans.PropertyChangeListener;
 
 @Singleton
 public class LogView implements PropertyChangeListener {
-
     @Inject
     private IPreferencesController preferencesController;
     @Inject
@@ -31,30 +30,22 @@ public class LogView implements PropertyChangeListener {
 
         this.logView = new TextArea();
         this.logView.setId("logView");
-        this.logView.setStyle("-fx-font-family: " + fontLog + ";");
+        this.logView.setStyle("-fx-font-family:" + fontLog + ";");
         this.logView.appendText(supportedLanguageController.getTranslation("label.langInfo") + " " + supportedLanguageController.getLanguageTagSelected());
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt instanceof LogEvent logEvent) {
-
             if (logView != null) {
-
                 String msg = logEvent.getMessage();
-
-                // Splitta key e parametro
                 String[] parts = msg.split("::", 2);
                 String key = parts[0];
                 String param = (parts.length > 1) ? parts[1] : "";
 
-                // Traduzione
                 String translated = supportedLanguageController.getTranslation(key);
-
-                // Aggiungi parametro (path) alla fine
                 if (!param.isEmpty())
                     translated = translated + " " + param;
-
                 logView.appendText("\n" + translated);
             }
         }

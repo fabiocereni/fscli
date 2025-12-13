@@ -31,13 +31,16 @@ public class RmfileCommand implements IFSCommand {
 
     @Override
     public CommandResult execute() {
-        if (args.size() != 1) return new CommandResult("label.wrongRmFileUse1", true);
+        if (args.isEmpty()) return new CommandResult("label.wrongRmFileUse1", true);
 
-        String fileName = args.get(0);
+        boolean errorOccurred = false;
 
-        if (!business.rmfile(fileName)) {
-            return new CommandResult( "label.wrongRmFileUse2", true);
+        for (String fileName : args) {
+            boolean success = business.rmfile(fileName);
+            if (!success) errorOccurred = true;
         }
+
+        if (errorOccurred) return new CommandResult("label.wrongRmFileUse2", true);
         return null;
     }
 }

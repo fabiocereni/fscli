@@ -5,7 +5,6 @@ import com.google.inject.ImplementedBy;
 
 import java.io.File;
 
-@ImplementedBy(FSDataReaderController.class)
 public interface IFSDataReaderController extends EventHandler {
     void reader(File file);
     void showReaderView();

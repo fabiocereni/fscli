@@ -12,10 +12,8 @@ import java.nio.file.Path;
 
 @Singleton
 public class SaveAsView implements IShow {
-
     @Inject
     private IFSDataSaverController dataSaverController;
-
 
     @Override
     public void showMyView() {
@@ -23,7 +21,6 @@ public class SaveAsView implements IShow {
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
 
         File file = chooser.showSaveDialog(new Stage());
-
         if(file != null) {
             Path path = file.toPath();
             this.dataSaverController.save(path);

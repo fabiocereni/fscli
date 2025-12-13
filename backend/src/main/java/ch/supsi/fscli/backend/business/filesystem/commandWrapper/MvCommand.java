@@ -9,7 +9,6 @@ import java.util.List;
 
 @Singleton
 public class MvCommand implements IFSCommand {
-
     private final IFSMvCommandBusiness business;
 
     private List<String> args = new ArrayList<>();

@@ -21,10 +21,8 @@ public class OutputView implements PropertyChangeListener {
     private IPreferencesModel preferencesModel;
     @Inject
     private ISupportedLanguageController supportedLanguageController;
-
     @Inject
     private IPreferencesController preferencesController;
-
     @Inject
     private FSCreationDirector fsCreationDirector;
 
@@ -38,7 +36,7 @@ public class OutputView implements PropertyChangeListener {
         this.outputView = new TextArea();
         this.outputView.setId("outputView");
         this.outputView.setText(supportedLanguageController.getTranslation("label.textOutput") + "\n");
-        this.outputView.setStyle("-fx-font-family: " + fontOutput + ";");
+        this.outputView.setStyle("-fx-font-family:" + fontOutput + ";");
 
         this.fsCreationDirector.addPropertyChangeListener(this);
     }
@@ -66,10 +64,8 @@ public class OutputView implements PropertyChangeListener {
         return this.outputView;
     }
 
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
         if(evt instanceof FilesystemCreatedEvent) {
             clear();
         }

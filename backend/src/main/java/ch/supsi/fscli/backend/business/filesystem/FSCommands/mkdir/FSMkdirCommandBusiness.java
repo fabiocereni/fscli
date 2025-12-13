@@ -36,7 +36,7 @@ public class FSMkdirCommandBusiness implements IFSMkdirCommandBusiness {
         if (pathSolver.nameAlreadyExists(parentDir, newDirName))
             return false;
 
-        DirectoryInodeBusiness newDir = fileSystem.createDirectory(parentDir);
+        DirectoryInodeBusiness newDir = fileSystem.createDirectory();
         parentDir.addEntry(newDirName, newDir);
 
         return true;

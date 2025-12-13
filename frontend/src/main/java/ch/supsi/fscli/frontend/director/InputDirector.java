@@ -5,10 +5,7 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class InputDirector extends AbstractDirector {
-
     public void manageInput() {
         firePropertyChange(new InputEvent(this));
     }
-
-
 }

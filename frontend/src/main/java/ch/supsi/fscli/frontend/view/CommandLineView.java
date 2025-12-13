@@ -5,7 +5,7 @@ import ch.supsi.fscli.frontend.controller.filesystem.ICommandLineController;
 import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
 import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
 import ch.supsi.fscli.frontend.director.FSCreationDirector;
-import ch.supsi.fscli.frontend.director.FSLoadDirectory;
+import ch.supsi.fscli.frontend.director.FSLoadDirector;
 import ch.supsi.fscli.frontend.director.InputDirector;
 import ch.supsi.fscli.frontend.event.FilesystemCreatedEvent;
 import ch.supsi.fscli.frontend.event.LoadFSEvent;
@@ -22,10 +22,8 @@ import javafx.scene.control.TextField;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-
 @Singleton
 public class CommandLineView implements PropertyChangeListener {
-
     @Inject
     private IPreferencesController preferencesController;
     @Inject
@@ -35,7 +33,7 @@ public class CommandLineView implements PropertyChangeListener {
     @Inject
     private FSCreationDirector fsCreationDirector;
     @Inject
-    private FSLoadDirectory FSLoadDirectory;
+    private FSLoadDirector FSLoadDirector;
     @Inject
     private InputDirector inputDirector;
 
@@ -54,16 +52,16 @@ public class CommandLineView implements PropertyChangeListener {
         fontCommandLine = preferencesController.getProperty(PreferencesModel.KEY_FONT_COMMANDLINE);
 
         this.commandLineLabel = new Label(supportedLanguageController.getTranslation("label.commandLine"));
-        this.commandLineLabel.setStyle("-fx-font-family: " + fontCommandLine + ";");
+        this.commandLineLabel.setStyle("-fx-font-family:" + fontCommandLine + ";");
 
         this.commandLine = new TextField();
-        this.commandLine.setStyle("-fx-font-family: " + fontCommandLine + ";");
+        this.commandLine.setStyle("-fx-font-family:" + fontCommandLine + ";");
         this.commandLine.setDisable(true);
         this.commandLine.setId("commandLineView");
 
         this.enter = new Button(supportedLanguageController.getTranslation("label.enter"));
         this.enter.setId("enter");
-        this.enter.setStyle("-fx-font-family: " + fontCommandLine + ";");
+        this.enter.setStyle("-fx-font-family:" + fontCommandLine + ";");
         this.enter.setDisable(true);
 
         // evento per poter schiacciare il tasto invio
@@ -94,9 +92,7 @@ public class CommandLineView implements PropertyChangeListener {
                 }
             }
 
-            // da decidere
             this.inputDirector.manageInput();
-
             commandLine.clear();
         };
 
@@ -104,7 +100,7 @@ public class CommandLineView implements PropertyChangeListener {
         this.commandLine.setOnAction(submitCommandHandler);
 
         this.fsCreationDirector.addPropertyChangeListener(this);
-        this.FSLoadDirectory.addPropertyChangeListener(this);
+        this.FSLoadDirector.addPropertyChangeListener(this);
     }
 
     public void initCommandLineView(int commandLinePrefColumnCount) {
@@ -129,7 +125,6 @@ public class CommandLineView implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
         if(evt instanceof FilesystemCreatedEvent) {
             commandLine.setDisable(false);
             enter.setDisable(false);
