@@ -8,6 +8,7 @@ import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusine
 import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
+import com.google.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -20,7 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class FSReaderTest {
 
     private FileSystem fileSystem;
+    @Inject
     private FSDataReaderBusiness readerBusiness;
+    @Inject
     private FSDataWriterBusiness writerBusiness;
 
     @TempDir
@@ -30,7 +33,7 @@ class FSReaderTest {
     void setUp() {
         // --- SETUP IDENTICO A PRIMA ---
         DirectoryInodeBusiness root = new DirectoryInodeBusiness(1L);
-        fileSystem = new FileSystem(root);
+        fileSystem = new FileSystem();
         fileSystem.setRoot(root);
         fileSystem.setCurrentWorkingDirectory(root);
         fileSystem.setCurrentWorkingDirectoryPath("/");
@@ -49,12 +52,12 @@ class FSReaderTest {
         DirectoryInodeBusiness root = fileSystem.getRoot();
 
         // Struttura: /Photos/Summer
-        DirectoryInodeBusiness photosDir = fileSystem.createDirectory(root);
+        DirectoryInodeBusiness photosDir = fileSystem.createDirectory();
         root.addEntry("Photos", photosDir);
         photosDir.addEntry(".", photosDir);
         photosDir.addEntry("..", root);
 
-        DirectoryInodeBusiness summerDir = fileSystem.createDirectory(photosDir);
+        DirectoryInodeBusiness summerDir = fileSystem.createDirectory();
         photosDir.addEntry("Summer", summerDir);
         summerDir.addEntry(".", summerDir);
         summerDir.addEntry("..", photosDir);

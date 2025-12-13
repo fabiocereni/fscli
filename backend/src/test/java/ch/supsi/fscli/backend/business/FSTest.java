@@ -20,14 +20,14 @@ public class FSTest {
         // 1. Setup manuale delle dipendenze per isolare il test
         root = new DirectoryInodeBusiness(1L); // Creiamo la root (id 1)
 
-        fileSystem = new FileSystem(root); // Iniettiamo la root nel FS
+        fileSystem = new FileSystem(); // Iniettiamo la root nel FS
 
         fileSystem.setRoot(root);
         fileSystem.setCurrentWorkingDirectory(root);
 
         // 2. Creazione entità per il test
         // createDirectory richiede il genitore come argomento
-        this.directory = fileSystem.createDirectory(root);
+        this.directory = fileSystem.createDirectory();
         this.file = fileSystem.createFile();
 
         // 3. Collegamento manuale alla CWD (Root)

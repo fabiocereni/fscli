@@ -41,7 +41,8 @@ public class OutputView implements PropertyChangeListener {
         this.fsCreationDirector.addPropertyChangeListener(this);
     }
 
-    public void initOutputView(int prefRowCount) {
+    public void initOutputView() {
+        int prefRowCount = Integer.parseInt(preferencesController.getProperty(PreferencesModel.KEY_LINES_NUMBER));
         outputView.setId("outputView");
         outputView.setEditable(false);
         outputView.setWrapText(true);

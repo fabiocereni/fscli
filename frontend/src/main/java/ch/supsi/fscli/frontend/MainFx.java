@@ -1,40 +1,22 @@
 package ch.supsi.fscli.frontend;
 
 import ch.supsi.fscli.frontend.controller.*;
-import ch.supsi.fscli.frontend.controller.persistence.FSDataReaderController;
-import ch.supsi.fscli.frontend.controller.persistence.FSDataSaverController;
-import ch.supsi.fscli.frontend.controller.filesystem.creation.FSCreationController;
-import ch.supsi.fscli.frontend.controller.filesystem.creation.IFSCreationController;
-import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
-import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
-import ch.supsi.fscli.frontend.controller.menubar.AboutController;
-import ch.supsi.fscli.frontend.controller.menubar.HelpController;
-import ch.supsi.fscli.frontend.controller.menubar.IQuitController;
-import ch.supsi.fscli.frontend.controller.menubar.QuitController;
-import ch.supsi.fscli.frontend.controller.preference.IPreferencesController;
-import ch.supsi.fscli.frontend.controller.preference.PreferencesController;
+import ch.supsi.fscli.frontend.controller.menubar.*;
 import ch.supsi.fscli.frontend.director.ConfirmExitDirector;
 import ch.supsi.fscli.frontend.director.LogDirector;
-import ch.supsi.fscli.frontend.director.WidgetDirector;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
-import ch.supsi.fscli.frontend.modules.ControllerModule;
-import ch.supsi.fscli.frontend.modules.DirectorModule;
-import ch.supsi.fscli.frontend.modules.ModelModule;
-import ch.supsi.fscli.frontend.modules.ViewModule;
+import ch.supsi.fscli.frontend.modules.*;
 import ch.supsi.fscli.frontend.view.*;
-import ch.supsi.fscli.frontend.view.menubar.*;
+import ch.supsi.fscli.frontend.view.menubar.MenuBarView;
 import ch.supsi.fscli.frontend.view.menubar.buttonMenubar.*;
 import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.google.inject.Inject;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.Collection;
@@ -43,10 +25,7 @@ import java.util.HashSet;
 public class MainFx extends Application {
 
     public static Collection<Stage> stageToClose = new HashSet<>();
-
-    public static Collection<Stage> getStageToClose() {
-        return stageToClose;
-    }
+    public static Collection<Stage> getStageToClose() { return stageToClose; }
 
     private static final int PREF_INSETS_SIZE = 7;
     private static final int PREF_COMMAND_SPACER_WIDTH = 11;
@@ -54,91 +33,46 @@ public class MainFx extends Application {
     private static final int PREF_OUTPUT_VIEW_ROW_COUNT = 25;
     private static final int PREF_LOG_VIEW_ROW_COUNT = 5;
 
-    private final String applicationTitle;
+    private static String applicationTitle = "filesystem command interpreter simulator";
 
-    // VIEW
-    private final MenuBarView menuBarView;
-    private final IShow savingView;
-    private final IShow readerView;
-    private final IShow aboutView;
-    private final IShow helpView;
-    private final QuitView quitView;
-    private final PreferencesView preferencesView;
-    private final CommandLineView commandLineView;
-    private final OutputView outputView;
-    private final LogView logView;
 
-    // INJECTOR
-    private final Injector injector;
+    // View
+    @Inject private MenuBarView menuBarView;
+    @Inject private CommandLineView commandLineView;
+    @Inject private OutputView outputView;
+    @Inject private LogView logView;
+    @Inject private QuitView quitView;
 
-    // EVENT HANDLER
-    private final EventHandler dataSaverController;
-    private final EventHandler dataReaderController;
-    private final EventHandler aboutViewController;
-    private final EventHandler helpController;
+    @Inject private IQuitController quitController;
 
-    // DIRECTOR
-    private final WidgetDirector widgetDirector;
-    private final LogDirector logDirector;
-    private final ConfirmExitDirector confirmExitDirector;
+    // Directors
+    @Inject private LogDirector logDirector;
+    @Inject private ConfirmExitDirector confirmExitDirector;
 
-    // CONTROLLER
-    private final IQuitController quitController;
-    private final IFSCreationController fsCreationController;
-    private final ISupportedLanguageController supportedLanguageController;
-    private final IPreferencesController preferencesController;
+    private BorderPane rootPane;
 
-    private final PreferencesModel preferencesModel;
 
-    public MainFx() {
-        this.applicationTitle = "filesystem command interpreter simulator";
+    @Override
+    public void init() {
+        Guice.createInjector(new MainModule()).injectMembers(this);
 
-        this.injector = Guice.createInjector(new ViewModule(), new ControllerModule(),
-                new DirectorModule(), new ModelModule());
+        commandLineView.setOutputView(outputView);
 
-        this.preferencesController = injector.getInstance(PreferencesController.class);
-        this.supportedLanguageController = injector.getInstance(SupportedLanguageController.class);
-        this.preferencesModel = injector.getInstance(PreferencesModel.class);
-
-        // VIEW
-        this.menuBarView = injector.getInstance(MenuBarView.class);
-        this.savingView = injector.getInstance(SaveAsView.class);
-        this.readerView = injector.getInstance(OpenFileView.class);
-        this.aboutView = injector.getInstance(AboutView.class);
-        this.helpView = injector.getInstance(HelpView.class);
-        this.preferencesView = injector.getInstance(PreferencesView.class);
-        this.quitView = injector.getInstance(QuitView.class);
-        this.commandLineView = injector.getInstance(CommandLineView.class);
-        this.outputView = injector.getInstance(OutputView.class);
-        this.logView = injector.getInstance(LogView.class);
-
-        // CONTROLLER
-        this.dataSaverController = injector.getInstance(FSDataSaverController.class);
-        this.dataReaderController = injector.getInstance(FSDataReaderController.class);
-        this.aboutViewController = injector.getInstance(AboutController.class);
-        this.helpController = injector.getInstance(HelpController.class);
-        this.quitController = injector.getInstance(QuitController.class);
-        this.fsCreationController = injector.getInstance(FSCreationController.class);
-
-        // DIRECTOR
-        this.widgetDirector = injector.getInstance(WidgetDirector.class);
-        this.logDirector = injector.getInstance(LogDirector.class);
-        this.confirmExitDirector = injector.getInstance(ConfirmExitDirector.class);
         this.confirmExitDirector.addPropertyChangeListener(this.quitView);
         this.logDirector.addPropertyChangeListener(this.logView);
 
-        commandLineView.setOutputView(outputView);
+        buildMainView();
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        // init
-        this.menuBarView.initMenuBarView();
-        this.outputView.initOutputView(Integer.parseInt(preferencesController.getProperty(PreferencesModel.KEY_LINES_NUMBER)));
+
+
+    private void buildMainView() {
         this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
+        this.outputView.initOutputView();
+        menuBarView.initMenuBarView();
         this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
 
-        // horizontal box to hold the command line
+        // command line
         HBox commandLinePane = new HBox();
         commandLinePane.setAlignment(Pos.BASELINE_LEFT);
         commandLinePane.setPadding(new Insets(PREF_INSETS_SIZE));
@@ -155,59 +89,51 @@ public class MainFx extends Application {
         commandLinePane.getChildren().add(spacer2);
         commandLinePane.getChildren().add(this.commandLineView.getEnter());
 
-        // vertical pane to hold the menu bar and the command line
         VBox top = new VBox(
                 this.menuBarView.getNode(),
                 commandLinePane
         );
 
-        // scroll pane to hold the output view
         ScrollPane centerPane = new ScrollPane();
         centerPane.setFitToHeight(true);
         centerPane.setFitToWidth(true);
         centerPane.setPadding(new Insets(PREF_INSETS_SIZE));
         centerPane.setContent(this.outputView.getNode());
 
-        // scroll pane to hold log view
         ScrollPane bottomPane = new ScrollPane();
         bottomPane.setFitToHeight(true);
         bottomPane.setFitToWidth(true);
         bottomPane.setPadding(new Insets(PREF_INSETS_SIZE));
         bottomPane.setContent(this.logView.getNode());
 
-        // root pane
-        BorderPane rootPane = new BorderPane();
+        rootPane = new BorderPane();
         rootPane.setTop(top);
         rootPane.setCenter(centerPane);
         rootPane.setBottom(bottomPane);
+    }
 
-        // scene
-        Scene mainScene = new Scene(rootPane);
 
-        // put the scene onto the primary stage
-        primaryStage.setTitle(this.applicationTitle);
+
+    @Override
+    public void start(Stage primaryStage) {
+        Scene mainScene = new Scene(this.rootPane);
+
+        primaryStage.setTitle(applicationTitle);
         primaryStage.setResizable(true);
         primaryStage.setScene(mainScene);
 
-        // on close
         primaryStage.setOnCloseRequest(e -> {
-            // send a command to the ApplicationExitController
-            // to handle to exit process...
-            //
-            // for new we just close the app directly
             boolean confirmed = this.quitController.manageQuit();
-            System.out.println(confirmed);
-            if(confirmed)
+            if (confirmed)
                 e.consume();
         });
 
         stageToClose.add(primaryStage);
-        // show the primary stage
         primaryStage.show();
     }
+
 
     public static void main(String[] args) {
         Application.launch(args);
     }
-
 }
