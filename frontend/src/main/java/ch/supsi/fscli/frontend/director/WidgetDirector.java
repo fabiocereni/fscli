@@ -25,18 +25,15 @@ public class WidgetDirector extends AbstractDirector implements PropertyChangeLi
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt instanceof FilesystemCreatedEvent) {
-            System.out.println("Filesystem created!");
             this.saveMenuItem.setDisable(false);
             this.saveAsMenuItem.setDisable(false);
         }
 
         if(evt instanceof SaveEvent) {
-            System.out.println("Filesystem saved!");
             this.saveMenuItem.setDisable(true);
         }
 
         if (evt instanceof LoadFSEvent) {
-            System.out.println("Filesystem loaded!");
             this.saveMenuItem.setDisable(true);
             this.saveAsMenuItem.setDisable(true);
         }

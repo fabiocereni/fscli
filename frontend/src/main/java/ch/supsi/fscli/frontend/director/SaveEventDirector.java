@@ -6,7 +6,6 @@ import com.google.inject.Singleton;
 @Singleton
 public class SaveEventDirector extends AbstractDirector {
     public void manageSave() {
-        System.out.println("SAVE EVENT FIRED");
         firePropertyChange(new SaveEvent(this, "save", false, true));
     }
 }
