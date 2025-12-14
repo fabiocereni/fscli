@@ -29,9 +29,6 @@ public class MainFx extends Application {
 
     private static final int PREF_INSETS_SIZE = 7;
     private static final int PREF_COMMAND_SPACER_WIDTH = 11;
-    private static final int COMMAND_LINE_PREF_COLUMN_COUNT = 72;
-    private static final int PREF_OUTPUT_VIEW_ROW_COUNT = 25;
-    private static final int PREF_LOG_VIEW_ROW_COUNT = 5;
 
     private static String applicationTitle = "filesystem command interpreter simulator";
 
@@ -67,11 +64,6 @@ public class MainFx extends Application {
 
 
     private void buildMainView() {
-        this.commandLineView.initCommandLineView(COMMAND_LINE_PREF_COLUMN_COUNT);
-        this.outputView.initOutputView();
-        menuBarView.initMenuBarView();
-        this.logView.initLogView(PREF_LOG_VIEW_ROW_COUNT);
-
         // command line
         HBox commandLinePane = new HBox();
         commandLinePane.setAlignment(Pos.BASELINE_LEFT);
@@ -119,7 +111,7 @@ public class MainFx extends Application {
         Scene mainScene = new Scene(this.rootPane);
 
         primaryStage.setTitle(applicationTitle);
-        primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
 
         primaryStage.setOnCloseRequest(e -> {

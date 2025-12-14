@@ -13,6 +13,8 @@ import javafx.scene.control.TextArea;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import static ch.supsi.fscli.frontend.model.preference.PreferencesModel.DEFAULT_LINES_NUMBER_LOG;
+
 @Singleton
 public class LogView implements PropertyChangeListener {
     @Inject
@@ -26,9 +28,11 @@ public class LogView implements PropertyChangeListener {
 
     @Inject
     public void init() {
-        fontLog = preferencesController.getProperty(PreferencesModel.KEY_FONT_LOG_AREA);
 
-        this.logView = new TextArea();
+        fontLog = preferencesController.getProperty(PreferencesModel.KEY_FONT_LOG_AREA);
+        logView = new TextArea();
+        this.logView.setPrefRowCount(Integer.parseInt(preferencesController.getProperty(PreferencesModel.KEY_LINES_NUMBER_LOG)));
+        this.logView.setEditable(false);
         this.logView.setId("logView");
         this.logView.setStyle("-fx-font-family:" + fontLog + ";");
         this.logView.appendText(supportedLanguageController.getTranslation("label.langInfo") + " " + supportedLanguageController.getLanguageTagSelected());
@@ -49,11 +53,6 @@ public class LogView implements PropertyChangeListener {
                 logView.appendText("\n" + translated);
             }
         }
-    }
-
-    public void initLogView(int logViewPrefRowCount) {
-        this.logView.setPrefRowCount(logViewPrefRowCount);
-        this.logView.setEditable(false);
     }
 
     public Node getNode() {

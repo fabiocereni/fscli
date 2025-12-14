@@ -32,7 +32,6 @@ public class MenuBarView {
     private IHelpController helpController;
     @Inject
     private IPreferencesController preferencesController;
-
     @Inject
     private IFSCreationController fsCreationController;
     @Inject
@@ -45,7 +44,6 @@ public class MenuBarView {
     private SaveEventDirector saveEventDirector;
     @Inject
     private InputDirector inputDirector;
-
     @Inject
     private ISupportedLanguageController supportedLanguageController;
 
@@ -66,6 +64,7 @@ public class MenuBarView {
         this.inputDirector.addPropertyChangeListener(widgetDirector);
     }
 
+    @Inject
     public void initMenuBarView() {
         // FILE MENU
         MenuItem newMenuItem = new MenuItem(supportedLanguageController.getTranslation("label.new"));

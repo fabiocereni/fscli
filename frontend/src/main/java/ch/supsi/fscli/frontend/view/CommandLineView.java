@@ -59,6 +59,8 @@ public class CommandLineView implements PropertyChangeListener {
         this.commandLine.setDisable(true);
         this.commandLine.setId("commandLineView");
 
+        this.commandLine.setPrefColumnCount(Integer.parseInt(preferencesController.getProperty(PreferencesModel.KEY_COLUMNS_NUMBER)));
+
         this.enter = new Button(supportedLanguageController.getTranslation("label.enter"));
         this.enter.setId("enter");
         this.enter.setStyle("-fx-font-family:" + fontCommandLine + ";");
@@ -103,8 +105,7 @@ public class CommandLineView implements PropertyChangeListener {
         this.FSLoadDirector.addPropertyChangeListener(this);
     }
 
-    public void initCommandLineView(int commandLinePrefColumnCount) {
-        this.commandLine.setPrefColumnCount(commandLinePrefColumnCount);
+    public void initCommandLineView() {
     }
 
     public Label getCommandLineLabel() {

@@ -37,6 +37,8 @@ public class PreferencesView implements IShow {
     private ComboBox<String> fontOutputAreaComboBox;
     private ComboBox<String> fontLogAreaComboBox;
     private TextField linesField;
+    private TextField linesField2;
+    private TextField columnsField;
     private Button saveButton;
 
     // Stato iniziale per i confronti
@@ -45,6 +47,8 @@ public class PreferencesView implements IShow {
     private String initFontOut;
     private String initFontLog;
     private String initLines;
+    private String initLines2;
+    private String initColumns;
 
     @Override
     public void showMyView() {
@@ -59,9 +63,11 @@ public class PreferencesView implements IShow {
         stage.setTitle(supportedLanguageController.getTranslation("label.titlePreferences"));
         stage.initModality(Modality.APPLICATION_MODAL);
 
+        stage.setResizable(false);
+
         GridPane root = new GridPane();
         root.setPadding(new Insets(20));
-        root.setVgap(15);
+        root.setVgap(8);
         root.setHgap(10);
 
         Label languageLabel = new Label(supportedLanguageController.getTranslation("label.language"));
@@ -91,6 +97,20 @@ public class PreferencesView implements IShow {
         linesField.setEditable(true);
         initLines = preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER);
 
+        Label linesLabel2 = new Label(supportedLanguageController.getTranslation("label.line2"));
+        linesField2 = new TextField(preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER_LOG));
+        linesField2.setId("linesField2");
+        linesField2.setPrefColumnCount(4);
+        linesField2.setEditable(true);
+        initLines2 = preferencesModel.getProperty(PreferencesModel.KEY_LINES_NUMBER_LOG);
+
+        Label columns = new Label(supportedLanguageController.getTranslation("label.column"));
+        columnsField = new TextField(preferencesModel.getProperty(PreferencesModel.KEY_COLUMNS_NUMBER));
+        columnsField.setId("columnsField");
+        columnsField.setPrefColumnCount(4);
+        columnsField.setEditable(true);
+        initColumns = preferencesModel.getProperty(PreferencesModel.KEY_COLUMNS_NUMBER);
+
         ChangeListener<Object> commonListener = (obs, oldVal, newVal) -> checkChanges();
 
         languageComboBox.valueProperty().addListener(commonListener);
@@ -98,6 +118,8 @@ public class PreferencesView implements IShow {
         fontOutputAreaComboBox.valueProperty().addListener(commonListener);
         fontLogAreaComboBox.valueProperty().addListener(commonListener);
         linesField.textProperty().addListener(commonListener);
+        linesField2.textProperty().addListener(commonListener);
+        columnsField.textProperty().addListener(commonListener);
 
         root.add(languageLabel, 0, 0);
         root.add(languageComboBox, 1, 0);
@@ -117,18 +139,39 @@ public class PreferencesView implements IShow {
         root.add(linesLabel, 0, 4);
         root.add(spinnerBox, 1, 4);
 
+        Button minusBtn2 = new Button("-");
+        Button plusBtn2 = new Button("+");
+        minusBtn2.setOnAction(e -> changeValue(linesField2, -1));
+        plusBtn2.setOnAction(e -> changeValue(linesField2, +1));
+
+        HBox spinnerBox2 = new HBox(5, minusBtn2, linesField2, plusBtn2);
+        root.add(linesLabel2, 0, 5);
+        root.add(spinnerBox2, 1, 5);
+
+        Button minusBtn3 = new Button("-");
+        Button plusBtn3 = new Button("+");
+        minusBtn3.setOnAction(e -> changeValue(columnsField, -1));
+        plusBtn3.setOnAction(e -> changeValue(columnsField, +1));
+
+        HBox spinnerBox3 = new HBox(5, minusBtn3, columnsField, plusBtn3);
+        root.add(columns, 0, 6);
+        root.add(spinnerBox3, 1, 6);
+
         saveButton = new Button(supportedLanguageController.getTranslation("label.save"));
-        root.add(saveButton, 1, 5);
+        root.add(saveButton, 1, 7);
         saveButton.setDisable(true);
 
         saveButton.setOnAction(e -> {
             try {
                 int lines = Integer.parseInt(linesField.getText().trim());
-                if (lines < 5 || lines > 100) throw new NumberFormatException();
+                int lines2 = Integer.parseInt(linesField2.getText().trim());
+
+                if ((lines < 3 || lines > 100) || (lines2 < 3 || lines2 > 100)) throw new NumberFormatException();
                 savePreferences();
             } catch (NumberFormatException ex) {
-                showError(stage, "Enter a number between 5 and 100.");
+                showError(stage, "Enter a number between 3 and 100.");
             }
+
         });
         saveButton.setId("saveButton");
         stage.setScene(new Scene(root, 450, 300));
@@ -141,12 +184,16 @@ public class PreferencesView implements IShow {
         String fontOutputArea = fontOutputAreaComboBox.getValue();
         String fontLogArea = fontLogAreaComboBox.getValue();
         int nLines = Integer.parseInt(linesField.getText().trim());
+        int nLines2 = Integer.parseInt(linesField2.getText().trim());
+        int nColumns = Integer.parseInt(columnsField.getText().trim());
 
         preferencesController.setProperty(PreferencesModel.KEY_LANGUAGE, lingua);
         preferencesController.setProperty(PreferencesModel.KEY_FONT_COMMANDLINE, fontCommandLine);
         preferencesController.setProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA, fontOutputArea);
         preferencesController.setProperty(PreferencesModel.KEY_FONT_LOG_AREA, fontLogArea);
         preferencesController.setProperty(PreferencesModel.KEY_LINES_NUMBER, String.valueOf(nLines));
+        preferencesController.setProperty(PreferencesModel.KEY_LINES_NUMBER_LOG, String.valueOf(nLines2));
+        preferencesController.setProperty(PreferencesModel.KEY_COLUMNS_NUMBER, String.valueOf(nColumns));
 
         preferencesController.savePreferences();
         stage.close();
@@ -176,6 +223,9 @@ public class PreferencesView implements IShow {
         if (!isSame(fontOutputAreaComboBox.getValue(), initFontOut)) changed = true;
         if (!isSame(fontLogAreaComboBox.getValue(), initFontLog)) changed = true;
         if (!isSame(linesField.getText(), initLines)) changed = true;
+        if (!isSame(linesField2.getText(), initLines2)) changed = true;
+        if (!isSame(columnsField.getText(), initColumns)) changed = true;
+
 
         if (saveButton != null) {
             saveButton.setDisable(!changed);

@@ -15,14 +15,20 @@ public class PreferencesModel implements IPreferencesModel {
     public static final String KEY_FONT_OUTPUT_AREA = "font-output-area";
     public static final String KEY_FONT_LOG_AREA = "font-log-area";
     public static final String KEY_LINES_NUMBER = "number-lines";
+    public static final String KEY_LINES_NUMBER_LOG = "number-lines2";
+    public static final String KEY_COLUMNS_NUMBER = "number-columns";
+
+
 
     public static final String DEFAULT_LANGUAGE = "it_IT";
     public static final String DEFAULT_FONT_COMMANDLINE = "Consolas";
     public static final String DEFAULT_FONT_OUTPUT_AREA = "Arial";
     public static final String DEFAULT_FONT_LOG_AREA = "Comic Sans MS";
     public static final int DEFAULT_LINES_NUMBER = 25;
+    public static final int DEFAULT_LINES_NUMBER_LOG = 25;
+    public static final int DEFAULT_KEY_COLUMNS_NUMBER = 72;
 
-    // da iniettare manualmente
+
     private final IPreferencesApplication preferencesApplication;
 
     private String preferencesPath;
@@ -58,6 +64,8 @@ public class PreferencesModel implements IPreferencesModel {
             getProperties().setProperty(KEY_FONT_OUTPUT_AREA, DEFAULT_FONT_OUTPUT_AREA);
             getProperties().setProperty(KEY_FONT_LOG_AREA, DEFAULT_FONT_LOG_AREA);
             getProperties().setProperty(KEY_LINES_NUMBER, String.valueOf(DEFAULT_LINES_NUMBER));
+            getProperties().setProperty(KEY_LINES_NUMBER_LOG, String.valueOf(DEFAULT_LINES_NUMBER_LOG));
+            getProperties().setProperty(KEY_COLUMNS_NUMBER, String.valueOf(DEFAULT_KEY_COLUMNS_NUMBER));
 
             savePreferences();
         }

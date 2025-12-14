@@ -32,21 +32,17 @@ public class OutputView implements PropertyChangeListener {
 
     @Inject
     public void init() {
-        fontOutput = preferencesController.getProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA);
         this.outputView = new TextArea();
+        outputView.setId("outputView");
+        outputView.setEditable(false);
+        outputView.setWrapText(true);
+        outputView.setPrefRowCount(Integer.parseInt(preferencesController.getProperty(PreferencesModel.KEY_LINES_NUMBER)));
+        fontOutput = preferencesController.getProperty(PreferencesModel.KEY_FONT_OUTPUT_AREA);
         this.outputView.setId("outputView");
         this.outputView.setText(supportedLanguageController.getTranslation("label.textOutput") + "\n");
         this.outputView.setStyle("-fx-font-family:" + fontOutput + ";");
 
         this.fsCreationDirector.addPropertyChangeListener(this);
-    }
-
-    public void initOutputView() {
-        int prefRowCount = Integer.parseInt(preferencesController.getProperty(PreferencesModel.KEY_LINES_NUMBER));
-        outputView.setId("outputView");
-        outputView.setEditable(false);
-        outputView.setWrapText(true);
-        outputView.setPrefRowCount(prefRowCount);
     }
 
     public void clear() {
