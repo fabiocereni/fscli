@@ -65,12 +65,4 @@ class SupportedLanguageBusinessTest {
         verify(supportedLanguageDAO).getMapLanguages(tag);
     }
 
-    @Test
-    void getTranslation_returnsKey() {
-        String key = "hello";
-
-        String result = business.getTranslation(key);
-
-        assertEquals(key, result);
-    }
 }

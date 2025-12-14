@@ -76,9 +76,7 @@ public class SupportedLanguageModel implements ISupportedLanguageModel {
         HashMap<String, HashMap<String, String>> listMapLanguages = new HashMap<>();
 
         for (String tag : languagesTag) {
-            // scegliere quale tenere
             Locale currentLocale = Locale.forLanguageTag(tag.replace('_', '-'));
-//            Locale currentLocale = new Locale(tag);
             System.out.println("CURRENT LOCALE: " + currentLocale);
 
             ResourceBundle bundle = ResourceBundle.getBundle(translationPropertiesLabel, currentLocale);

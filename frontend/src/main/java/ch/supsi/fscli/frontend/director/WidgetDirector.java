@@ -32,9 +32,7 @@ public class WidgetDirector extends AbstractDirector implements PropertyChangeLi
 
         if(evt instanceof SaveEvent) {
             System.out.println("Filesystem saved!");
-
-            if(evt.getPropertyName().equalsIgnoreCase("save"))
-                this.saveMenuItem.setDisable(true);
+            this.saveMenuItem.setDisable(true);
         }
 
         if (evt instanceof LoadFSEvent) {

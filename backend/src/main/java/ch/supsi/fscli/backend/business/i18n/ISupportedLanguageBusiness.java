@@ -10,5 +10,4 @@ public interface ISupportedLanguageBusiness {
     List<String> getSupportedLanguagesTags();
     void setMapLanguages(HashMap<String, HashMap<String, String>> mapLanguages);
     HashMap<String, String> getMapLanguages(String languageTag);
-    String getTranslation(String key);
 }

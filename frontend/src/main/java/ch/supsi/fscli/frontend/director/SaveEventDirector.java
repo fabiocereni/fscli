@@ -9,9 +9,4 @@ public class SaveEventDirector extends AbstractDirector {
         System.out.println("SAVE EVENT FIRED");
         firePropertyChange(new SaveEvent(this, "save", false, true));
     }
-
-    public void manageSaveAs() {
-        System.out.println("SAVE AS EVENT FIRED");
-        firePropertyChange(new SaveEvent(this, "save as", false, true));
-    }
 }

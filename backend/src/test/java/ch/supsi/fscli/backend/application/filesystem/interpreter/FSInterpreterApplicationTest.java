@@ -21,17 +21,6 @@ class FSInterpreterApplicationTest {
     @InjectMocks
     private FSInterpreterApplication application;
 
-//    @Test
-//    void getCurrentpathDelegation() {
-//        String path = "/home";
-//        when(interpreter.getCurrentpath()).thenReturn(path);
-//
-//        String result = application.getCurrentpath();
-//
-//        assertSame(path, result);
-//        verify(interpreter).getCurrentpath();
-//    }
-
     @Test
     void executeDelegation() {
         String command = "ls";

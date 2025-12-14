@@ -63,11 +63,4 @@ class SupportedLanguageApplicationTest {
         assertEquals(map, result);
         verify(supportedLanguageBusiness).getMapLanguages(tag);
     }
-
-    @Test
-    void getTranslation_returnsEmptyString() {
-        String result = application.getTranslation("key");
-
-        assertEquals("", result);
-    }
 }

@@ -34,7 +34,7 @@ public class FSDataSaverController implements IFSDataSaverController {
     public void save(Path path) {
         this.ifsStateModel.setCloseable(true);
         this.ifsDataWriterModel.save(path);
-        saveEventDirector.manageSaveAs();
+        saveEventDirector.manageSave();
         logDirector.logSaveFS();
     }
 
