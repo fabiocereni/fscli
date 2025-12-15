@@ -1,0 +1,526 @@
+[33mcommit 748bbf43dfc96cc42784cef2e99f0be7915e0166[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/FSCommands-ln[m[33m, [m[1;31morigin/dev[m[33m, [m[1;32mdev[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Wed Nov 19 20:19:00 2025 +0100
+
+    da sistemare
+
+[33mcommit 928af0b40ca59cb4f27d3e674aa505054ee30d4d[m[33m ([m[1;31morigin/feature/FSCommands-ln[m[33m)[m
+Merge: 0a1930d f8b247f
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Tue Nov 18 16:18:55 2025 +0100
+
+    Merge branch 'feature/help-command' into dev
+
+[33mcommit f8b247fe871cc68ef02870c4194194d7116eaf4c[m[33m ([m[1;31morigin/feature/help-command[m[33m)[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Tue Nov 18 16:17:44 2025 +0100
+
+    command help
+
+[33mcommit 0a1930d9edbbb21cf3a7221a29201b4f911c2897[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Tue Nov 18 14:58:03 2025 +0100
+
+    removed comments
+
+[33mcommit c6e186bac85d4755648261ceed280383078e1bb0[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Tue Nov 18 12:38:08 2025 +0100
+
+    structure help command
+
+[33mcommit 8e4dd09c1cfdac247255b79067adf779c2c147f5[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Tue Nov 18 12:14:25 2025 +0100
+
+    deleted a useless file
+
+[33mcommit cff468708f89847d2e49bde48e69db15c5dc0836[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Sun Nov 16 10:15:45 2025 +0100
+
+    semplification of handlels method
+
+[33mcommit ab91edd60af4f94fa1ec7387d8f1c3ba5a0987d4[m[33m ([m[1;31morigin/feature/FSCommands-mv[m[33m)[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 15 22:28:39 2025 +0100
+
+    added mv command
+
+[33mcommit c8843fd1629336b5c6389ea0fa371bda09ee55a3[m
+Merge: bc46212 8622c5b
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Sat Nov 15 21:33:38 2025 +0100
+
+    Merge branch 'feature/FSCommands-ls_i' into dev
+
+[33mcommit 8622c5b0d88571f3b83a3fe9534ebc2a18a554b8[m[33m ([m[1;31morigin/feature/FSCommands-ls_i[m[33m)[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Sat Nov 15 21:32:47 2025 +0100
+
+    Created logic, class and interfaces to enable ls -i command
+
+[33mcommit bc46212c1ce2027f1d991f99a7db3e6014dcc1a7[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Sat Nov 15 20:18:35 2025 +0100
+
+    sistemato comando touch
+
+[33mcommit 8daa765ae15d6a0a7ef6fb4ef5a3351e9514a923[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 15 18:59:53 2025 +0100
+
+    fix pathsolver for file
+
+[33mcommit ba1275ffdfcfbbafb755ef429c240febe8b16ea7[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 15 14:30:05 2025 +0100
+
+    disabled the command line and the enter button until a filesystem is created
+
+[33mcommit c3e040509f480bb34b0ec366978864bb74e02a5e[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 15 14:22:19 2025 +0100
+
+    added clear command
+
+[33mcommit 9be124efe1bf707899208f472d4b70b5079607b6[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 15 13:50:48 2025 +0100
+
+    added getCurrentPath when sending a command
+
+[33mcommit 65829f6b4fdfa4d1619484db2937f48af92d4ed2[m[33m ([m[1;31morigin/feature/interpreter[m[33m)[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 15 13:28:46 2025 +0100
+
+    added filesystem interpreter
+
+[33mcommit 0f02769841977ab9cf0693f164c22a166e4c1a23[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 15 10:58:38 2025 +0100
+
+    print on output view
+
+[33mcommit eccb5daacb921bbe5e2614ce467861254e0fa553[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 15 10:27:28 2025 +0100
+
+    event handler on the enter button
+
+[33mcommit 8a3c4159945c6e212b34a7fd95496be347505c1f[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Sat Nov 15 00:10:13 2025 +0100
+
+    Sistemato test
+
+[33mcommit adf4bf8b4e306d6b2a5c483cb96a01ddf63f1912[m[33m ([m[1;31morigin/feature/FSCommands-pwd[m[33m, [m[1;32mfeature/FSCommands-pwd[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Fri Nov 14 23:51:39 2025 +0100
+
+    Sistemato test
+
+[33mcommit 546e50d3a78568fb9ef2c7b98caa33e155cbca9a[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Fri Nov 14 23:49:19 2025 +0100
+
+    Creato comando pwd
+
+[33mcommit daf780839364693f15d7205c41b605abc174c3bd[m
+Merge: 4b5530b beff47a
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Fri Nov 14 23:19:51 2025 +0100
+
+    Merge branch 'feature/FSCommands-touch' into dev
+
+[33mcommit beff47ad78f84a49ec62cb0ba79ac8a7a8b1ba02[m[33m ([m[1;31morigin/feature/FSCommands-touch[m[33m, [m[1;32mfeature/FSCommands-touch[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Fri Nov 14 23:17:58 2025 +0100
+
+    Aggiunto comando touch e sistemato path solver
+
+[33mcommit 4b5530b16445fff6a2f5b68e503226f69f0f82b9[m[33m ([m[1;31morigin/feature/FSCommands-rmfile[m[33m)[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Fri Nov 14 22:57:53 2025 +0100
+
+    added rm file command test
+
+[33mcommit 71fd27afe3de3d2ea6ce386c7c0ee0d3141be960[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Fri Nov 14 22:50:00 2025 +0100
+
+    added rm file command logic
+
+[33mcommit f1697b0ed095ff4f32a5514fb0a8bf2f24b051b4[m[33m ([m[1;31morigin/feature/FSCommands-cd[m[33m)[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Fri Nov 14 21:50:24 2025 +0100
+
+    performed cd command test
+
+[33mcommit 0239a4639f087eafc027bb7d335d6f13797eb1f4[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Fri Nov 14 21:49:15 2025 +0100
+
+    added cd command logic
+
+[33mcommit 42d00694baa953d2991ac27786ab0f989c19bfe7[m
+Merge: 07f6e01 872822d
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Fri Nov 14 19:52:36 2025 +0100
+
+    Merge branch 'feature/FSCommands-rmdir' into dev
+
+[33mcommit 07f6e01679a97bdf1dd559edd5ea989ceaf6d2a3[m[33m ([m[1;31morigin/feature/FSCommands-mkdir[m[33m)[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Fri Nov 14 18:51:11 2025 +0100
+
+    test classes
+
+[33mcommit 872822daa3053e90f3825bdc21feb845f6ae59ab[m[33m ([m[1;31morigin/feature/FSCommands-rmdir[m[33m)[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Fri Nov 14 18:45:22 2025 +0100
+
+    Created logic and classes to rmdir command, added a EnumType for the Node
+
+[33mcommit 11cb602e62032653f13c1a68df811d297b12f868[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Fri Nov 14 17:30:03 2025 +0100
+
+    Created logic and classes to enable mkdir command
+
+[33mcommit b5c7d042706a023f25ed5c23bdb8c6561fb1a232[m[33m ([m[1;31morigin/refactor/filesystem-structure[m[33m, [m[1;31morigin/feature/FSCommands[m[33m, [m[1;32mrefactor/filesystem-structure[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Thu Nov 13 21:08:30 2025 +0100
+
+    refactor filesystem terminato e aggiunta del path solver
+
+[33mcommit a37b2925bb3ae18874cd3be2962b21ce670c7c17[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Wed Nov 12 08:35:59 2025 +0100
+
+    commento sistemato
+
+[33mcommit 53af4fe63689566286b43de5770988f210ec481d[m[33m ([m[1;31morigin/refactor/language-fix[m[33m, [m[1;32mrefactor/language-fix[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Nov 11 16:33:40 2025 +0100
+
+    tradotta menubar
+
+[33mcommit 729f13aa1bb71b0c4741d3be5662eb4f7cfe745d[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Nov 11 16:28:49 2025 +0100
+
+    manca la menubar
+
+[33mcommit b1bcba01ae878fffa511afeba91731fd51af274a[m[33m ([m[1;31morigin/refactor/pref[m[33m, [m[1;32mrefactor/pref[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Nov 11 15:56:33 2025 +0100
+
+    da mergiare e sistemare le traduzioni
+
+[33mcommit 1fca3b471ee9b90f43b19e65a46b86f30afd2f22[m
+Merge: c8ab8da be4f490
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Nov 11 12:56:31 2025 +0100
+
+    merged
+
+[33mcommit be4f490a3178f3fa943369d42e7b99869090e701[m[33m ([m[1;31morigin/feature/preferences-numberOfLines[m[33m, [m[1;31morigin/feature/preferences[m[33m, [m[1;32mfeature/preferences[m[33m)[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Mon Nov 10 10:15:19 2025 +0100
+
+    preferences finished
+
+[33mcommit c8ab8dad5314f95ce3562c71248740623e60b386[m[33m ([m[1;31morigin/refactor/view-refactor_observer-pattern[m[33m, [m[1;32mrefactor/view-refactor_observer-pattern[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Sun Nov 9 15:20:58 2025 +0100
+
+    introduzione observer e mediator su quit
+
+[33mcommit f33916ff4128c55db97a16669392fe5435511e72[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Sun Nov 9 11:15:40 2025 +0100
+
+    introduzione observer e mediator su new, save, saveas
+
+[33mcommit 92f3a374cf913ed4effb78d37caf1b91f5535be2[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Sun Nov 9 09:39:31 2025 +0100
+
+    aboutView translated
+
+[33mcommit 31d4dd9acc2ae105e50322d9a5fe28ead36906da[m
+Merge: 507a791 ded2d8e
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Sun Nov 9 08:47:04 2025 +0100
+
+    merged preferences/language, now added preferences to modify numbero of lines
+
+[33mcommit ded2d8e035a0a0181ed86f45d23749602306df93[m[33m ([m[1;31morigin/feature/preferences-language[m[33m, [m[1;32mfeature/preferences-language[m[33m)[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 8 20:44:29 2025 +0100
+
+    added user preferences
+
+[33mcommit f62f499fe6a270ead2b766415a69c2805142610e[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Nov 8 00:07:19 2025 +0100
+
+    added l10n
+
+[33mcommit f54e7e837d2f1854b5e4c7c04e833dd97cc9c636[m[33m ([m[1;31morigin/refactor/dependency-injection[m[33m, [m[1;32mrefactor/dependency-injection[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Fri Nov 7 18:12:41 2025 +0100
+
+    fatta prima parte di dependency injection con Guice
+
+[33mcommit 199053b4fa6f5de33e496ba876d2cb169f0a2c2c[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Fri Nov 7 18:08:28 2025 +0100
+
+    translation test
+
+[33mcommit 507a7915b5be5a3e2892856fd20f62f1eb9dde77[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Thu Nov 6 10:35:33 2025 +0100
+
+    now we read from the file properties, we change it and we load the output bar with the correct dimension
+
+[33mcommit 0c59c1357e0a35866d88ba05bfd4914379caf7c8[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Wed Nov 5 22:09:34 2025 +0100
+
+    added support languages tag to comboBox
+
+[33mcommit 73d8e9b0d96bdc8356fef39d1c97e7be69099175[m
+Merge: a71aa5c 32b20ab
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Wed Nov 5 15:41:41 2025 +0100
+
+    Merge branch 'feature/fs-initial-structure' into dev
+
+[33mcommit 32b20ab1d6ba97aab91cc72b373a9b90e26e7926[m[33m ([m[1;31morigin/feature/fs-initial-structure[m[33m, [m[1;32mfeature/fs-initial-structure[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Wed Nov 5 15:39:04 2025 +0100
+
+    creato collegamento con tasto 'new' del menu
+
+[33mcommit 17ad3194b2bcacabc652cb41e6dcc8d66a5aa0df[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Wed Nov 5 12:09:29 2025 +0100
+
+    i18 in frontend resources, created translationControlle class
+
+[33mcommit d441268cb4db95beea1de9da9687b4c106e36f92[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Wed Nov 5 11:57:52 2025 +0100
+
+    added spinner element
+
+[33mcommit 7144e3671ac2df895062af0d2ecb4cc0ddce6b31[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Tue Nov 4 15:53:11 2025 +0100
+
+    added preferences view
+
+[33mcommit a71aa5cb715f71816a0f9b8e5404796b8547ef63[m[33m ([m[1;31morigin/refactor/view-refactor[m[33m, [m[1;32mrefactor/view-refactor[m[33m)[m
+Merge: cd90a2c 2dea064
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Mon Nov 3 13:02:24 2025 +0100
+
+    Merge branch 'feature/fs-initial-structure' into dev
+
+[33mcommit 2dea0642c25e6610bda1536c9e7329058fab61d6[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Mon Nov 3 12:58:27 2025 +0100
+
+    creata struttura del filesystem
+
+[33mcommit cd90a2c7014f23ef8fda59af033b7efcac876d01[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Mon Nov 3 11:54:23 2025 +0100
+
+    sistemato CI/CD
+
+[33mcommit 7cd551cea59520d7e8507212f7f66103e82aed1f[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Mon Nov 3 11:51:21 2025 +0100
+
+    sistemato CI/CD
+
+[33mcommit e714654de52c653ec6f24bc8646aba134d335af5[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Mon Nov 3 11:49:34 2025 +0100
+
+    sistemato CI/CD
+
+[33mcommit ed712fbdea83b75a4c37d65e0841253700213c6b[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Mon Nov 3 11:45:58 2025 +0100
+
+    sistemato CI/CD
+
+[33mcommit beac0fc3269adfe4dbc49e15c1d889c3222e1fc6[m[33m ([m[1;31morigin/feature/read-from-file[m[33m, [m[1;32mfeature/read-from-file[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Sun Nov 2 18:50:38 2025 +0100
+
+    Creato sistema di lettura file
+
+[33mcommit 45e6e94d1b75f72708e90d49a87b336ed87afff5[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Thu Oct 30 22:03:28 2025 +0100
+
+    Created Preferences View and Controller
+
+[33mcommit c96df5115ad2086e259663a8d88b64ef8690ae06[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Wed Oct 29 14:23:50 2025 +0100
+
+    Tentativo di sistemare build
+
+[33mcommit df7976cce5347c76e420a47854f3875bf36c2b96[m[33m ([m[1;32mtest/mediator[m[33m)[m
+Merge: 3d6954e 05b99e3
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Tue Oct 28 21:01:38 2025 +0100
+
+    merge quitDev
+
+[33mcommit 05b99e3a6d64efe06d63a2575a712d3f1e5c74b5[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Oct 28 19:02:38 2025 +0100
+
+    Sistemato test per esecuzione in remoto
+
+[33mcommit 53a3b85e666e5de70221eea99c65b0c0000eedc5[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Oct 28 18:59:24 2025 +0100
+
+    Sistemato test per esecuzione in remoto
+
+[33mcommit 04c7a890ff8f3abce6a95a28f8e2994343f959af[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Oct 28 18:49:49 2025 +0100
+
+    Sistemato file .yml
+
+[33mcommit 38295b9a28721546f792438ce476651ca3111299[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Oct 28 18:48:29 2025 +0100
+
+    Sistemato file .yml
+
+[33mcommit a6ad95e4212066a4a0ce37e4b82bb0b4b45bf135[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Tue Oct 28 16:44:46 2025 +0100
+
+    Aggiunto file per CI gitlab
+
+[33mcommit 3d6954e9f37601ce553ff29b5f2deaaa26c3b4ef[m[33m ([m[1;31morigin/quitDev[m[33m, [m[1;32mquitDev[m[33m)[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Sat Oct 25 10:59:53 2025 +0200
+
+    Changed the way I close the stages
+
+[33mcommit fa0bcce47630f14ed97154e3be01288abeb02fbd[m
+Merge: 3f127c6 a0e72e4
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Fri Oct 24 19:00:14 2025 +0200
+
+    Feature: implemented application closure with exit and X
+
+[33mcommit 3f127c6193e29a79d8ba0616901202b78319ed17[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Fri Oct 24 18:27:08 2025 +0200
+
+    Feature: implemented event closed when you click exit or X
+
+[33mcommit a0e72e4ca03dba59ac8edd31225e701db246d10e[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Fri Oct 24 12:04:52 2025 +0200
+
+    Feature: used a similar observer pattern to call the method quit in the QuitController from quitAlertView
+
+[33mcommit ffa30f22348f3f127f9c420a741ca6eafb7debb7[m[33m ([m[1;31morigin/creditsViewDev[m[33m, [m[1;32mcreditsViewDev[m[33m)[m
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Fri Oct 24 09:51:59 2025 +0200
+
+    inserito i comandi necessari
+
+[33mcommit 679f683d0a35a632ef0b19278a23cd9d56183022[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Wed Oct 22 15:37:01 2025 +0200
+
+    New Class: BuildInfoController which reads build varsion from resource, AboutView use BuildInfoController to display version
+
+[33mcommit 70d4c0bc4a004a3153a23c01a0328642edeb6088[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Wed Oct 22 11:45:04 2025 +0200
+
+    Created: QuitAlertView, QuitController, IQuitController Feature: show QuitAlert on exit button
+
+[33mcommit 85aed3a577e606ef50aa7198c108992bbb66e379[m
+Merge: 2d5e36a 84b0cc0
+Author: fabio.cereni <fabio.cereni@supsi.ch>
+Date:   Tue Oct 21 16:10:22 2025 +0200
+
+    merge help to about view
+
+[33mcommit 2d5e36a04e050668abf5a4a9ec28ae9cc8fd3ad5[m[33m ([m[1;31morigin/helpViewDev[m[33m, [m[1;32mhelpViewDev[m[33m)[m
+Author: fabio.cereni <fabiocereni@MacBook-Pro-di-Fabio.local>
+Date:   Tue Oct 21 15:43:00 2025 +0200
+
+    added help view
+
+[33mcommit 84b0cc00c409efc237e08f79acb67b1dbb82b308[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Tue Oct 21 15:42:08 2025 +0200
+
+    Feature: aboutViewController, EventHandlerInitializer, IAboutView
+
+[33mcommit c2c17e5ac98aa2fde0aab8c713664d0ee7b0224d[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Tue Oct 21 10:27:00 2025 +0200
+
+    Feature: created and initialized aboutView
+
+[33mcommit a23a487ecedfd4414d512f2c4ff9f1be83a9c16a[m
+Author: Mattia <mattia.ferraris@student.supsi.ch>
+Date:   Tue Oct 21 09:57:30 2025 +0200
+
+    Feature: aboutView, created and  initialized
+
+[33mcommit 7f68ef1f6998082b62b179aa9293891a7e465c89[m[33m ([m[1;31morigin/serialization_and_save[m[33m, [m[1;32mserialization_and_save[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Fri Oct 17 10:01:22 2025 +0200
+
+    Aggiunta logica di serializzazione e salvataggio, view di salvataggio. Effettuati test su serializzazione e salvataggio
+
+[33mcommit db57beaf2b264c94486dae4d7bc1d9725b0a5375[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Wed Oct 8 09:32:44 2025 +0200
+
+    Aggiunta layer ed MVC
+
+[33mcommit 5efc062a650ccb4f0cd1a2c15573fa8c050bc035[m[33m ([m[1;31morigin/view_separation[m[33m, [m[1;32mview_separation[m[33m)[m
+Author: simone.torri <simone.torri@supsi.ch>
+Date:   Sun Oct 5 15:25:07 2025 +0200
+
+    Refactor per separazione delle view dal mainfx
+
+[33mcommit ce40af24b5137d1a376906cd2b7f5f8c45c85e08[m
+Author: fabio.cereni <fabiocereni@MacBook-Pro-di-Fabio.local>
+Date:   Fri Oct 3 22:02:50 2025 +0200
+
+    created backend and frontend structure and language properties file
+
+[33mcommit 558e4a1358bf71dac07d8a5cc9ce48c44322923d[m[33m ([m[1;31morigin/test-libreria-file_system[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mtest-libreria-file_system[m[33m, [m[1;32mmain[m[33m)[m
+Author: fabio.cereni <fabiocereni@MacBook-Pro-di-Fabio.local>
+Date:   Thu Oct 2 21:21:06 2025 +0200
+
+    added backend and frontend modules
+
+[33mcommit bfda73734a28d56aeaa710aa159654758a6a550c[m
+Author: groups-create <group_2962_bot_d999ce4dbac90aa43e8d62b4e70c6d43@noreply.gitlab-edu.supsi.ch>
+Date:   Wed Sep 24 09:28:05 2025 +0000
+
+    Initial commit

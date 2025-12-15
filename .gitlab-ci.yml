@@ -1,0 +1,57 @@
+variables:
+  MAVEN_OPTS: >-
+    -Dhttps.protocols=TLSv1.2
+    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    -Dorg.slf4j.simpleLogger.showDateTime=true
+    -Djava.awt.headless=true
+
+  MAVEN_CLI_OPTS: >-
+    --batch-mode
+    --errors
+    --fail-at-end
+    --show-version
+    --no-transfer-progress
+    --no-snapshot-updates
+
+stages:
+  - backend
+  - frontend
+
+cache:
+  key: "maven-$CI_COMMIT_REF_SLUG"
+  paths:
+    - .m2/repository/
+
+backend:
+  stage: backend
+  image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:maven3java17
+  before_script:
+    - cd backend
+  script:
+    - 'mvn $MAVEN_OPTS $MAVEN_CLI_OPTS clean install'
+  after_script:
+    - cd ..
+  artifacts:
+    paths:
+      - backend/target/backend-1.0-SNAPSHOT.jar
+    expire_in: 1 hour
+
+frontend:
+  stage: frontend
+  image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:maven3java17
+  dependencies:
+    - backend  # Assicura che scarichi esplicitamente gli artifact del job backend
+  before_script:
+    - 'cd frontend'
+    - 'Xvfb :99 -screen 0 1920x1080x16 &'
+  script:
+    # NOTA: Assicurati che groupId, artifactId e version corrispondano ESATTAMENTE al pom.xml del backend
+    - 'mvn install:install-file -Dfile=../backend/target/backend-1.0-SNAPSHOT.jar -DgroupId=ch.supsi.fscli -DartifactId=backend -Dversion=1.0-SNAPSHOT -Dpackaging=jar'
+
+    - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless clean package'
+  after_script:
+    - cd ..
+  artifacts:
+    paths:
+      - frontend/target/fscli-jar-with-dependencies.jar
+    expire_in: 1 hour

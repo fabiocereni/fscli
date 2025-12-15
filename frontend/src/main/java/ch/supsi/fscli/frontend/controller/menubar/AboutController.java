@@ -1,0 +1,21 @@
+package ch.supsi.fscli.frontend.controller.menubar;
+
+import ch.supsi.fscli.frontend.view.menubar.qualifier.AboutViewQualifier;
+import ch.supsi.fscli.frontend.view.IShow;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+@Singleton
+public class AboutController implements IAboutController {
+
+    private final IShow aboutView;
+
+    @Inject
+    public AboutController(@AboutViewQualifier IShow aboutView) {
+        this.aboutView = aboutView;
+    }
+
+    @Override
+    public void showAboutView() { aboutView.showMyView(); }
+
+}

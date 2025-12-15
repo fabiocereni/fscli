@@ -1,0 +1,11 @@
+package ch.supsi.fscli.frontend.director;
+
+import ch.supsi.fscli.frontend.event.SaveEvent;
+import com.google.inject.Singleton;
+
+@Singleton
+public class SaveEventDirector extends AbstractDirector {
+    public void manageSave() {
+        firePropertyChange(new SaveEvent(this, "save", false, true));
+    }
+}
