@@ -66,36 +66,7 @@ public class FSInterpreter implements IFSInterpreter {
         if (command == null)
             return new CommandResult( "label.commandNotFound", true);
 
-        List<String> expandedArgs = expandArgs(args);
-        command.setArgs(expandedArgs);
+        command.setArgs(args);
         return command.execute();
-    }
-
-    private List<String> expandArgs(List<String> args) {
-        List<String> result = new ArrayList<>();
-        Set<String> filesInDir = fileSystem.getCurrentWorkingDirectory().getEntries().keySet();
-        for (String arg : args) {
-            if (arg.contains("*")) {
-                String regex = "^" + arg.replace(".", "\\.").replace("*", ".*") + "$";
-                Pattern pattern = Pattern.compile(regex);
-                List<String> matches = new ArrayList<>();
-                for (String fileName : filesInDir) {
-                    if (fileName.equals(".") || fileName.equals("..")) continue;
-
-                    if (pattern.matcher(fileName).matches()) {
-                        matches.add(fileName);
-                    }
-                }
-                if (!matches.isEmpty()) {
-                    Collections.sort(matches);
-                    result.addAll(matches);
-                } else {
-                    result.add(arg);
-                }
-            } else {
-                result.add(arg);
-            }
-        }
-        return result;
     }
 }
