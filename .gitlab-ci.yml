@@ -50,16 +50,11 @@ frontend:
 
   before_script:
     - cd frontend
-    # Avvio Xvfb con profondità colore compatibile con JavaFX
     - Xvfb :99 -ac -screen 0 1920x1080x24 &
     - export DISPLAY=:99
 
   script:
-    - mvn $MAVEN_OPTS $MAVEN_CLI_OPTS \
-      -Dheadless=true \
-      -Dsw-renderer=true \
-      -Dmonocle=true \
-      clean test
+    - mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless=true -Dsw-renderer=true -Dmonocle=true clean test
 
   after_script:
     - cd ..
