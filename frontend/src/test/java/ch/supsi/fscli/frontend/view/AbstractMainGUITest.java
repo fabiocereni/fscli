@@ -2,42 +2,48 @@ package ch.supsi.fscli.frontend.view;
 
 import ch.supsi.fscli.frontend.MainFx;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach; // Nota: BeforeAll statico non serve più per le properties
+import org.junit.jupiter.api.BeforeAll;
 import org.testfx.framework.junit5.ApplicationTest;
-import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.logging.Logger;
 
 abstract public class AbstractMainGUITest extends ApplicationTest {
 
-    protected static final int SLEEP_INTERVAL = 100;
+    protected static final int SLEEP_INTERVAL = 0;
+
     protected static final Logger LOGGER = Logger.getAnonymousLogger();
+
     protected int stepNo;
+
     protected Stage primaryStage;
 
-    // --- MODIFICA CRITICA: BLOCCO STATICO ---
-    // Questo viene eseguito PRIMA che JavaFX venga inizializzato.
-    static {
-        // Leggiamo le property, ma se siamo in dubbio forziamo valori sicuri per la CI
-        // Se vuoi essere sicuro al 100%, togli gli if e forza tutto.
-
-        String headlessVal = System.getProperty("headless", "false");
-        // Piccolo trucco: se non è settato, controlliamo se siamo in ambiente CI (spesso settano la variabile CI=true)
-        if (Boolean.parseBoolean(headlessVal) || System.getenv("CI") != null) {
-            System.out.println("FORCING HEADLESS & SOFTWARE RENDERING IN STATIC BLOCK");
-
-            // 1. Forza Rendering Software (evita BufferOverflow e crash Xvfb)
-            System.setProperty("prism.order", "sw");
-            System.setProperty("prism.text", "t2k");
+    @BeforeAll
+    public static void setupSpec() {
+        boolean headless = Boolean.getBoolean("headless");
+        if (headless) {
+            System.out.println("headless mode..." + headless);
             System.setProperty("java.awt.headless", "true");
-
-            // 2. Configura TestFX
-            System.setProperty("testfx.robot", "glass");
+            System.setProperty("javafx.animation.framerate", "10");
             System.setProperty("testfx.headless", "true");
+            System.setProperty("testfx.robot", "glass");
+        }
 
-            // 3. Opzioni extra per stabilità
+        boolean swRenderer = Boolean.getBoolean("sw-renderer");
+        if (swRenderer) {
+            System.out.println("sw rendering mode..." + swRenderer);
+            System.setProperty("prism.order", "sw");
             System.setProperty("prism.forceSW", "true");
+            System.setProperty("prism.use.egl", "false");
             System.setProperty("prism.disableEGL", "true");
+            System.setProperty("prism.forceGPU", "false");
+        }
+
+        boolean monocle = Boolean.getBoolean("monocle");
+        if (monocle) {
+            System.out.println("monocle mode..." + monocle);
+            System.setProperty("glass.platform", "monocle");
+            System.setProperty("monocle.platform", "headless");
+            System.setProperty("monocle.renderer", "software");
         }
     }
 
@@ -48,20 +54,13 @@ abstract public class AbstractMainGUITest extends ApplicationTest {
         LOGGER.info("STEP" + stepNo + ":" + "end");
     }
 
-    @Override
     public void start(final Stage stage) {
         this.primaryStage = stage;
 
         final MainFx main = new MainFx();
         main.init();
         main.start(stage);
-
-        // --- FIX PER "NODE NOT FOUND" ---
-        // stage.toFront() a volte non basta in Linux/Xvfb.
-        // requestFocus() aiuta il robot a "agganciare" la finestra.
         stage.toFront();
-        stage.requestFocus();
-
-        WaitForAsyncUtils.waitForFxEvents();
     }
+
 }
