@@ -57,7 +57,7 @@ frontend:
   before_script:
     - 'cd frontend'
   script:
-    - 'mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless=true -Dmonocle=true -Dsw-renderer=true -Dmonocle.screen.size=1920x1080 clean install'
+    - 'mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless=true -Dmonocle=true -Dsw-renderer=true clean install'
   after_script:
     - cd ..
   artifacts:
