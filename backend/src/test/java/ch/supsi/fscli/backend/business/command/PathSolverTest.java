@@ -22,12 +22,12 @@ class PathSolverTest {
     private DirectoryInodeBusiness root;
     private DirectoryInodeBusiness home;
     private DirectoryInodeBusiness user;
-    private FileInodeBusiness photo;
+    private FileInodeBusiness file;
 
     @BeforeEach
     void setUp() {
 
-        fs    = new FileSystem();
+        fs = new FileSystem();
         pathSolver = new PathSolver(fs);
 
         root = fs.getRoot();
@@ -37,7 +37,7 @@ class PathSolverTest {
         DirectoryInodeBusiness docs = new DirectoryInodeBusiness(400);
         DirectoryInodeBusiness bin  = new DirectoryInodeBusiness(500);
 
-        photo = fs.createFile();
+        file = fs.createFile();
 
         root.addEntry("home", home);
         root.addEntry("bin", bin);
@@ -45,7 +45,7 @@ class PathSolverTest {
         home.addEntry("user", user);
 
         user.addEntry("docs", docs);
-        user.addEntry("photo.jpg", photo);
+        user.addEntry("file.txt", file);
 
         fs.setCurrentWorkingDirectory(root);
     }
@@ -61,9 +61,9 @@ class PathSolverTest {
 
     @Test
     void testResolveAbsolutePathSuccess() {
-        Optional<Inode> result = pathSolver.resolvePath("/home/user/photo.jpg");
+        Optional<Inode> result = pathSolver.resolvePath("/home/user/file.txt");
         assertTrue(result.isPresent());
-        assertEquals(photo, result.get());
+        assertEquals(file, result.get());
     }
 
     @Test
@@ -77,9 +77,9 @@ class PathSolverTest {
     void testResolveRelativePathFromSubDir() {
         fs.setCurrentWorkingDirectory(home);
 
-        Optional<Inode> result = pathSolver.resolvePath("user/photo.jpg");
+        Optional<Inode> result = pathSolver.resolvePath("user/file.txt");
         assertTrue(result.isPresent());
-        assertEquals(photo, result.get());
+        assertEquals(file, result.get());
     }
 
     @Test
@@ -91,9 +91,9 @@ class PathSolverTest {
 
     @Test
     void testResolvePathWithDoubleDotsInString() {
-        Optional<Inode> result = pathSolver.resolvePath("/home/user/../user/photo.jpg");
+        Optional<Inode> result = pathSolver.resolvePath("/home/user/../user/file.txt");
         assertTrue(result.isPresent());
-        assertEquals(photo, result.get());
+        assertEquals(file, result.get());
     }
 
     @Test
@@ -114,11 +114,10 @@ class PathSolverTest {
         assertTrue(pathSolver.resolvePath("").isEmpty());
     }
 
-    // --- TEST EXTRACT PARENT DIRECTORY ---
 
     @Test
     void testExtractParentFromFile() {
-        DirectoryInodeBusiness parent = pathSolver.extractParentDirectory("/home/user/photo.jpg");
+        DirectoryInodeBusiness parent = pathSolver.extractParentDirectory("/home/user/file.txt");
         assertNotNull(parent);
         assertEquals(user, parent);
     }
@@ -140,21 +139,20 @@ class PathSolverTest {
     void testExtractParentSimpleName() {
         fs.setCurrentWorkingDirectory(user);
 
-        DirectoryInodeBusiness parent = pathSolver.extractParentDirectory("photo.jpg");
+        DirectoryInodeBusiness parent = pathSolver.extractParentDirectory("file.txt");
         assertEquals(user, parent);
     }
 
     @Test
     void testExtractParentNotExists() {
-        DirectoryInodeBusiness parent = pathSolver.extractParentDirectory("/home/ghost/file.txt");
+        DirectoryInodeBusiness parent = pathSolver.extractParentDirectory("/home/path/file.txt");
         assertNull(parent);
     }
 
-    // --- TEST EXTRACT FILE NAME ---
 
     @Test
     void testExtractFileNameAbsolute() {
-        assertEquals("photo.jpg", pathSolver.extractFileName("/home/user/photo.jpg"));
+        assertEquals("file.txt", pathSolver.extractFileName("/home/user/file.txt"));
     }
 
     @Test
@@ -162,11 +160,10 @@ class PathSolverTest {
         assertEquals("readme.txt", pathSolver.extractFileName("readme.txt"));
     }
 
-    // --- TEST NAME ALREADY EXISTS ---
 
     @Test
     void testNameAlreadyExists() {
-        assertTrue(pathSolver.nameAlreadyExists(user, "photo.jpg"));
-        assertFalse(pathSolver.nameAlreadyExists(user, "video.mp4"));
+        assertTrue(pathSolver.nameAlreadyExists(user, "file.txt"));
+        assertFalse(pathSolver.nameAlreadyExists(user, "file2.txt"));
     }
 }

@@ -17,6 +17,7 @@ public class LsCommand implements IFSCommand {
 
     private final IFSLsCommandBusiness business;
     private final FileSystem fileSystem;
+
     private List<String> args = new ArrayList<>();
 
     @Inject
@@ -38,13 +39,16 @@ public class LsCommand implements IFSCommand {
     @Override
     public CommandResult execute() {
         boolean showInode = false;
+        boolean wildcardUsed = false;
+
         List<String> targets = new ArrayList<>();
 
-        if (this.args != null) {
-            for (String arg : this.args) {
-                if (arg.equals("-i")) {
+        if (args != null) {
+            for (String arg : args) {
+                if ("-i".equals(arg)) {
                     showInode = true;
                 } else if (arg.startsWith("*")) {
+                    wildcardUsed = true;
                     targets.addAll(findAllEntries());
                 } else {
                     targets.add(arg);
@@ -52,76 +56,76 @@ public class LsCommand implements IFSCommand {
             }
         }
 
-        // Caso A: Nessun target specificato -> ls sulla cartella corrente (.)
         if (targets.isEmpty()) {
             CommandResult result = business.ls(null, showInode);
             if (result == null) return null;
 
             String content = result.getContent();
-            if (isErrorMessage(content)) {
+            if (result.isTranslatable()) {
                 return result;
             }
-            // Altrimenti formattiamo
-            return new CommandResult(formatHierarchy(".", content), false);
+
+            return new CommandResult(content, false);
         }
 
-        // Uno o più target (es. ls folder1 folder2)
-        StringBuilder finalOutput = new StringBuilder();
+        StringBuilder output = new StringBuilder();
 
         for (int i = 0; i < targets.size(); i++) {
             String path = targets.get(i);
             CommandResult result = business.ls(path, showInode);
-            String content = (result != null) ? result.getContent() : "";
 
-            if (isErrorMessage(content)) {
-                finalOutput.append(content);
+            if (result == null) {
+                continue;
+            }
+
+            String content = result.getContent();
+
+            if (result.isTranslatable()) {
+                return result;
             } else {
-                Inode node = fileSystem.getCurrentWorkingDirectory().getEntry(path);
+                Inode inode = fileSystem
+                        .getCurrentWorkingDirectory()
+                        .getEntry(path);
 
-                if (node != null && node.getType() == InodeType.FILE) {
-                    finalOutput.append(content);
+                if (inode != null && inode.getType() == InodeType.FILE) {
+                    output.append(content);
                 } else {
-                    finalOutput.append(formatHierarchy(path, content));
+                    if (wildcardUsed || targets.size() > 1) {
+                        output.append(formatHierarchy(path, content));
+                    } else {
+                        output.append(content);
+                    }
                 }
             }
 
             if (i < targets.size() - 1) {
-                finalOutput.append("\n");
+                output.append("\n");
             }
         }
 
-        return new CommandResult(finalOutput.toString(), false);
+        return new CommandResult(output.toString(), false);
     }
 
     private List<String> findAllEntries() {
-        List<String> matches = new ArrayList<>();
-        Set<String> currentEntries = fileSystem.getCurrentWorkingDirectory().getEntries().keySet();
+        Set<String> entries = fileSystem
+                .getCurrentWorkingDirectory()
+                .getEntries()
+                .keySet();
 
-        for (String name : currentEntries) {
-            if (!name.equals(".") && !name.equals("..")) {
-                matches.add(name);
-            }
-        }
-        return matches;
+        return entries.stream()
+                .filter(e -> !e.equals(".") && !e.equals(".."))
+                .collect(Collectors.toList());
     }
 
-    private String formatHierarchy(String parentName, String content) {
-        if (content.isEmpty()) {
-            return parentName; // Cartella vuota, stampa solo il nome
+    private String formatHierarchy(String parent, String content) {
+        if (content == null || content.isBlank()) {
+            return parent;
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(parentName).append("\n");
-
-        String indentedContent = content.lines()
+        String indented = content.lines()
                 .map(line -> "-> " + line)
                 .collect(Collectors.joining("\n"));
 
-        sb.append(indentedContent);
-        return sb.toString();
-    }
-
-    private boolean isErrorMessage(String content) {
-        return content.startsWith("label.") || content.contains("cannot access");
+        return parent + "\n" + indented;
     }
 }

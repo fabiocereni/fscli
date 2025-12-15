@@ -10,16 +10,19 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmdir.IFSRmdirComma
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmfile.IFSRmfileCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.touch.IFSTouchCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.commandWrapper.*;
+import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
+import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
 import java.util.List;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CommandWrapperTest {
@@ -38,6 +41,8 @@ class CommandWrapperTest {
 
     @Mock
     private IFSLsCommandBusiness ifsLsCommandBusiness;
+    @Mock
+    private FileSystem fileSystem;
     @InjectMocks
     private LsCommand lsCommand;
 
@@ -100,16 +105,20 @@ class CommandWrapperTest {
 
 
 
-//    @Test
-//    void lsCommandDelegation() {
-//        when(ifsLsCommandBusiness.ls("test", false))
-//                .thenReturn(new CommandResult("test",false));
-//
-//        lsCommand.setArgs(List.of("test"));
-//        lsCommand.execute();
-//
-//        verify(ifsLsCommandBusiness).ls("test",false);
-//    }
+    @Test
+    void lsCommand_callsBusinessLs() {
+        when(ifsLsCommandBusiness.ls("test", false))
+                .thenReturn(new CommandResult("file1", false));
+
+        DirectoryInodeBusiness cwd = mock(DirectoryInodeBusiness.class);
+        when(fileSystem.getCurrentWorkingDirectory()).thenReturn(cwd);
+        when(cwd.getEntry("test")).thenReturn(null);
+
+        lsCommand.setArgs(List.of("test"));
+        lsCommand.execute();
+
+        verify(ifsLsCommandBusiness).ls("test", false);
+    }
 
 
     @Test
