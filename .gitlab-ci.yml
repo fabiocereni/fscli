@@ -56,12 +56,15 @@ frontend:
   image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:maven3java17
   before_script:
     - 'cd frontend'
+    - 'Xvfb :99 -screen 0 1920x1080x16 &'
   script:
-    - 'mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless=true -Dmonocle=true -Dsw-renderer=true clean install'
+    - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless clean package'
+  #    - 'mvn $MAVEN_CLI_OPTS jacoco:report'
   after_script:
     - cd ..
   artifacts:
     paths:
+      #      - frontend/target/site/jacoco/*
       - frontend/target/fscli-jar-with-dependencies.jar
     expire_in: 1 hour
 
