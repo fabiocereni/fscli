@@ -50,6 +50,21 @@ public class FileSystem {
         return file;
     }
 
+    public void reset() {
+        this.inodeTable.clear();
+        this.nextInodeId = 1L;
+
+        this.root = new DirectoryInodeBusiness(1L);
+        initializeRoot(root);
+
+        this.currentWorkingDirectory = root;
+        this.currentWorkingDirectoryPath = "/";
+
+        if (this.nextInodeId <= root.getId()) {
+            this.nextInodeId = root.getId() + 1;
+        }
+    }
+
     private long allocateInodeId() {
         return nextInodeId++;
     }
@@ -64,4 +79,8 @@ public class FileSystem {
     public void setCurrentWorkingDirectory(DirectoryInodeBusiness directory) { this.currentWorkingDirectory = directory; }
     public String getCurrentWorkingDirectoryPath() { return currentWorkingDirectoryPath; }
     public void setCurrentWorkingDirectoryPath(String currentWorkingDirectoryPath) { this.currentWorkingDirectoryPath = currentWorkingDirectoryPath; }
+
+    public void setInodeTable(Map<Long, Inode> inodeTable) {
+        this.inodeTable = inodeTable;
+    }
 }
