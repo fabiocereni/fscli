@@ -2,8 +2,12 @@ package ch.supsi.fscli.backend.business.filesystem.creation;
 
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
+import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Singleton
 public class FSCreationBusiness implements IFSCreationBusiness {
@@ -17,9 +21,6 @@ public class FSCreationBusiness implements IFSCreationBusiness {
 
     @Override
     public void newfs() {
-        DirectoryInodeBusiness root = fileSystem.getRoot();
-        fileSystem.setRoot(root);
-        fileSystem.setCurrentWorkingDirectory(root);
-        System.out.println("NEW FILESYSTEM CREATED");
+        fileSystem.reset();
     }
 }
