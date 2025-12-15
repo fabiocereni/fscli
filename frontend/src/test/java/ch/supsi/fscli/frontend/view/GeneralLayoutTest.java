@@ -18,6 +18,7 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
     @Test
     public void testMainScene() {
         step("main scene...", () -> {
+            sleep(SLEEP_INTERVAL);
             verifyThat("#fileMenu", isVisible());
             verifyThat("#editMenu", isVisible());
             verifyThat("#helpMenu", isVisible());
@@ -27,10 +28,11 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             verifyThat("#enter", isVisible());
             verifyThat("#enter", isDisabled());
             verifyThat("#outputView", (TextInputControl t) ->
-                    t.getText().contains("Questo e' un esempio del testo in output...") ||
+                    t.getText().contains("Questo \u00E8 un esempio del testo in output...") ||
                             t.getText().contains("This is an example output text...") ||
-                            t.getText().contains("Dies ist ein Beispiel-Ausgabetext..."));
-
+                            t.getText().contains("Dies ist ein Beispiel-Ausgabetext...")
+            );
+            sleep(SLEEP_INTERVAL);
 
             verifyThat("#logView", (TextInputControl t) ->
                     t.getText().contains("Lingua selezionata it_IT") ||
@@ -43,14 +45,15 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
     @Test
     public void testFileMenu() {
         step("file menu...", () -> {
-            // file menu
             Menu menu = lookup("#fileMenu").queryAs(MenuBarButton.class).menu;
             assertTrue(menu.isVisible());
             assertFalse(menu.isDisable());
 
-            // open the menu
+            sleep(SLEEP_INTERVAL);
 
             clickOn("#fileMenu");
+
+            sleep(SLEEP_INTERVAL);
 
 
             MenuItem newMenuItem = lookup("#newMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
@@ -75,6 +78,7 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             assertTrue(exitMenuItem.isVisible());
             assertFalse(exitMenuItem.isDisable());
 
+            sleep(SLEEP_INTERVAL);
             clickOn("#fileMenu");
         });
     }
@@ -86,13 +90,16 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             assertTrue(menu.isVisible());
             assertFalse(menu.isDisable());
 
+            sleep(SLEEP_INTERVAL);
+
             clickOn("#editMenu");
 
+            sleep(SLEEP_INTERVAL);
             MenuItem preferencesMenuItem = lookup("#preferencesMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
             assertTrue(preferencesMenuItem.isVisible());
             assertFalse(preferencesMenuItem.isDisable());
 
-
+            sleep(SLEEP_INTERVAL);
 
             clickOn("#editMenu");
         });
@@ -105,7 +112,11 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             assertTrue(menu.isVisible());
             assertFalse(menu.isDisable());
 
+            sleep(SLEEP_INTERVAL);
+
             clickOn("#helpMenu");
+
+            sleep(SLEEP_INTERVAL);
 
             MenuItem helpMenuItem = lookup("#helpMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
             assertTrue(helpMenuItem.isVisible());
@@ -115,6 +126,7 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             assertTrue(aboutMenuItem.isVisible());
             assertFalse(aboutMenuItem.isDisable());
 
+            sleep(SLEEP_INTERVAL);
             clickOn("#helpMenu");
         });
     }

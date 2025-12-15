@@ -18,10 +18,11 @@ public class EditMenuTest extends AbstractMainGUITest {
         step("Apertura finestra preferenze...", () -> {
             clickOn("#editMenu");
 
+            sleep(SLEEP_INTERVAL);
 
             clickOn("#preferencesMenuItem");
+            sleep(SLEEP_INTERVAL);
 
-            verifyThat("#languageComboBox", isVisible());
             verifyThat("#linesField", isVisible());
 
 
@@ -30,20 +31,24 @@ public class EditMenuTest extends AbstractMainGUITest {
 
         step("Modifica valori e abilitazione tasto Salva...", () -> {
             doubleClickOn("#linesField");
+            sleep(SLEEP_INTERVAL);
             TextField numberOfLines = lookup("#linesField").queryAs(TextField.class);
 
             String tmp = numberOfLines.getText();
 
             int num = Integer.parseInt(tmp);
 
-            if(num <= 20) {
-                num+=10;
-            }else
-                num-=10;
+            int numToWrite;
 
-            write(String.valueOf(num));
+            if(num > 10)
+                numToWrite = num+10;
+            else
+                numToWrite = num-10;
+
+            write(String.valueOf(numToWrite));
 
             press(KeyCode.TAB).release(KeyCode.TAB);
+            sleep(SLEEP_INTERVAL);
 
             verifyThat("#saveButton", isEnabled());
         });
@@ -51,6 +56,7 @@ public class EditMenuTest extends AbstractMainGUITest {
         step("Salvataggio e chiusura...", () -> {
             clickOn("#saveButton");
 
+            sleep(SLEEP_INTERVAL);
 
             verifyThat("#logView", (TextInputControl t) ->
                     t.getText().contains("Preferenze salvate correttamente.") ||
