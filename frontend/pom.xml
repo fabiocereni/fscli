@@ -7,11 +7,13 @@
     <groupId>ch.supsi.fscli</groupId>
     <artifactId>frontend</artifactId>
     <version>0.8-SNAPSHOT</version>
+    <description>Torri, Ferraris, Cereni</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     </properties>
 
 

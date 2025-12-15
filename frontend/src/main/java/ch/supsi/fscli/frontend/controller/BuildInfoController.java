@@ -18,6 +18,7 @@ public class BuildInfoController {
                 System.err.println("WARN: File 'version.properties' non trovato.");
                 properties.setProperty("app.version", "IDE-DEV"); // Default per l'IDE
                 properties.setProperty("app.artifactId", "frontend"); // Default
+                properties.setProperty("app.description", "Torri, Ferraris, Cereni"); // Default
             } else {
                 properties.load(is);
             }
@@ -30,4 +31,12 @@ public class BuildInfoController {
     public String getVersion() {
         return properties.getProperty("app.version", "unknown");
     }
+    public String getDescription() {
+        return properties.getProperty("app.description", "unknown");
+    }
+    public String getDate() {
+        return properties.getProperty("build.date", "unknown");
+    }
+
+
 }
