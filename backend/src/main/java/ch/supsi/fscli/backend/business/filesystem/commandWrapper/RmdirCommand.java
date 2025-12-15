@@ -2,11 +2,14 @@ package ch.supsi.fscli.backend.business.filesystem.commandWrapper;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmdir.IFSRmdirCommandBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
+import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
+import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Singleton
@@ -57,11 +60,13 @@ public class RmdirCommand implements IFSCommand {
 
     private List<String> findMatchingDirectories() {
         List<String> matches = new ArrayList<>();
-        Set<String> currentDirectoryEntries = fileSystem.getCurrentWorkingDirectory().getEntries().keySet();
+        Map<String, Inode> entries = fileSystem.getCurrentWorkingDirectory().getEntries();
 
-        for (String dirName : currentDirectoryEntries) {
-            if (!dirName.equals(".") && !dirName.equals("..")) {
-                matches.add(dirName);
+        for (Map.Entry<String, Inode> entry : entries.entrySet()) {
+            String name = entry.getKey();
+            Inode node = entry.getValue();
+            if (!name.equals(".") && !name.equals("..") && node.getType() == InodeType.DIRECTORY) {
+                matches.add(name);
             }
         }
         return matches;

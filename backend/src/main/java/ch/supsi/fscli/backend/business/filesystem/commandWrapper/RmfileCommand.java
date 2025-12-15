@@ -4,6 +4,7 @@ import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmfile.IFSRmfileCom
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
+import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -61,12 +62,13 @@ public class RmfileCommand implements IFSCommand {
 
     private List<String> findMatchingFiles(String pattern) {
         List<String> matches = new ArrayList<>();
-        Set<String> currentDirectoryEntries = fileSystem.getCurrentWorkingDirectory().getEntries().keySet();
-        String suffix = pattern.substring(1);
+        Map<String, Inode> entries = fileSystem.getCurrentWorkingDirectory().getEntries();
 
-        for (String filename : currentDirectoryEntries) {
-            if (!filename.equals(".") && !filename.equals("..") && filename.endsWith(suffix)) {
-                matches.add(filename);
+        for (Map.Entry<String, Inode> entry : entries.entrySet()) {
+            String name = entry.getKey();
+            Inode node = entry.getValue();
+            if (!name.equals(".") && !name.equals("..") && node.getType() == InodeType.FILE) {
+                matches.add(name);
             }
         }
         return matches;
