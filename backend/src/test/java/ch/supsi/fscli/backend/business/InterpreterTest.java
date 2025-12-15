@@ -45,7 +45,7 @@ class InterpreterTest {
         when(touch.getCommandName()).thenReturn("touch");
         when(clear.getCommandName()).thenReturn("clear");
 
-        fsInterpreter = new FSInterpreter(fileSystem, cd, help, ln, ls, mkdir, mv, pwd, rmdir, rmfile, touch, clear);
+        fsInterpreter = new FSInterpreter(cd, help, ln, ls, mkdir, mv, pwd, rmdir, rmfile, touch, clear);
     }
 
     @Test

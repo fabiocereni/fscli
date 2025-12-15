@@ -26,21 +26,17 @@ class FSMvCommandBusinessTest {
 
     @BeforeEach
     void setUp() {
-
         fileSystem  = new FileSystem();
 
         mvCommand = new FSMvCommandBusiness(new PathSolver(fileSystem));
-
 
         root = fileSystem.getRoot();
         assertNotNull(root);
 
         fileSystem.setCurrentWorkingDirectory(root);
 
-        // pulizia iniziale (solo se necessario)
         root.getEntries().clear();
 
-        // aggiungiamo "." e ".." come nel vecchio test
         root.addEntry(".", root);
         root.addEntry("..", root);
     }

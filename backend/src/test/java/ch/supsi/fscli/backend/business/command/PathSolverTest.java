@@ -14,8 +14,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PathSolverTest {
-
-
     private FileSystem fs;
     private PathSolver pathSolver;
 
@@ -26,7 +24,6 @@ class PathSolverTest {
 
     @BeforeEach
     void setUp() {
-
         fs = new FileSystem();
         pathSolver = new PathSolver(fs);
 
@@ -49,8 +46,6 @@ class PathSolverTest {
 
         fs.setCurrentWorkingDirectory(root);
     }
-
-
 
     @Test
     void testResolveRoot() {

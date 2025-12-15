@@ -35,21 +35,18 @@ public class LnCommand implements IFSCommand {
             return new CommandResult("label.wrongLnUse1", true);
         }
 
-        //Soft Link (ln -s <target> <linkName>) -> 3 argomenti
         if (this.args.size() == 3 && this.args.get(0).equals("-s")) {
             String target = this.args.get(1);
             String linkName = this.args.get(2);
 
             return new CommandResult(business.lns(target, linkName), true);
         }
-        //Hard Link (ln <target> <linkName>) -> 2 argomenti
         else if (this.args.size() == 2) {
             String target = this.args.get(0);
             String linkName = this.args.get(1);
 
             return new CommandResult(business.ln(target, linkName), true);
         }
-        //Numero di argomenti errato
         else {
             return new CommandResult("label.wrongLnUse1", true);
         }

@@ -22,44 +22,30 @@ class FSCdCommandBusinessTest {
 
     @BeforeEach
     void setUp() {
-        // 1. Setup manuale delle dipendenze (Simuliamo quello che fa Guice)
-
-        // Creiamo la root manualmente
         rootDir = new DirectoryInodeBusiness(1L);
 
-        // Inizializziamo il FileSystem (accede al costruttore protected perché siamo nello stesso package)
         fs = new FileSystem();
         fs.setRoot(rootDir);
         fs.setCurrentWorkingDirectory(rootDir);
-        fs.setCurrentWorkingDirectoryPath("/"); // Fondamentale per la logica del path assoluto
+        fs.setCurrentWorkingDirectoryPath("/");
 
-        // Inizializziamo il PathSolver iniettando lo state
         pathSolver = new PathSolver(fs);
 
-        // Inizializziamo il Command iniettando state e solver
         cdBusiness = new FSCdCommandBusiness(fs, pathSolver);
 
-        // 2. Popoliamo il FileSystem per i test
-
-        // Crea /documents
-        // Nota: createDirectory richiede il parent nel tuo FileSystem.java
         subDir = fs.createDirectory();
         rootDir.addEntry("documents", subDir);
 
-        // Crea /file.txt
         testFile = fs.createFile();
         rootDir.addEntry("file.txt", testFile);
     }
 
     @Test
     void testCdSuccess() {
-        // Act
         boolean result = cdBusiness.cd("documents");
 
-        // Assert
         assertTrue(result);
         assertEquals(subDir, fs.getCurrentWorkingDirectory());
-        // Verifichiamo anche che il path string sia aggiornato correttamente
         assertEquals("/documents", fs.getCurrentWorkingDirectoryPath());
     }
 
@@ -68,7 +54,6 @@ class FSCdCommandBusinessTest {
         boolean result = cdBusiness.cd("foo");
 
         assertFalse(result);
-        // Non deve essersi mosso
         assertEquals(rootDir, fs.getCurrentWorkingDirectory());
         assertEquals("/", fs.getCurrentWorkingDirectoryPath());
     }
@@ -83,16 +68,11 @@ class FSCdCommandBusinessTest {
 
     @Test
     void testCdToParent() {
-        // Arrange: Simuliamo di essere già dentro /documents
         fs.setCurrentWorkingDirectory(subDir);
-        // IMPORTANTE: Dobbiamo settare manualmente anche la stringa del path
-        // perché la nuova logica del cd si basa su questa stringa per calcolare i ".."
         fs.setCurrentWorkingDirectoryPath("/documents");
 
-        // Act
         boolean result = cdBusiness.cd("..");
 
-        // Assert
         assertTrue(result);
         assertEquals(rootDir, fs.getCurrentWorkingDirectory(), "Dovrebbe tornare alla root");
         assertEquals("/", fs.getCurrentWorkingDirectoryPath(), "Il path dovrebbe essere /");
@@ -100,14 +80,11 @@ class FSCdCommandBusinessTest {
 
     @Test
     void testCdToRoot() {
-        // Arrange: Simuliamo di essere dentro /documents
         fs.setCurrentWorkingDirectory(subDir);
         fs.setCurrentWorkingDirectoryPath("/documents");
 
-        // Act
         boolean result = cdBusiness.cd("/");
 
-        // Assert
         assertTrue(result);
         assertEquals(rootDir, fs.getCurrentWorkingDirectory());
         assertEquals("/", fs.getCurrentWorkingDirectoryPath());
@@ -115,17 +92,13 @@ class FSCdCommandBusinessTest {
 
     @Test
     void testCdComplexPath() {
-        // Test extra: navigazione complessa (dipende dalla logica di PathSolver + CD)
-        // Crea /documents/work
         DirectoryInodeBusiness workDir = fs.createDirectory();
         subDir.addEntry("work", workDir);
 
-        // Vai in work
         cdBusiness.cd("documents/work");
         assertEquals(workDir, fs.getCurrentWorkingDirectory());
         assertEquals("/documents/work", fs.getCurrentWorkingDirectoryPath());
 
-        // Torna indietro di due livelli
         cdBusiness.cd("../..");
         assertEquals(rootDir, fs.getCurrentWorkingDirectory());
         assertEquals("/", fs.getCurrentWorkingDirectoryPath());

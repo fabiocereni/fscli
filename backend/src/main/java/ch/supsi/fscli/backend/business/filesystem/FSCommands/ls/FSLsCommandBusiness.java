@@ -28,11 +28,9 @@ public class FSLsCommandBusiness implements IFSLsCommandBusiness {
     public CommandResult ls(String path, boolean showInodeIds) {
         DirectoryInodeBusiness targetDir;
 
-        // Caso 1: ls senza argomenti -> usa CWD
         if (path == null || path.isBlank()) {
             targetDir = fileSystem.getCurrentWorkingDirectory();
         } else {
-            // Caso 2: ls <path> -> risolvi il path
             Optional<Inode> targetOpt = pathSolver.resolvePath(path);
 
             if (targetOpt.isEmpty()) {
@@ -41,19 +39,13 @@ public class FSLsCommandBusiness implements IFSLsCommandBusiness {
 
             Inode targetNode = targetOpt.get();
 
-            // Se è un file, mostriamo solo il nome (comportamento standard ls)
-            // Oppure ritorniamo errore se vuoi simulare rigidamente una lista di directory
             if (targetNode.getType() != InodeType.DIRECTORY) {
-                // Opzione A: Mostra info file
                 return new CommandResult(formatEntry(pathSolver.extractFileName(path), targetNode, showInodeIds), false);
-                // Opzione B: Errore (come nel tuo codice commentato)
-                // return "ls: " + path + ": Not a directory";
             }
 
             targetDir = (DirectoryInodeBusiness) targetNode;
         }
 
-        // Generazione Output
         if (targetDir.getEntries().isEmpty()) {
             return null;
         }

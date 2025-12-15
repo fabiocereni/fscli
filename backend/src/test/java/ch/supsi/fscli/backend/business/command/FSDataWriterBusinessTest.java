@@ -1,13 +1,11 @@
 package ch.supsi.fscli.backend.business.command;
 
-import ch.supsi.fscli.backend.DAO.persistence.FSDataReaderDAO;
 import ch.supsi.fscli.backend.DAO.persistence.FSDataWriterDAO;
 import ch.supsi.fscli.backend.business.persistence.FSDataWriterBusiness;
 import ch.supsi.fscli.backend.business.persistence.IFSDataWriterBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
-import com.google.inject.Inject;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -26,12 +24,10 @@ class FSDataWriterBusinessTest {
 
         fs = new FileSystem();
 
-
         DirectoryInodeBusiness root = fs.getRoot();
         DirectoryInodeBusiness documents = fs.createDirectory();
         root.addEntry("documents", documents);
 
-        FSDataReaderDAO readerDAO = new FSDataReaderDAO();
         FSDataWriterDAO writerDAO = new FSDataWriterDAO();
 
         writer = new FSDataWriterBusiness(fs, writerDAO);

@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 
-// non mettiamo singleton?
 public class SupportedLanguageController implements ISupportedLanguageController {
 
     @Inject

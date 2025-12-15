@@ -64,5 +64,4 @@ class SupportedLanguageBusinessTest {
         assertSame(map, result);
         verify(supportedLanguageDAO).getMapLanguages(tag);
     }
-
 }

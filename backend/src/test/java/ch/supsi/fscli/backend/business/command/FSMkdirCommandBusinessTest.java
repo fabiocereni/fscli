@@ -33,9 +33,6 @@ public class FSMkdirCommandBusinessTest {
         fileSystem.setCurrentWorkingDirectory(root);
     }
 
-    // ----------------------------------------------------------
-    // 1) Invalid input
-    // ----------------------------------------------------------
     @Test
     void testNullPath() {
         assertFalse(mkdirBusiness.mkdir(null));
@@ -47,9 +44,6 @@ public class FSMkdirCommandBusinessTest {
         assertFalse(mkdirBusiness.mkdir("   "));
     }
 
-    // ----------------------------------------------------------
-    // 2) Basic creation in root
-    // ----------------------------------------------------------
     @Test
     void testCreateDirectoryInRoot() {
         assertTrue(mkdirBusiness.mkdir("folder"));
@@ -63,9 +57,6 @@ public class FSMkdirCommandBusinessTest {
         assertFalse(mkdirBusiness.mkdir("dup"));
     }
 
-    // ----------------------------------------------------------
-    // 3) Relative path creation
-    // ----------------------------------------------------------
     @Test
     void testRelativePathCreation() {
         mkdirBusiness.mkdir("a");
@@ -84,9 +75,6 @@ public class FSMkdirCommandBusinessTest {
         assertNotNull(a.getEntry("b"));
     }
 
-    // ----------------------------------------------------------
-    // 4) Absolute path creation
-    // ----------------------------------------------------------
     @Test
     void testAbsolutePathCreation() {
         assertTrue(mkdirBusiness.mkdir("/x"));
@@ -101,9 +89,6 @@ public class FSMkdirCommandBusinessTest {
         assertNotNull(p.getEntry("q"));
     }
 
-    // ----------------------------------------------------------
-    // 5) Invalid parent path
-    // ----------------------------------------------------------
     @Test
     void testInvalidParentPath() {
         assertFalse(mkdirBusiness.mkdir("/does/not/exist/newdir"));
@@ -115,9 +100,6 @@ public class FSMkdirCommandBusinessTest {
         assertFalse(mkdirBusiness.mkdir("/file/sub"));
     }
 
-    // ----------------------------------------------------------
-    // 6) Invalid name extraction
-    // ----------------------------------------------------------
     @Test
     void testCreateEmptyNameAtEnd() {
         assertFalse(mkdirBusiness.mkdir("/abc/"));
@@ -128,9 +110,6 @@ public class FSMkdirCommandBusinessTest {
         assertFalse(mkdirBusiness.mkdir("/"));
     }
 
-    // ----------------------------------------------------------
-    // 7) Ensure state is not corrupted
-    // ----------------------------------------------------------
     @Test
     void testNoSideEffectsWhenFailing() {
         int before = root.getEntries().size();

@@ -26,18 +26,15 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CommandWrapperTest {
-
     @Mock
     private IFSCdCommandBusiness ifsCdCommandBusiness;
     @InjectMocks
     private CdCommand cdCommand;
 
-
     @Mock
     private IFSLnCommandBusiness ifsLnCommandBusiness;
     @InjectMocks
     private LnCommand lnCommand;
-
 
     @Mock
     private IFSLsCommandBusiness ifsLsCommandBusiness;
@@ -46,43 +43,35 @@ class CommandWrapperTest {
     @InjectMocks
     private LsCommand lsCommand;
 
-
     @Mock
     private IFSMkdirCommandBusiness ifsMkdirCommandBusiness;
     @InjectMocks
     private MkdirCommand mkdirCommand;
-
 
     @Mock
     private IFSMvCommandBusiness ifsMvCommandBusiness;
     @InjectMocks
     private MvCommand mvCommand;
 
-
     @Mock
     private IFSPwdCommandBusiness ifsPwdCommandBusiness;
     @InjectMocks
     private PwdCommand pwdCommand;
-
 
     @Mock
     private IFSRmdirCommandBusiness ifsRmdirCommandBusiness;
     @InjectMocks
     private RmdirCommand rmDirCommand;
 
-
     @Mock
     private IFSRmfileCommandBusiness ifsRmfileCommandBusiness;
     @InjectMocks
     private RmfileCommand rmFileCommand;
 
-
     @Mock
     private IFSTouchCommandBusiness ifsTouchCommandBusiness;
     @InjectMocks
     private TouchCommand touchCommand;
-
-
 
     @Test
     void cdCommandDelegation() {
@@ -93,7 +82,6 @@ class CommandWrapperTest {
         verify(ifsCdCommandBusiness).cd("test");
     }
 
-
     @Test
     void lnCommandDelegation() {
         when(ifsLnCommandBusiness.ln("target", "linkname")).thenReturn("passed");
@@ -102,8 +90,6 @@ class CommandWrapperTest {
         lnCommand.execute();
         verify(ifsLnCommandBusiness).ln("target", "linkname");
     }
-
-
 
     @Test
     void lsCommand_callsBusinessLs() {
@@ -120,23 +106,18 @@ class CommandWrapperTest {
         verify(ifsLsCommandBusiness).ls("test", false);
     }
 
-
     @Test
     void mkdirCommandDelegation() {
-
         when(ifsMkdirCommandBusiness.mkdir("dir")).thenReturn(true);
 
         mkdirCommand.setArgs(List.of("dir"));
         mkdirCommand.execute();
 
         verify(ifsMkdirCommandBusiness).mkdir("dir");
-
     }
-
 
     @Test
     void moveCommandDelegation() {
-
         when(ifsMvCommandBusiness.mv("source", "destination"))
                 .thenReturn(true);
 
@@ -146,7 +127,6 @@ class CommandWrapperTest {
         verify(ifsMvCommandBusiness).mv("source", "destination");
     }
 
-
     @Test
     void pwdCommandDelegation() {
         when(ifsPwdCommandBusiness.pwd()).thenReturn("correct path");
@@ -154,7 +134,6 @@ class CommandWrapperTest {
         pwdCommand.execute();
         verify(ifsPwdCommandBusiness).pwd();
     }
-
 
     @Test
     void rmdirCommandDelegation() {
@@ -166,10 +145,8 @@ class CommandWrapperTest {
         verify(ifsRmdirCommandBusiness).rmdir("dir");
     }
 
-
     @Test
     void rmFileCommandDelegation() {
-
         when(ifsRmfileCommandBusiness.rmfile("file")).thenReturn(true);
 
         rmFileCommand.setArgs(List.of("file"));
@@ -178,10 +155,8 @@ class CommandWrapperTest {
         verify(ifsRmfileCommandBusiness).rmfile("file");
     }
 
-
     @Test
     void touchCommandDelegation() {
-
         when(ifsTouchCommandBusiness.touch("file")).thenReturn("true");
 
         touchCommand.setArgs(List.of("file"));
@@ -189,5 +164,4 @@ class CommandWrapperTest {
 
         verify(ifsTouchCommandBusiness).touch("file");
     }
-
 }

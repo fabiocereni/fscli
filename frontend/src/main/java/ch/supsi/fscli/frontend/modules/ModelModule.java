@@ -18,7 +18,6 @@ public class ModelModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        // sistemare
         bind(IFSCreationApplication.class).to(FSCreationApplication.class).in(Singleton.class);
 
         bind(IFSStateModel.class).to(FSStateModel.class).in(Singleton.class);

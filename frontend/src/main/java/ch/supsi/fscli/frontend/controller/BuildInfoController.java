@@ -16,9 +16,9 @@ public class BuildInfoController {
         try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourceName)) {
             if (is == null) {
                 System.err.println("WARN: File 'version.properties' non trovato.");
-                properties.setProperty("app.version", "IDE-DEV"); // Default per l'IDE
-                properties.setProperty("app.artifactId", "frontend"); // Default
-                properties.setProperty("app.description", "Torri, Ferraris, Cereni"); // Default
+                properties.setProperty("app.version", "IDE-DEV");
+                properties.setProperty("app.artifactId", "frontend");
+                properties.setProperty("app.description", "Torri, Ferraris, Cereni");
             } else {
                 properties.load(is);
             }

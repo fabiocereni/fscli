@@ -14,11 +14,9 @@ import java.util.regex.Pattern;
 public class FSInterpreter implements IFSInterpreter {
 
     private final Map<String, IFSCommand> commands = new HashMap<>();
-    private final FileSystem fileSystem;
 
     @Inject
-    public FSInterpreter(FileSystem fileSystem,
-                         CdCommand cd,
+    public FSInterpreter(CdCommand cd,
                          HelpCommand help,
                          LnCommand ln,
                          LsCommand ls,
@@ -29,7 +27,6 @@ public class FSInterpreter implements IFSInterpreter {
                          RmfileCommand rmfile,
                          TouchCommand touch,
                          ClearCommand clear) {
-        this.fileSystem = fileSystem;
         addCommand(cd);
         addCommand(help);
         addCommand(ln);

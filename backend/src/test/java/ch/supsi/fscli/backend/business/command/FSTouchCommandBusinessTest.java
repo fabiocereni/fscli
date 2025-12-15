@@ -24,15 +24,12 @@ class FSTouchCommandBusinessTest {
 
     @BeforeEach
     void setUp() {
-
-
         fs = new FileSystem();
 
         touch = new FSTouchCommandBusiness(fs, new PathSolver(fs));
 
         root = fs.getRoot();
 
-        // build structure
         sub = new DirectoryInodeBusiness(200);
         root.addEntry("sub", sub);
     }
@@ -50,6 +47,7 @@ class FSTouchCommandBusinessTest {
     @Test
     void testTouchCreatesFileInSubfolder() {
         String result = touch.touch("sub/photo.png");
+
         assertEquals(null, result);
 
         FileInodeBusiness file = (FileInodeBusiness) sub.getEntry("photo.png");

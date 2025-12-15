@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FSLsCommandBusinessTest {
 
-
-
     private IFSLsCommandBusiness lsCommand;
     private FileSystem fs;
     private DirectoryInodeBusiness root;
@@ -32,25 +30,20 @@ class FSLsCommandBusinessTest {
 
     @Test
     void testLsCurrentDirectoryEmpty() {
-        // La root è inizialmente vuota nel setup standard (o quasi, dipende da newfs)
-        // Se newfs crea root vuota:
         CommandResult result = lsCommand.ls(null, false);
 
-        // Il tuo codice ritorna null se la lista è vuota
         assertNull(result, "Se la directory è vuota, ls ritorna null");
     }
 
     @Test
     void testLsCurrentDirectoryWithContent() {
-        // Aggiungo file
         root.addEntry("fileA", fs.createFile());
         root.addEntry("dirB", fs.createDirectory());
 
-        // ls normale
         CommandResult result = lsCommand.ls(null, false);
 
         assertNotNull(result);
-        assertFalse(result.isTranslatable()); // Deve essere false per i dati
+        assertFalse(result.isTranslatable());
 
         String content = result.getContent();
         assertTrue(content.contains("fileA"));
@@ -62,7 +55,6 @@ class FSLsCommandBusinessTest {
     void testLsWithInodeOption() {
         root.addEntry("testFile", fs.createFile());
 
-        // ls -i
         CommandResult result = lsCommand.ls(null, true);
 
         assertNotNull(result);
@@ -75,7 +67,6 @@ class FSLsCommandBusinessTest {
         root.addEntry("documents", subDir);
         subDir.addEntry("notes.txt", fs.createFile());
 
-        // ls documents
         CommandResult result = lsCommand.ls("documents", false);
 
         assertNotNull(result);
@@ -85,7 +76,6 @@ class FSLsCommandBusinessTest {
 
     @Test
     void testLsPathNotFound() {
-        // ls nonEsiste
         CommandResult result = lsCommand.ls("nonEsiste", false);
 
         assertNotNull(result);
@@ -97,7 +87,6 @@ class FSLsCommandBusinessTest {
     void testLsOnFile() {
         root.addEntry("image.png", fs.createFile());
 
-        // ls image.png
         CommandResult result = lsCommand.ls("image.png", false);
 
         assertNotNull(result);

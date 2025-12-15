@@ -33,12 +33,6 @@ public class DirectoryInodeBusiness extends Inode {
         return entries.get(name);
     }
 
-    /**
-     * Sostituire nei comandi il metodo:
-     * - fileSystem.getCurrentWorkingDirectory().getEntries().keySet() con
-     * - fileSystem.getCurrentWorkingDirectory().listNames()
-     * @return
-     */
     public Set<String> listNames() {
         return entries.keySet();
     }

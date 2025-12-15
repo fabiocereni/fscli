@@ -14,9 +14,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FSRmfilecommandBusinessTest {
-
-
-
     private IFSRmfileCommandBusiness rmFileCommand;
     private FileSystem fileSystem;
 
@@ -24,11 +21,9 @@ class FSRmfilecommandBusinessTest {
 
     @BeforeEach
     void setUp() {
-
         fileSystem = new FileSystem();
 
         rmFileCommand = new FSRmfilecommandBusiness(fileSystem, new PathSolver(fileSystem));
-
 
         root = fileSystem.getRoot();
         fileSystem.setCurrentWorkingDirectory(root);

@@ -3,7 +3,6 @@ package ch.supsi.fscli.backend.DAO.persistence;
 import org.junit.jupiter.api.*;
 import java.io.*;
 import java.nio.file.*;
-import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,41 +18,13 @@ class FSDataReaderDAOTest {
     @Test
     void testReadFromAFile() throws IOException {
         Path tempFile = Files.createTempFile("testFile", ".txt");
-        Files.writeString(tempFile, "Hello, world!");
+        String contentToWrite = "Hello, world!";
+        Files.writeString(tempFile, contentToWrite);
 
-        String content = dao.readFromAFile(tempFile.toFile());
+        String contentRead = dao.readFromAFile(tempFile.toFile());
 
-        assertTrue(content.contains("Hello, world!"));
+        assertEquals(contentToWrite, contentRead);
+
         Files.deleteIfExists(tempFile);
     }
-
-//    @Test
-//    void testGetPreferencesFileNotExists() {
-//        Path fakePrefs = Paths.get(System.getProperty("user.home"),
-//                "filesystem_simulator", "user_preferences", "preferences.properties");
-//
-//        try {
-//            Files.deleteIfExists(fakePrefs);
-//        } catch (IOException ignored) {}
-//
-//        Properties props = dao.getPreferences();
-//        assertTrue(props.isEmpty());
-//    }
-//
-//    @Test
-//    void testGetPreferencesFileExists() throws IOException {
-//        Path prefsDir = Paths.get(System.getProperty("user.home"),
-//                "filesystem_simulator", "user_preferences");
-//        Files.createDirectories(prefsDir);
-//
-//        Path prefsFile = prefsDir.resolve("preferences.properties");
-//        Files.writeString(prefsFile, "test=test\nfontsize=14");
-//
-//        Properties props = dao.getPreferences();
-//
-//        assertEquals("test", props.getProperty("test"));
-//        assertEquals("14", props.getProperty("fontsize"));
-//
-//        Files.deleteIfExists(prefsFile);
-//    }
 }

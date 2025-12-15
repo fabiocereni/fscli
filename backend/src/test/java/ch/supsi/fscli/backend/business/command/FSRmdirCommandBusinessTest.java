@@ -17,20 +17,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FSRmdirCommandBusinessTest {
 
-
     private IFSRmdirCommandBusiness rmdir;
 
     private FileSystem fs;
-
 
     private DirectoryInodeBusiness root;
 
     @BeforeEach
     void setUp() {
-
         fs = new FileSystem();
         rmdir = new FSRmdirCommandBusiness(fs, new PathSolver(fs));
-
 
         root = fs.getRoot();
         assertNotNull(root);

@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PreferencesDAOTest {
 
-
     private final IPreferencesDAO preferenceDAO = new PreferencesDAO();
 
     @Test
@@ -35,5 +34,4 @@ public class PreferencesDAOTest {
 
         assertNull(result);
     }
-
 }
