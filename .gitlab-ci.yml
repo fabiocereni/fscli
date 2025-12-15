@@ -56,17 +56,17 @@ frontend:
   image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:maven3java17
   before_script:
     - 'cd frontend'
-    - 'Xvfb :99 -screen 0 1920x1080x16 &'
+    # Change x16 to x24 to match JavaFX pixel buffer expectations
+    # Added -ac to disable access control for stability
+    - 'Xvfb :99 -ac -screen 0 1920x1080x24 &'
   script:
-    - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless clean package'
-  #    - 'mvn $MAVEN_CLI_OPTS jacoco:report'
+    # Added -Dprism.order=sw to force software rendering
+    - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless -Dprism.order=sw clean package'
   after_script:
     - cd ..
   artifacts:
     paths:
-      #      - frontend/target/site/jacoco/*
       - frontend/target/fscli-jar-with-dependencies.jar
     expire_in: 1 hour
-
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"'
