@@ -62,9 +62,10 @@ public class MenuBarView {
         this.FSLoadDirector.addPropertyChangeListener(widgetDirector);
         this.saveEventDirector.addPropertyChangeListener(widgetDirector);
         this.inputDirector.addPropertyChangeListener(widgetDirector);
+
+        initMenuBarView();
     }
 
-    @Inject
     public void initMenuBarView() {
         // FILE MENU
         MenuItem newMenuItem = new MenuItem(supportedLanguageController.getTranslation("label.new"));

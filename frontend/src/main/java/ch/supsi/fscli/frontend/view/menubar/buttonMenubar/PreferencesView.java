@@ -70,10 +70,12 @@ public class PreferencesView implements IShow {
         root.setVgap(8);
         root.setHgap(10);
 
+
         Label languageLabel = new Label(supportedLanguageController.getTranslation("label.language"));
         languageComboBox.getItems().addAll(supportedLanguageController.getSupportedLanguagesTags());
         languageComboBox.setValue(preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE));
         initLanguage = preferencesModel.getProperty(PreferencesModel.KEY_LANGUAGE);
+
 
         Label fontCommandLineLabel = new Label("Font command line:");
         fontCommandLineComboBox.getItems().addAll(Font.getFamilies());

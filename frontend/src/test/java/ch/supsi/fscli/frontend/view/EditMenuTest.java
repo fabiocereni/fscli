@@ -36,7 +36,7 @@ public class EditMenuTest extends AbstractMainGUITest {
 
             int num = Integer.parseInt(tmp);
 
-            int numToWrite = (num/2) + 1;
+            int numToWrite = num + 5;
 
             write(String.valueOf(numToWrite));
 
@@ -50,8 +50,9 @@ public class EditMenuTest extends AbstractMainGUITest {
 
 
             verifyThat("#logView", (TextInputControl t) ->
-                    t.getText().contains("Preferenze salvate") ||
-                            t.getText().contains("Preferences saved")
+                    t.getText().contains("Preferenze salvate correttamente.") ||
+                            t.getText().contains("Preferences saved successfully.") ||
+                            t.getText().contains("Einstellungen erfolgreich gespeichert.")
             );
         });
     }

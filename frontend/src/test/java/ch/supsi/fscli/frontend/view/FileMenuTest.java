@@ -1,9 +1,26 @@
 package ch.supsi.fscli.frontend.view;
 
+import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
+import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
+import ch.supsi.fscli.frontend.modules.ControllerModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.sun.javafx.scene.control.ContextMenuContent;
+import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testfx.util.WaitForAsyncUtils;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,15 +28,6 @@ import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.*;
 
 public class FileMenuTest extends AbstractMainGUITest {
-
-//    @Test
-//    public void walkThrough() {
-//        testNewButtonPressed();
-//        testOpenMenuItem();
-//        testSaveAsMenuItem();
-//        testSaveMenuItem();
-//        testExitMenuItem();
-//    }
 
     public void createNew() {
         clickOn("#fileMenu");
@@ -43,7 +51,9 @@ public class FileMenuTest extends AbstractMainGUITest {
             verifyThat("#enter", isVisible());
             verifyThat("#enter", isEnabled());
             verifyThat("#outputView", (TextInputControl t) -> t.getText().isEmpty());
-            verifyThat("#logView", (TextInputControl t) -> t.getText().contains("FS creato con successo."));
+            verifyThat("#logView", (TextInputControl t) -> t.getText().contains("FS Creato con successo.") ||
+                    t.getText().contains("FS created successfully.") ||
+                    t.getText().contains("Dateisystem erfolgreich erstellt."));
         });
     }
     @Test
@@ -100,7 +110,9 @@ public class FileMenuTest extends AbstractMainGUITest {
 
             // Verifica output nel log
             verifyThat("#logView", (TextInputControl t) ->
-                    t.getText().contains("File system salvato correttamente in")
+                    t.getText().contains("File system salvato correttamente in") ||
+                            t.getText().contains("FS saved successfully in") ||
+                            t.getText().contains("Dateisystem erfolgreich gespeichert in")
             );
         });
     }

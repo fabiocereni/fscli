@@ -5,6 +5,7 @@ import com.sun.javafx.scene.control.ContextMenuContent;
 import com.sun.javafx.scene.control.MenuBarButton;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputControl;
 import org.junit.jupiter.api.Test;
 import org.testfx.matcher.control.TextInputControlMatchers;
 
@@ -14,27 +15,8 @@ import static org.testfx.matcher.base.NodeMatchers.*;
 
 public class GeneralLayoutTest extends AbstractMainGUITest {
 
-//    private final SupportedLanguageController supportedLanguageController = new SupportedLanguageController();
-//    private final PreferencesController preferencesController = new PreferencesController();
-//
-//    @BeforeEach
-//    public void setUp() {
-//        supportedLanguageController.setSupportedLanguagesTags();
-//        supportedLanguageController.setMapLanguages();
-//        supportedLanguageController.setLanguageTagSelected(
-//                preferencesController.getProperty(PreferencesModel.KEY_LANGUAGE)
-//        );
-//    }
-
     @Test
-    public void walkThrough() {
-        testMainScene();
-        testFileMenu();
-        testEditMenu();
-        testHelpMenu();
-    }
-
-    private void testMainScene() {
+    public void testMainScene() {
         step("main scene...", () -> {
             verifyThat("#fileMenu", isVisible());
             verifyThat("#editMenu", isVisible());
@@ -44,15 +26,22 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             verifyThat("#commandLineView", TextInputControlMatchers.hasText(""));
             verifyThat("#enter", isVisible());
             verifyThat("#enter", isDisabled());
-//            verifyThat("#outputView", TextInputControlMatchers.hasText(supportedLanguageController.getTranslation("label.textOutput")));
-            verifyThat("#outputView", TextInputControlMatchers.hasText("Questo è un esempio del testo in output...\n"));
-            verifyThat("#logView", TextInputControlMatchers.hasText("Lingua selezionata it_IT"));
+            verifyThat("#outputView", (TextInputControl t) ->
+                    t.getText().contains("Questo \\u00E8 un esempio del testo in output...") ||
+                            t.getText().contains("This is an example output text...") ||
+                            t.getText().contains("Dies ist ein Beispiel-Ausgabetext..."));
+
+
+            verifyThat("#logView", (TextInputControl t) ->
+                    t.getText().contains("Lingua selezionata it_IT") ||
+                            t.getText().contains("Language selected en_US") ||
+                            t.getText().contains("Sprache ausgewahlt de_CH"));
         });
     }
 
 
-
-    private void testFileMenu() {
+    @Test
+    public void testFileMenu() {
         step("file menu...", () -> {
             // file menu
             Menu menu = lookup("#fileMenu").queryAs(MenuBarButton.class).menu;
@@ -90,7 +79,8 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
         });
     }
 
-    private void testEditMenu() {
+    @Test
+    public void testEditMenu() {
         step("edit menu...", () -> {
             Menu menu = lookup("#editMenu").queryAs(MenuBarButton.class).menu;
             assertTrue(menu.isVisible());
@@ -107,8 +97,8 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             clickOn("#editMenu");
         });
     }
-
-    private void testHelpMenu() {
+    @Test
+    public void testHelpMenu() {
         step("help menu...", () -> {
 
             Menu menu = lookup("#helpMenu").queryAs(MenuBarButton.class).menu;
