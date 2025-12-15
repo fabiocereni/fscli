@@ -1,6 +1,7 @@
 package ch.supsi.fscli.backend.business.filesystem.commandWrapper;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmdir.IFSRmdirCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.state.FindElementByType;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
 import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
@@ -43,10 +44,14 @@ public class RmdirCommand implements IFSCommand {
 
         for (String dirName : args) {
             if (dirName.startsWith("*"))
-                dirToDelete.addAll(findMatchingDirectories());
+                dirToDelete.addAll(FindElementByType.findMatchingObjects(InodeType.DIRECTORY, fileSystem));
             else
                 dirToDelete.add(dirName);
         }
+
+       if (dirToDelete.isEmpty()) {
+           return new CommandResult("label.wrongRmUse2", true);
+       }
 
         boolean errorOccurred = false;
         for (String directoryName : dirToDelete) {

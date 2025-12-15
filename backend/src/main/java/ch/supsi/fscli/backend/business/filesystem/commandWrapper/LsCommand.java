@@ -114,7 +114,7 @@ public class LsCommand implements IFSCommand {
         sb.append(parentName).append("\n");
 
         String indentedContent = content.lines()
-                .map(line -> "!- " + line)
+                .map(line -> "-> " + line)
                 .collect(Collectors.joining("\n"));
 
         sb.append(indentedContent);

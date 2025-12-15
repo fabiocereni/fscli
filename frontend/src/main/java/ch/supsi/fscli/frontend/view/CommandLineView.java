@@ -47,6 +47,7 @@ public class CommandLineView implements PropertyChangeListener {
     private Button enter;
     private TextField commandLine;
 
+    @Inject
     public void init() {
         fontCommandLine = preferencesController.getProperty(PreferencesModel.KEY_FONT_COMMANDLINE);
 

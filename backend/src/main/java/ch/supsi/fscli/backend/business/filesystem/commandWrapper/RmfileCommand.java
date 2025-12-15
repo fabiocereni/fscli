@@ -1,6 +1,8 @@
 package ch.supsi.fscli.backend.business.filesystem.commandWrapper;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.rmfile.IFSRmfileCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.state.FindElementByType;
+import ch.supsi.fscli.backend.business.filesystem.state.PathSolver;
 import ch.supsi.fscli.backend.business.filesystem.structure.DirectoryInodeBusiness;
 import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
 import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
@@ -8,6 +10,7 @@ import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +48,13 @@ public class RmfileCommand implements IFSCommand {
 
         for (String fileName : args) {
             if (fileName.startsWith("*"))
-                filesToDelete.addAll(findMatchingFiles(fileName));
+                filesToDelete.addAll(FindElementByType.findMatchingObjects(InodeType.FILE, fileSystem));
             else
                 filesToDelete.add(fileName);
+        }
+
+        if (filesToDelete.isEmpty()) {
+            return new CommandResult("label.wrongRmFileUse2", true);
         }
 
         boolean errorOccurred = false;
@@ -59,19 +66,4 @@ public class RmfileCommand implements IFSCommand {
 
         return null;
     }
-
-    private List<String> findMatchingFiles(String pattern) {
-        List<String> matches = new ArrayList<>();
-        Map<String, Inode> entries = fileSystem.getCurrentWorkingDirectory().getEntries();
-
-        for (Map.Entry<String, Inode> entry : entries.entrySet()) {
-            String name = entry.getKey();
-            Inode node = entry.getValue();
-            if (!name.equals(".") && !name.equals("..") && node.getType() == InodeType.FILE) {
-                matches.add(name);
-            }
-        }
-        return matches;
-    }
-
 }

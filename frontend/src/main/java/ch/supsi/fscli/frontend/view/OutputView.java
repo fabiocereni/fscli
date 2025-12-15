@@ -8,6 +8,7 @@ import ch.supsi.fscli.frontend.model.preference.IPreferencesModel;
 import ch.supsi.fscli.frontend.model.preference.PreferencesModel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 
@@ -30,6 +31,7 @@ public class OutputView implements PropertyChangeListener {
 
     private TextArea outputView;
 
+    @Inject
     public void init() {
         this.outputView = new TextArea();
         outputView.setId("outputView");
