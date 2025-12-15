@@ -56,7 +56,6 @@ frontend:
   image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:maven3java17
   before_script:
     - 'cd frontend'
-    # MODIFICA CRITICA QUI SOTTO: x24 invece di x16
     - 'Xvfb :99 -ac -screen 0 1920x1080x24 &'
   script:
     - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless clean package'

@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -66,6 +67,7 @@ public class PreferencesView implements IShow {
         stage.setResizable(false);
 
         GridPane root = new GridPane();
+        root.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         root.setPadding(new Insets(20));
         root.setVgap(8);
         root.setHgap(10);
@@ -176,7 +178,10 @@ public class PreferencesView implements IShow {
 
         });
         saveButton.setId("saveButton");
-        stage.setScene(new Scene(root, 450, 300));
+        stage.setScene(new Scene(root));
+        stage.sizeToScene();
+        stage.setMinHeight(400);
+        stage.setMinWidth(500);
         stage.showAndWait();
     }
 

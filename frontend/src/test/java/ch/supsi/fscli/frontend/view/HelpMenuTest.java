@@ -15,8 +15,9 @@ public class HelpMenuTest extends AbstractMainGUITest {
         step("Test apertura e contenuto Help...", () -> {
             clickOn("#helpMenu");
 
+            sleep(SLEEP_INTERVAL);
             clickOn("#helpMenuItem");
-
+            sleep(SLEEP_INTERVAL);
             verifyThat("#helpTextArea", isVisible());
 
 
@@ -29,12 +30,13 @@ public class HelpMenuTest extends AbstractMainGUITest {
     @Test
     public void testAboutContent() {
         step("Test apertura e contenuto About...", () -> {
+            sleep(SLEEP_INTERVAL);
             clickOn("#helpMenu");
-
+            sleep(SLEEP_INTERVAL);
             clickOn("#aboutMenuItem");
-
+            sleep(SLEEP_INTERVAL);
             verifyThat("#aboutDialogPane", isVisible());
-
+            sleep(SLEEP_INTERVAL);
             press(KeyCode.ENTER).release(KeyCode.ENTER);
         });
     }
