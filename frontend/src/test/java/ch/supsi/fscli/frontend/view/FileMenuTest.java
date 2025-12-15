@@ -1,26 +1,10 @@
 package ch.supsi.fscli.frontend.view;
 
-import ch.supsi.fscli.frontend.controller.i18n.ISupportedLanguageController;
-import ch.supsi.fscli.frontend.controller.i18n.SupportedLanguageController;
-import ch.supsi.fscli.frontend.modules.ControllerModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.sun.javafx.scene.control.ContextMenuContent;
-import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
+
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
-import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testfx.util.WaitForAsyncUtils;
-
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -94,21 +78,13 @@ public class FileMenuTest extends AbstractMainGUITest {
     @Test
     public void testSaveMenuItem() {
         step("test save menu item...", () -> {
-            // Assumiamo che createNew() sia già stato chiamato dai test precedenti o lo chiamiamo qui
              createNew();
 
             clickOn("#fileMenu");
             verifyThat("#saveMenuItem", isVisible());
-            // Se è stato creato un FS, dovrebbe essere attivo (o disattivo se appena salvato, dipende dalla logica precisa)
-            // Nel WidgetDirector: saveMenuItem si abilita con InputEvent o FilesystemCreatedEvent
 
-            // Qui clicchiamo save perché FSDataSaverController.save() (senza path)
-            // NON apre un dialog se il path è già impostato o gestito internamente,
-            // MA attenzione: la prima volta potrebbe comportarsi come Save As se non c'è un path.
-            // Nel tuo codice FSDataSaverModel usa un path di default con timestamp, quindi non dovrebbe aprire dialog.
             clickOn("#saveMenuItem");
 
-            // Verifica output nel log
             verifyThat("#logView", (TextInputControl t) ->
                     t.getText().contains("File system salvato correttamente in") ||
                             t.getText().contains("FS saved successfully in") ||
@@ -120,17 +96,13 @@ public class FileMenuTest extends AbstractMainGUITest {
     @Test
     public void testExitMenuItem() {
         step("Test voce menu Exit...", () -> {
-            // 1. Apri il menu File
             clickOn("#fileMenu");
 
-            // 2. Recupera l'elemento Exit
             MenuItem exitMenuItem = lookup("#exitMenuItem").queryAs(ContextMenuContent.MenuItemContainer.class).getItem();
 
-            // 3. Verifiche: deve essere visibile e abilitato (si può sempre uscire)
             assertTrue(exitMenuItem.isVisible(), "Il menu Exit dovrebbe essere visibile");
             assertFalse(exitMenuItem.isDisable(), "Il menu Exit dovrebbe essere sempre abilitato");
 
-            // 4. Chiudi il menu senza cliccare (per evitare di chiudere l'app di test)
             clickOn("#fileMenu");
         });
     }
