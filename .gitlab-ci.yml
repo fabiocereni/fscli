@@ -61,7 +61,7 @@ frontend:
     - 'Xvfb :99 -ac -screen 0 1920x1080x24 &'
   script:
     # Added -Dprism.order=sw to force software rendering
-    - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless -Dprism.order=sw clean package'
+    - 'export DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless -Dprism.order=sw clean package'
   after_script:
     - cd ..
   artifacts:
