@@ -26,14 +26,14 @@ backend:
   stage: backend
   image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:maven3java17
   before_script:
-    - cd fscli/backend
+    - cd backend
   script:
     - 'mvn $MAVEN_OPTS $MAVEN_CLI_OPTS clean install'
   after_script:
-    - cd ../..
+    - cd ..
   artifacts:
     paths:
-      - fscli/backend/target/fscli-backend.jar
+      - backend/target/backend-1.0-SNAPSHOT.jar
     expire_in: 1 hour
 
 frontend:
@@ -42,15 +42,16 @@ frontend:
   dependencies:
     - backend  # Assicura che scarichi esplicitamente gli artifact del job backend
   before_script:
-    - 'cd fscli/frontend'
+    - 'cd frontend'
     - 'Xvfb :99 -screen 0 1920x1080x16 &'
   script:
     # NOTA: Assicurati che groupId, artifactId e version corrispondano ESATTAMENTE al pom.xml del backend
-    - 'mvn install:install-file -Dfile=../backend/target/backend-1.0-SNAPSHOT.jar -DgroupId=ch.supsi.fscli -DartifactId=backend -Dversion=1.0-SNAPSHOT -Dpackaging=jar'
+    - 'mvn install:install-file -Dfile= backend/target/backend-1.0-SNAPSHOT.jar -DgroupId=ch.supsi.fscli -DartifactId=backend -Dversion=1.0-SNAPSHOT -Dpackaging=jar'
+
     - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dheadless clean package'
   after_script:
-    - cd ../..
+    - cd ..
   artifacts:
     paths:
-      - fscli/frontend/target/fscli-jar-with-dependencies.jar
+      - frontend/target/fscli-jar-with-dependencies.jar
     expire_in: 1 hour
