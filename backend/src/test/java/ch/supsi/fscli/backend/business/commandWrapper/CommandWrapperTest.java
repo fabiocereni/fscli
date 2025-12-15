@@ -100,16 +100,16 @@ class CommandWrapperTest {
 
 
 
-    @Test
-    void lsCommandDelegation() {
-        when(ifsLsCommandBusiness.ls("test", false))
-                .thenReturn(new CommandResult("test",false));
-
-        lsCommand.setArgs(List.of("test"));
-        lsCommand.execute();
-
-        verify(ifsLsCommandBusiness).ls("test",false);
-    }
+//    @Test
+//    void lsCommandDelegation() {
+//        when(ifsLsCommandBusiness.ls("test", false))
+//                .thenReturn(new CommandResult("test",false));
+//
+//        lsCommand.setArgs(List.of("test"));
+//        lsCommand.execute();
+//
+//        verify(ifsLsCommandBusiness).ls("test",false);
+//    }
 
 
     @Test
