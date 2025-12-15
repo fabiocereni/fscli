@@ -54,6 +54,7 @@ abstract public class AbstractMainGUITest extends ApplicationTest {
         LOGGER.info("STEP" + stepNo + ":" + "end");
     }
 
+    @Override
     public void start(final Stage stage) {
         this.primaryStage = stage;
 
