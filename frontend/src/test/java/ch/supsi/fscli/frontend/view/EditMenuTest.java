@@ -40,7 +40,7 @@ public class EditMenuTest extends AbstractMainGUITest {
 
             int numToWrite;
 
-            if(num > 10)
+            if(num <= 25 && num >= 10)
                 numToWrite = num+10;
             else
                 numToWrite = num-10;

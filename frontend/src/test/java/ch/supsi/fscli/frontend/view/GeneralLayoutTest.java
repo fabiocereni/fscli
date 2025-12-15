@@ -28,7 +28,7 @@ public class GeneralLayoutTest extends AbstractMainGUITest {
             verifyThat("#enter", isVisible());
             verifyThat("#enter", isDisabled());
             verifyThat("#outputView", (TextInputControl t) ->
-                    t.getText().contains("Questo \u00E8 un esempio del testo in output...") ||
+                    t.getText().contains("Questo e' un esempio del testo in output...") ||
                             t.getText().contains("This is an example output text...") ||
                             t.getText().contains("Dies ist ein Beispiel-Ausgabetext...")
             );
