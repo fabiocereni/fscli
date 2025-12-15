@@ -1,22 +1,28 @@
 package ch.supsi.fscli.backend.business.filesystem.commandWrapper;
 
 import ch.supsi.fscli.backend.business.filesystem.FSCommands.ls.IFSLsCommandBusiness;
+import ch.supsi.fscli.backend.business.filesystem.structure.FileSystem;
+import ch.supsi.fscli.backend.business.filesystem.structure.Inode;
+import ch.supsi.fscli.backend.business.filesystem.structure.InodeType;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Singleton
 public class LsCommand implements IFSCommand {
 
     private final IFSLsCommandBusiness business;
+    private final FileSystem fileSystem;
     private List<String> args = new ArrayList<>();
 
     @Inject
-    public LsCommand(IFSLsCommandBusiness business) {
+    public LsCommand(IFSLsCommandBusiness business, FileSystem fileSystem) {
         this.business = business;
+        this.fileSystem = fileSystem;
     }
 
     @Override
@@ -34,11 +40,12 @@ public class LsCommand implements IFSCommand {
         boolean showInode = false;
         List<String> targets = new ArrayList<>();
 
-        // 1. Parsing: Separiamo opzioni (-i) dai percorsi
         if (this.args != null) {
             for (String arg : this.args) {
                 if (arg.equals("-i")) {
                     showInode = true;
+                } else if (arg.startsWith("*")) {
+                    targets.addAll(findAllEntries());
                 } else {
                     targets.add(arg);
                 }
@@ -51,7 +58,6 @@ public class LsCommand implements IFSCommand {
             if (result == null) return null;
 
             String content = result.getContent();
-            // Se c'è un errore (es. label.error), lo ritorniamo diretto
             if (isErrorMessage(content)) {
                 return result;
             }
@@ -59,7 +65,7 @@ public class LsCommand implements IFSCommand {
             return new CommandResult(formatHierarchy(".", content), false);
         }
 
-        // Caso B: Uno o più target (es. ls folder1 folder2)
+        // Uno o più target (es. ls folder1 folder2)
         StringBuilder finalOutput = new StringBuilder();
 
         for (int i = 0; i < targets.size(); i++) {
@@ -70,11 +76,15 @@ public class LsCommand implements IFSCommand {
             if (isErrorMessage(content)) {
                 finalOutput.append(content);
             } else {
-                // Applichiamo lo stile gerarchico
-                finalOutput.append(formatHierarchy(path, content));
+                Inode node = fileSystem.getCurrentWorkingDirectory().getEntry(path);
+
+                if (node != null && node.getType() == InodeType.FILE) {
+                    finalOutput.append(content);
+                } else {
+                    finalOutput.append(formatHierarchy(path, content));
+                }
             }
 
-            // Aggiungiamo "a capo" tra un blocco e l'altro (ma non alla fine)
             if (i < targets.size() - 1) {
                 finalOutput.append("\n");
             }
@@ -83,12 +93,18 @@ public class LsCommand implements IFSCommand {
         return new CommandResult(finalOutput.toString(), false);
     }
 
-    /**
-     * Helper per formattare l'output nello stile:
-     * NomeCartella
-     * !- Contenuto1
-     * !- Contenuto2
-     */
+    private List<String> findAllEntries() {
+        List<String> matches = new ArrayList<>();
+        Set<String> currentEntries = fileSystem.getCurrentWorkingDirectory().getEntries().keySet();
+
+        for (String name : currentEntries) {
+            if (!name.equals(".") && !name.equals("..")) {
+                matches.add(name);
+            }
+        }
+        return matches;
+    }
+
     private String formatHierarchy(String parentName, String content) {
         if (content.isEmpty()) {
             return parentName; // Cartella vuota, stampa solo il nome
@@ -97,7 +113,6 @@ public class LsCommand implements IFSCommand {
         StringBuilder sb = new StringBuilder();
         sb.append(parentName).append("\n");
 
-        // Prende ogni riga dell'output originale e ci mette davanti "!- "
         String indentedContent = content.lines()
                 .map(line -> "!- " + line)
                 .collect(Collectors.joining("\n"));
@@ -106,7 +121,6 @@ public class LsCommand implements IFSCommand {
         return sb.toString();
     }
 
-    // Piccolo controllo per evitare di formattare i messaggi di errore come gerarchie
     private boolean isErrorMessage(String content) {
         return content.startsWith("label.") || content.contains("cannot access");
     }
