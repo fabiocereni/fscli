@@ -56,15 +56,14 @@ frontend:
   image: gitlab-edu.supsi.ch:5050/dti-isin/labingsw/common:maven3java17
   before_script:
     - 'cd frontend'
-
-    - 'Xvfb :99 -screen 0 1920x1080x16 &'
+    # MODIFICA IMPORTANTE QUI SOTTO: Cambiato x16 in x24
+    # JavaFX richiede un buffer a 24 bit per evitare il BufferOverflowException
+    - 'Xvfb :99 -screen 0 1920x1080x24 &'
   script:
-
     - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS clean'
 
-
+    # Manteniamo prism.order=sw per sicurezza, testfx.headless aiuta il robot
     - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -Dprism.order=sw -Dtestfx.headless=true -Dheadless test'
-
 
     - 'DISPLAY=:99 mvn $MAVEN_OPTS $MAVEN_CLI_OPTS -DskipTests package'
 
@@ -73,8 +72,8 @@ frontend:
   artifacts:
     paths:
       - frontend/target/fscli-jar-with-dependencies.jar
-      # Se vuoi vedere i report dei test in caso di fallimento, decommenta la riga sotto:
-      # - frontend/target/surefire-reports/
+      # Decommenta questa riga se vuoi poter scaricare i report degli errori
+      - frontend/target/surefire-reports/
     expire_in: 1 hour
 
   rules:
