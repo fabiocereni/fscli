@@ -58,12 +58,18 @@ public class MainFx extends Application {
         this.confirmExitDirector.addPropertyChangeListener(this.quitView);
         this.logDirector.addPropertyChangeListener(this.logView);
 
+        menuBarView.init();
+        logView.init();
+        outputView.init();
+        commandLineView.init();
+
         buildMainView();
     }
 
 
 
     private void buildMainView() {
+
         // command line
         HBox commandLinePane = new HBox();
         commandLinePane.setAlignment(Pos.BASELINE_LEFT);

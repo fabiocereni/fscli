@@ -26,7 +26,6 @@ public class LogView implements PropertyChangeListener {
 
     private TextArea logView;
 
-    @Inject
     public void init() {
 
         fontLog = preferencesController.getProperty(PreferencesModel.KEY_FONT_LOG_AREA);

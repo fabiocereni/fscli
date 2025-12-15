@@ -52,7 +52,6 @@ public class MenuBarView {
     private Menu editMenu;
     private Menu helpMenu;
 
-    @Inject
     public void init () {
         this.fileMenu = new Menu(supportedLanguageController.getTranslation("label.file"));
         this.editMenu = new Menu(supportedLanguageController.getTranslation("label.edit"));

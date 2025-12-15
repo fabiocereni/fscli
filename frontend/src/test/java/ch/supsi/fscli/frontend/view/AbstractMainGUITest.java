@@ -4,6 +4,7 @@ import ch.supsi.fscli.frontend.MainFx;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.logging.Logger;
 
@@ -60,6 +61,7 @@ abstract public class AbstractMainGUITest extends ApplicationTest {
         final MainFx main = new MainFx();
         main.init();
         main.start(stage);
+        WaitForAsyncUtils.waitForFxEvents();
         stage.toFront();
     }
 

@@ -30,7 +30,6 @@ public class OutputView implements PropertyChangeListener {
 
     private TextArea outputView;
 
-    @Inject
     public void init() {
         this.outputView = new TextArea();
         outputView.setId("outputView");
