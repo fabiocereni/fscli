@@ -64,6 +64,10 @@ public class MainFx extends Application {
 
 
     private void buildMainView() {
+        menuBarView.init();
+        logView.init();
+        outputView.init();
+        commandLineView.init();
         // command line
         HBox commandLinePane = new HBox();
         commandLinePane.setAlignment(Pos.BASELINE_LEFT);
